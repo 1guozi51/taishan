@@ -1,0 +1,116 @@
+.successPop{
+  background: transparent;
+  background: url('@/assets/img/buySuccessBg.png') no-repeat;
+  background-size: 100% 100%;
+  width: 100vw !important;
+  max-width: 600px;
+  .title2{
+    font-family: AlibabaPuHuiTi;
+    font-size: 24px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    text-align: center;
+    background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  .payNode{
+    background: url('@/assets/img/popNodeBg.png');
+    background-size: 100% 100%;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    .text{
+      font-family: AlibabaPuHuiTi;
+      font-size: 16px;
+      font-weight: normal;
+      line-height: normal;
+      letter-spacing: 0px;
+      color: #FEE8B0;
+      margin-top: 12px;
+    }
+    img{
+      width: 80px;
+      height: 80px;
+    }
+  }
+  .btn{
+    width: 180px;
+    height: 50px;
+    font-family: AlibabaPuHuiTi;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    color: #000000;
+    margin: auto;
+    display: block;
+  }
+}
+
+.PopBox{
+  padding: 16px;
+  .popTitle{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-family: AlibabaPuHuiTi;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    img{
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      right: 16px;
+    }
+  }
+  .price{
+    font-family: AlibabaPuHuiTi;
+    font-size: 28px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    text-align: center;
+    margin: 7px auto 60px; 
+  }
+  .balance{
+    font-family: AlibabaPuHuiTi;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    color: rgba(255, 255, 255, 0.6508);
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .payNode{
+    background: url('@/assets/img/popNodeBg.png');
+    background-size: 100% 100%;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    img{
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+.adm-center-popup-wrap{
+  max-width: unset !important;
+}

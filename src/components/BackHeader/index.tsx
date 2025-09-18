@@ -1,0 +1,26 @@
+import './index.scss'
+import React from 'react'
+import { useNavigate } from "react-router-dom"
+
+import back from '@/assets/img/back.png'
+
+const Header: React.FC<{
+    title: string,
+    rightText?: string,
+    rightUrl?: string
+}> = ({ title, rightText, rightUrl }) => {
+    const navigate = useNavigate();
+
+    return (
+
+        <>
+            <div className='back-header'>
+                <img onClick={() => navigate(-1)} src={back} className='back-img' alt="" />
+                <span className='title'>{title}</span>
+                <span onClick={() => rightUrl && navigate(rightUrl)} className='right-text'>{rightText}</span>
+            </div>
+        </>
+    )
+}
+
+export default Header;

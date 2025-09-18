@@ -1,0 +1,159 @@
+.nodeBox{
+  background: url('@/assets/img/myNodeBg.png') no-repeat;
+  background-size: 100% 274px;
+  background-color: #03022c;
+  min-height: 100vh;
+  padding: 0 15px;
+  .nodeImg{
+    margin: auto;
+    display: block;
+    font-family: AlibabaPuHuiTi;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    color: #FEE8B0;
+    text-align: center;
+    padding: 20px;
+    img{
+      width: 120px;
+      height: 120px;
+      margin-bottom: 16px;
+    }
+  }
+  .CloudNode{
+    background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
+    box-sizing: border-box;
+    border: 1px solid #9AD1FF;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 0 6px;
+    img{
+      width: 37.5px;
+      height: 28px;
+    }
+    span{
+      font-family: AlibabaPuHuiTi;
+      font-size: 10px;
+      font-weight: normal;
+      line-height: normal;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #000000;
+    }
+    div{
+      font-family: AlibabaPuHuiTi;
+      font-size: 11px;
+      font-weight: normal;
+      line-height: normal;
+      letter-spacing: 4.4px;
+      color: #FFFFFF;
+      background: #000000;
+      border-radius: 9px;
+      padding: 1.5px 12px;
+    }
+  }
+
+  .awardButton{
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    .record{
+      flex: 1;
+      box-sizing: border-box;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      background: linear-gradient(180deg, #021e74 10%, #020d40 90%);
+      position: relative;
+      div:nth-child(1){ 
+        font-family: AlibabaPuHuiTi;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: normal;
+        letter-spacing: 0px;
+        color: #67BAFF;
+      }
+      div:nth-child(2){ 
+        font-size: 16px;
+        color: #FFFFFF;
+        margin: 7px auto 15px;
+      }
+      button{
+        width: 100%;
+        height: 40px;
+        border-radius: 45px;
+        border: 1px solid #67BAFF;
+        font-size: 14px;
+        font-family: AlibabaPuHuiTi;
+        color: #67BAFF;
+        background: #020f47;
+        box-sizing: border-box;
+      }
+    }
+    .record:nth-child(2){
+      button{
+        border: unset;
+        color: #000000;
+        background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
+      }
+    }
+    
+  }
+
+  .equityBox{
+    background: url('@/assets/img/equityBg.png') no-repeat;
+    background-size: 100% 100%;
+    padding: 8px 0 15px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 15px;
+    .title{
+      font-family: AlibabaPuHuiTi;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: normal;
+      letter-spacing: 0px;
+      color: #FFFFFF;
+      margin-bottom: 4px;
+    }
+    div{
+      font-family: AlibabaPuHuiTi;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: normal;
+      letter-spacing: 0px;
+      color: #67BAFF;
+    }
+    img{
+      width: 12px;
+      height: 12px;
+      margin-right: 2px;
+    }
+  }
+
+  .payNode{
+    border: unset;
+    margin: auto;
+    margin-top: 60px;
+    display: block;
+    border-radius: 25px;
+    opacity: 1;
+    width: 180px;
+    height: 50px;
+    background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
+
+    font-family: AlibabaPuHuiTi;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: normal;
+    letter-spacing: 0px;
+    color: #000000;
+  }
+}
+

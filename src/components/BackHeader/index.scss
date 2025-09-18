@@ -1,0 +1,22 @@
+.back-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 44px;
+    padding: 0 16px;
+
+    .back-img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .title {
+        font-size: 18px;
+        color: #fff;
+    }
+
+    .right-text {
+        font-size: 14px;
+        color: #67BAFF;
+    }
+}
