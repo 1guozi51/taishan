@@ -12,7 +12,7 @@ const Crowd = lazy(() => import('@/pages/Crowd/index.tsx'));
 const MyTeam = lazy(() => import('@/pages/MyTeam/index.tsx'));
 const MyNode = lazy(() => import('@/pages/MyNode/index.tsx'));
 const Node = lazy(() => import('@/pages/Node/index.tsx'));
-
+console.log('Home');
 function App() {
 
   return (
