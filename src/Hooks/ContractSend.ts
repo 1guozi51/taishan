@@ -27,9 +27,7 @@ async function useContractSend({
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contractInfo: ContractObje = ContractList[tokenName];
-  console.log("contractInfo写的实例化对象===========", contractInfo);
-  console.log("contractInfo写的实例化对象===params========", ...params);
-  console.log("contractInfo写的实例化对象===value========", value);
+ 
   const contract = new ethers.Contract(
     contractInfo.address,
     contractInfo.abi,

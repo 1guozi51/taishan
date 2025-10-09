@@ -20,11 +20,8 @@ async function useContractRequest({tokenName, methodsName, params}: ContractPara
     try{
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const contractInfo:ContractObje = ContractList[tokenName];
-        console.log('contractInfo',contractInfo);
         const contract = new ethers.Contract(contractInfo.address, contractInfo.abi, provider);
-        console.log('contract',contract);
         const Result = await contract[methodsName](...params);
-        console.log('Result',Result);
         return { value:Result };
     }catch (error){
         console.log(error);

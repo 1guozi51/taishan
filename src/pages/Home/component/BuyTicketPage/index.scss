@@ -1,0 +1,177 @@
+.ant-drawer-content {
+  background-color: #092468 !important;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.buyNodePage {
+  position: relative;
+  > .titleAndClose {
+    height: 30px;
+    position: relative;
+    > .title {
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 18px;
+    }
+    > .close {
+      width: 30px;
+      height: 30px;
+      background: url("@/assets/img/closeImg.png") no-repeat center center /
+        25px;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  > .type {
+    margin: 10px 0;
+    text-align: center;
+    color: #b0aeb8;
+  }
+  > .titleAndNodeBalance {
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+  > .title {
+    margin-bottom: 10px;
+    color: #ffffff;
+  }
+  .option-box {
+    margin-top: 12px;
+    .option-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .txt {
+        font-weight: 400;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+      }
+    }
+  }
+  .option-input-end {
+    padding: 14px 12px;
+    margin-top: 8px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    .input-class {
+      width: 100%;
+      background: transparent;
+      border: none !important;
+      outline: none !important;
+      font-weight: 500;
+      font-size: 16px;
+      color: #ffffff;
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      /* 移除获取焦点时的边框/阴影，覆盖 Ant Design 的默认 focus 样式 */
+      &:focus,
+      &:focus-visible,
+      &:active {
+        box-shadow: none !important;
+        outline: none !important;
+        border: none !important;
+      }
+    }
+    /* 额外覆盖 antd 的 .ant-input:focus 产生的 box-shadow（以防 Input 渲染为 ant-input） */
+    .ant-input:focus {
+      box-shadow: none !important;
+      outline: none !important;
+      border-color: transparent !important;
+    }
+    .unit {
+      flex: none;
+      .uni {
+        font-weight: 500;
+        font-size: 16px;
+        color: #ffffff;
+      }
+    }
+  
+  }
+    .btn-option {
+      margin-top: 40px;
+      height: 50px;
+      width: 100%;
+      line-height: 50px;
+      text-align: center;
+      background: linear-gradient(
+        270deg,
+        #ab46ff 0%,
+        #00b7ff 48%,
+        #00ffed 100%
+      );
+      border-radius: 25px;
+      font-weight: bold;
+font-size: 16px;
+color: #000000;
+    }
+}
+
+/* 覆盖：将骰子放在弹窗中间并禁用交互 */
+.dice-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  /* 让覆盖层位于弹窗之上，但低于应用级浮层 */
+  z-index: 99;
+  transform: none;
+  pointer-events: none !important; /* 禁止鼠标事件，防止点击触发（强制覆盖） */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 确保内部所有元素也不会接收指针事件（防止其他规则覆盖） */
+.dice-overlay, .dice-overlay * {
+  pointer-events: none !important;
+}
+
+
+
+
+.RestConnectWallBox{
+  >.Title{
+    color: rgba(0,0,0,0.7);
+  }
+  >.Message{
+    margin-top: 5px;
+    line-height: 20px;
+  }
+  >.inviteAddress{
+    margin-top: 10px;
+    >input{
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      box-sizing: border-box;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: rgba(0,0,0,0.1);
+    }
+  }
+  >.But{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    >.Item{
+      box-sizing: border-box;
+      padding: 0 20px;
+      height: 40px;
+      line-height: 40px;
+      background: #29F136;
+      color: #000000;
+    }
+  }
+}

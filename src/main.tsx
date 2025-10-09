@@ -1,3 +1,7 @@
+import { Buffer } from 'buffer'
+if (!window.Buffer) {
+    window.Buffer = Buffer
+}
 import { createRoot } from 'react-dom/client'
 import { HashRouter , BrowserRouter} from "react-router-dom";
 import './index.css'

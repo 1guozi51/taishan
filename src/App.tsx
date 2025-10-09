@@ -1,8 +1,6 @@
 import { lazy } from 'react'
 import { Routes, Route } from "react-router-dom";
 import './App.css'
-
-
 const Home = lazy(() => import('@/pages/Home/index.tsx'));
 const Deposit = lazy(() => import('@/pages/Deposit/index.tsx'));
 const Withdraw = lazy(() => import('@/pages/Withdraw/index.tsx'));
@@ -14,7 +12,6 @@ const MyNode = lazy(() => import('@/pages/MyNode/index.tsx'));
 const Node = lazy(() => import('@/pages/Node/index.tsx'));
 console.log('Home');
 function App() {
-
   return (
     <>
       <Routes>
