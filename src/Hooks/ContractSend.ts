@@ -27,7 +27,6 @@ async function useContractSend({
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const contractInfo: ContractObje = ContractList[tokenName];
- 
   const contract = new ethers.Contract(
     contractInfo.address,
     contractInfo.abi,
@@ -56,5 +55,4 @@ async function useContractSend({
     return { value: false };
   }
 }
-
 export default useContractSend;

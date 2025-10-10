@@ -12,7 +12,6 @@ import { ethers } from "ethers";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
-
 interface UserInfo {
   inviter: string;
   layerDirectCount: number;
@@ -55,12 +54,10 @@ const Swap: React.FC = () => {
       value: 1,
     },
   ];
-
+  //得到的对应值
   const [swapNum, setSwapNum] = useState(0);
-
   //当前选中的最大兑换百分比
   const [swapPercentage, setSwapPercentage] = useState(0);
-
   //当前选中的百分比数量
   const [swapComPutersNum, setSwapComPutersNum] = useState(1);
   // 用户信息
@@ -69,22 +66,24 @@ const Swap: React.FC = () => {
   const swapTypeChange = () => {
     swapType == 1 ? setSwapType(2) : setSwapType(1);
   };
-
   //得到ca转usdt的兑换值
   const getCaToUsdtAmount = async () => {
     if (swapComPutersNum < 0) {
+      setSwapNum(0);
       return;
     }
     const usdtValue = await ContractRequest({
       tokenName: "CaPool",
       methodsName: "getCaToUsdtAmount",
-      params: [ethers.utils.parseEther(caTokenBalance.toString())],
+      params: [ethers.utils.parseEther(swapComPutersNum.toString())],
     });
+    console.log("得到ca转usdt的兑换值==", formatAmount(usdtValue.value));
+    setSwapNum(formatAmount(usdtValue.value));
   };
-
   //得到usdt转ca的兑换值
   const getUsdtToCaAmount = async () => {
-    if (swapComPutersNum < 0) {
+    if (swapComPutersNum <= 0) {
+      setSwapNum(0);
       return;
     }
     const usdtValue = await ContractRequest({
@@ -92,9 +91,10 @@ const Swap: React.FC = () => {
       methodsName: "getUsdtToCaAmount",
       params: [ethers.utils.parseEther(swapComPutersNum.toString())],
     });
-    setSwapNum(Number(ethers.utils.formatUnits(usdtValue.value)).toFixed(2));
+    console.log("得到usdt转ca的兑换值==", formatAmount(usdtValue.value));
+    setSwapNum(formatAmount(usdtValue.value));
+    getCaNum();
   };
-
   //得到ca的滑点值
   const getCaSlipPageNum = async () => {
     const caRes = await ContractRequest({
@@ -109,6 +109,11 @@ const Swap: React.FC = () => {
     //ca-(ca乘以ca的滑点)
     return Number(swapNum - swapNum * sellFee).toFixed(2);
   };
+  //预计获得usdt值
+  const getUsdtNum = () => {
+    //ca-(ca乘以ca的滑点)
+    return Number(swapNum - swapNum * buyFee).toFixed(2);
+  };
   //得到usdt的滑点值
   const getUsdtSlipPageNum = async () => {
     const usdtRes = await ContractRequest({
@@ -118,24 +123,25 @@ const Swap: React.FC = () => {
     });
     setBuyFee(usdtRes.value / 10000);
   };
-
   //计算百分比数值
   const calculatePercentage = (total, part) => {
     if (total === 0) {
       return 0; // 避免除以零的情况
     }
-    return total * part;
+    return Number(total * part).toFixed(2);
   };
 
   //计算出对应的百分比数值
   const computersNum = () => {
     //得到当前1 还是2
+
     setSwapComPutersNum(
       calculatePercentage(
         swapType == 1 ? caTokenBalance : usdTokenBalance,
         swapPercentage
       )
     );
+    swapType == 1 ? getCaToUsdtAmount() : getUsdtToCaAmount();
   };
 
   //获取用户USDT和CA余额
@@ -157,105 +163,161 @@ const Swap: React.FC = () => {
         params: [wallertAddress],
       }),
     ]);
-    setUsdTokenBalance(
-      ethers.utils.formatUnits(usdtAndCaBalanceResult[0].value.value || 0)
-    );
 
-    setCaTokenBalance(
-      ethers.utils.formatUnits(usdtAndCaBalanceResult[1].value.value || 0)
-    );
-    // setUserInfo(usdtAndCaBalanceResult[2].value.value)
-   const userInfoValue=usdtAndCaBalanceResult[2].value.value
+    setUsdTokenBalance(formatAmount(usdtAndCaBalanceResult[0].value.value));
+
+    setCaTokenBalance(formatAmount(usdtAndCaBalanceResult[1].value.value));
+    const userInfoValue = usdtAndCaBalanceResult[2].value.value;
     setUserInfo(userInfoValue);
-     console.log(
-      "usdtAndCaBalanceResult[2].value",
-    userInfo.gasAmount
-    );
+    console.log("usdtAndCaBalanceResult[2].value", userInfo.gasAmount);
   };
-  //ustd兑换ca
-  const getUsdtToCaAmountFn = async () => {
-    let amountValue = swapComPutersNum;
-    if (amountValue < 0) {
-      setSwapNum(0);
-      return;
-    } else {
-      // 得到getUsdtToCaAmount的值
-      const caAmount = await ContractRequest({
-        tokenName: "CaPool",
-        methodsName: "getUsdtToCaAmount",
-        params: [ethers.utils.parseUnits(amountValue.toString())],
-      });
-    }
+
+  const formatAmount = (amount, decimals = 18) => {
+    const formatted = ethers.utils.formatUnits(amount, decimals);
+    return parseFloat(formatted).toFixed(2);
+  };
+
+  const swapComPutersNumChange = (e) => {
+    setSwapComPutersNum(e === "" ? 0 : parseFloat(e));
   };
   //开始兑换
-  const confirmBtnClick= async()=>{
+  const confirmBtnClick = async () => {
+    swapType == 2 ? usdtToCa() : caToUsdt();
+  };
+  const caToUsdt = async () => {
+    let amount = swapComPutersNum.toString();
     try {
-        // 1. 检查授权额度
-        const allowanceRes = await ContractRequest({
-          tokenName: "USDTToken",
-          methodsName: "allowance",
-          params: [wallertAddress, ContractList["CaPool"].address],
+      // 1. 检查授权额度
+      const allowanceRes = await ContractRequest({
+        tokenName: "CaToken",
+        methodsName: "allowance",
+        params: [wallertAddress, ContractList["CaPool"].address],
+      });
+      const allowanceAmount = parseFloat(
+        ethers.utils.formatUnits(allowanceRes.value || "0")
+      );
+       console.log("caToUsdt==allowanceRes=", allowanceRes);
+      // 2. 如果额度不足，则发起 approve 授权
+      if (allowanceAmount < swapComPutersNum) {
+        const approveRes = await ContractSend({
+          tokenName: "CaToken",
+          methodsName: "approve",
+          params: [
+            ContractList["CaPool"].address,
+             ethers.utils.parseUnits(amount)), // 授权足额
+          ],
         });
-
-        const allowanceAmount = parseFloat(
-          ethers.utils.formatUnits(allowanceRes.value || "0")
-        );
-
-        // 2. 如果额度不足，则发起 approve 授权
-        if (allowanceAmount < swapComPutersNum) {
-          const approveRes = await ContractSend ({
-            tokenName: "USDTToken",
-            methodsName: "approve",
-            params: [
-              ContractList["CaPool"].address,
-              ethers.utils.parseUnits(swapComPutersNum.toString()), // 授权足额
-            ],
-          });
-          if (!approveRes || !approveRes.value) {
-            console.error("USDT 授权失败");
-            return; // 授权失败则中止
-          }
+        if (!approveRes || !approveRes.value) {
+          console.error("USDT 授权失败");
+          return; // 授权失败则中止
         }
-        // console.log('swapComPutersNum.toString()',swapComPutersNum.toString())
-    
-         // 3. 执行兑换
-        // const swapRes = await ContractSend({
-        //   tokenName: "CaPool",
-        //   methodsName: "swap", // 假设兑换方法名为 usdtToCa
-        //   params: [ethers.utils.parseUnits('1',18),['0x8873bB4707351279e921637f0700BE5f9cef1b1B','0x7e0060dD72eBBc2dbA1A1498905657874c6064d3']],
-        // });
-const swapRes = await ContractSend({
-          tokenName: "CaPool",
-          methodsName: "swap", // 假设兑换方法名为 usdtToCa
-          params: [ethers.utils.parseUnits('1',18),['0x7e0060dD72eBBc2dbA1A1498905657874c6064d3','0x8873bB4707351279e921637f0700BE5f9cef1b1B']],
-        });
-        if (swapRes && swapRes.value) {
-          console.log("兑换成功");
-          // 兑换成功后，刷新页面数据，例如用户余额
-          getPageInfo();
-        } else {
-          console.error("兑换失败");
-        }
-      } catch (error) {
-        console.error("交易出错:", error);
       }
-  }
+      let amountEnd=ethers.utils.parseUnits(amount.toString())
+      console.log('amountEnd===',amountEnd)
+      const swapRes = await ContractSend({
+        tokenName: "CaPool",
+        methodsName: "swap", // 假设兑换方法名为 usdtToCa
+        params: [
+          amountEnd,
+          [
+            "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
+            "0x8873bB4707351279e921637f0700BE5f9cef1b1B",
+          ],
+        ],
+      });
+      if (swapRes && swapRes.value) {
+        console.log("兑换成功");
+        // 兑换成功后，刷新页面数据，例如用户余额
+        getPageInfo();
+      } else {
+        console.error("兑换失败");
+      }
+    } catch (error) {
+      console.error("交易出错:", error);
+    }
+  };
+  const usdtToCa = async () => {
+    let amount = swapComPutersNum.toString();
+    console.log("usdtToCa==amount=", amount);
+    try {
+      // 1. 检查授权额度
+      const allowanceRes = await ContractRequest({
+        tokenName: "USDTToken",
+        methodsName: "allowance",
+        params: [wallertAddress, ContractList["CaPool"].address],
+      });
+
+      const allowanceAmount = parseFloat(
+        ethers.utils.formatUnits(allowanceRes.value || "0")
+      );
+
+      // 2. 如果额度不足，则发起 approve 授权
+      if (allowanceAmount < swapComPutersNum) {
+        const approveRes = await ContractSend({
+          tokenName: "USDTToken",
+          methodsName: "approve",
+          params: [
+            ContractList["CaPool"].address,
+            ethers.utils.parseUnits(amount), // 授权足额
+          ],
+        });
+        if (!approveRes || !approveRes.value) {
+          console.error("USDT 授权失败");
+          return; // 授权失败则中止
+        }
+      }
+      const swapRes = await ContractSend({
+        tokenName: "CaPool",
+        methodsName: "swap", // 假设兑换方法名为 usdtToCa
+        params: [
+          ethers.utils.parseUnits(amount, 18),
+          [
+            "0x8873bB4707351279e921637f0700BE5f9cef1b1B",
+            "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
+          ],
+        ],
+      });
+      if (swapRes && swapRes.value) {
+        console.log("兑换成功");
+        // 兑换成功后，刷新页面数据，例如用户余额
+        getPageInfo();
+      } else {
+        console.error("兑换失败");
+      }
+    } catch (error) {
+      console.error("交易出错:", error);
+    }
+  };
   useEffect(() => {
     //如果类型切换了
     setSwapPercentage(1);
-    computersNum(); //给初始最大的兑换值
   }, [swapType]);
 
+  useEffect(() => {
+    swapType == 1 ? getCaToUsdtAmount() : getUsdtToCaAmount();
+  }, [swapComPutersNum]);
+
+  useEffect(() => {
+    //如果类型切换了
+    getUsdtToCaAmount();
+  }, [usdTokenBalance]);
+
+  useEffect(() => {
+    //如果类型切换了
+    getCaToUsdtAmount();
+  }, [caTokenBalance]);
   //如果监听到了swapPercentage值的变化
   useEffect(() => {
     computersNum();
-    swapType == 1 ? getCaToUsdtAmount() : getUsdtToCaAmount();
   }, [swapPercentage]);
-
+  //如果swapNum有变化
+  useEffect(() => {
+    swapType == 1 ? getCaNum() : getUsdtNum();
+  }, [swapNum]);
   useEffect(() => {
     getPageInfo();
-     getUsdtSlipPageNum();
-     getCaSlipPageNum();
+    getUsdtSlipPageNum();
+    getCaSlipPageNum();
   }, []);
   return (
     <>
@@ -284,6 +346,7 @@ const swapRes = await ContractSend({
             className="from-input"
             value={swapComPutersNum}
             type="number"
+            onChange={swapComPutersNumChange}
             placeholder="0.00"
           />
           <div className="price-text">
@@ -321,22 +384,26 @@ const swapRes = await ContractSend({
               余额：{swapType == 1 ? usdTokenBalance : caTokenBalance}
             </div>
           </div>
-          <div className="get-amount"> 0.00</div>
+          <div className="get-amount">
+            {" "}
+            {swapType == 2 ? getCaNum() + "CA" : getUsdtNum() + "USDT"}
+          </div>
         </div>
         <div className="swap-data">
           <span className="key">兑换滑点</span>
-          <span className="val">{swapType == 1 ? sellFee*100 : buyFee*100}%</span>
+          <span className="val">
+            {swapType == 1 ? sellFee * 100 : buyFee * 100}%
+          </span>
         </div>
         <div className="swap-data">
           <span className="key">预计获得：</span>
           <span className="val">
-            {" "}
-            {swapType == 2 ? getCaNum() + "CA" : "USDT"}
+            {swapType == 2 ? getCaNum() + "CA" : getUsdtNum() + "USDT"}
           </span>
         </div>
         {swapType == 1 ? null : (
           <div className="swap-data">
-            <span className="key">消耗GAS数：</span>
+            <span className="key">消耗GAS数</span>
             <span className="val">{swapComPutersNum} GAS</span>
           </div>
         )}
@@ -345,7 +412,9 @@ const swapRes = await ContractSend({
           {/* {ethers.utils.formatUnits( userInfo.gasAmount)} */}
           <span className="go-get">去获取</span>
         </div>
-        <Button className="confirm-btn swap-btn" onClick={confirmBtnClick}>兑换</Button>
+        <Button className="confirm-btn swap-btn" onClick={confirmBtnClick}>
+          兑换
+        </Button>
         <div className="records-title">
           <span className="title-text">兑换记录</span>
           <div className="more-box">
