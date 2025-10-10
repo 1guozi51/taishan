@@ -39,6 +39,7 @@ async function useContractSend({
     const receipt = await tx.wait();
     return { value: receipt };
   } catch (err: any) {
+    console.log("err===",err)
     if (
       err.code === "ACTION_REJECTED" ||
       err.message.includes("user rejected")

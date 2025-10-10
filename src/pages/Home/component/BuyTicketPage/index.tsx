@@ -3,7 +3,7 @@ import { userAddress } from "@/Store/Store.ts";
 import { useEffect, useState } from "react";
 import { Input, Spin, Modal, Button } from "antd";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { Totast } from "@/Hooks/Utils.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
@@ -16,14 +16,15 @@ interface BuyTicketPageClass {
 
 interface UserInfo {
   inviter: string;
-  layerDirectCount: number;
-  directCount: number;
-  preAmount: bigint;
-  gasAmount: bigint;
-  ticketNumber: bigint;
+  layerDirectCount: BigNumber;
+  directCount: BigNumber;
+  preAmount: BigNumber;
+  gasAmount: BigNumber;
+  ticketNumber: BigNumber;
 }
 
 function BuyTicketPage(Props: BuyTicketPageClass) {
+  const inviteStorage = localStorage.getItem("invite") || "";
   // 当前钱包地址
   const wallertAddress = userAddress().address;
   // 用户余额
@@ -54,7 +55,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   // 获取用户余额和节点余额
   const getPageInfo = async () => {
     setButLoding(true);
-    console.log("wallertAddress", wallertAddress);
     const ChainResult = await Promise.allSettled([
       ContractRequest({
         tokenName: "USDTToken",
@@ -81,6 +81,9 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       console.log("userInfoValue", userInfoValue);
       setUserInfo(userInfoValue);
     }
+    if (userInfo.inviter === ethers.constants.AddressZero && inviteStorage) {
+      setInputAddress(inviteStorage)
+    }
     setButLoding(false);
   };
   //关闭绑定邀请人弹窗
@@ -94,24 +97,25 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       return;
     }
     if (
-      userInfo.inviter == "0x0000000000000000000000000000000000000000" &&
+      userInfo.inviter == ethers.constants.AddressZero &&
       !ethers.utils.isAddress(inputAddress)
     ) {
       Totast("邀请人地址不正确", "warning"); // 邀请人地址不正确
       return;
     }
+    if (userInfo.inviter != ethers.constants.AddressZero) {
+      if (userInfo.gasAmount.gt(BigNumber.from(0))) {
+        //不可以购买
+        Totast("您当前持有GAS,无法购买门票", "warning"); // 您当前持有GAS，无法购买门票
+        return;
+      }
+      if (userInfo.ticketNumber.lt(BigNumber.from(1))) {
+        Totast("您无法购买门票", "warning"); // 您当前持有GAS，无法购买门票
+        return;
+      }
+    }
     if (parseFloat(userBalance) < parseFloat(buyNumber)) {
       Totast("USDT余额不足", "warning"); // USDT余额不足
-      return;
-    }
-    if (userInfo.gasAmount > 0n) {
-      //不可以购买
-      Totast("您当前持有GAS,无法购买门票", "warning"); // 您当前持有GAS，无法购买门票
-      return;
-    }
-    console.log("userInfo", userInfo);
-    if (userInfo.ticketNumber < 0n) {
-      Totast("您无法购买门票", "warning"); // 您当前持有GAS，无法购买门票
       return;
     }
     setButLoding(true);
@@ -149,7 +153,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       Totast("检查授权或者授权时发生了错误，请检查网络后重新尝试", "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       return;
     }
-     
+
     try {
       // 使用 await 获取 ContractSend 的返回结果并明确处理成功/失败情况
       const res = await ContractSend({
@@ -167,12 +171,12 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       setRunning(true);
       // ContractSend 可能会 resolve 一个结果对象而不是抛出错误，需检查返回值字段
       if (res && res.value) {
-           setTarget(res.value);
+        setTarget(res.value);
         // 成功——等待一段时间再停止动画并显示指定点数
         setTimeout(() => {
           setRunning(false);
-           setShowDice(false);
-            Props.onClose();
+          setShowDice(false);
+          Props.onClose();
         }, 1500);
         Totast("购买成功", "success");
       } else {
@@ -282,19 +286,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
           </div>
         </div>
       </div>
-      <div className="option-box">
-        {/* <div className="option-input-end">
-          <Input
-            type="text"
-            disabled
-            placeholder="预计可获得2至6倍GAS"
-            className="input-class"
-          />
-          <div className="unit">
-            <div className="uni">GAS</div>
-          </div>
-        </div> */}
-      </div>
+      <div className="option-box"></div>
       {userInfo.inviter == "0x0000000000000000000000000000000000000000" ? (
         <div className="option-box">
           <div className="option-header-top">
@@ -313,7 +305,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
 
       <div className="option-box">
         <div className="option-header-top">
-          <div className="txt">获得矿机价值*每日释放0.8%</div>
+          <div className="txt">获得矿机价值</div>
         </div>
         <div className="option-input-end">
           <Input

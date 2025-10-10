@@ -2,7 +2,7 @@
 import { message } from "antd";
 
 // const RequestUrl = "https://api.habitld.top/dapp/";
-const RequestUrl = "https://api.soulca.com/";
+const RequestUrl = "http://143.92.39.28:9030/api/";
 
 interface NetWorkProps {
     Url: string;

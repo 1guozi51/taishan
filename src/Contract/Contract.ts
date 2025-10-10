@@ -19,11 +19,9 @@ const Contract:ContractMap = {
         "abi": Erc20
     },
     "CaPool": {
-        "address": "0x8772fD1C9Bf29B93976A7b04d3013EC03f92c43f",
+        "address": "0x81097251B331564Cc418A1d5B05Af8ec2E1E5437",
         "abi": CaPoolABI
     }
 }
-
 // 正式
-
 export default Contract

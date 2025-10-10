@@ -1,6 +1,5 @@
 import { message } from "antd";
 import { ethers, BigNumber } from "ethers";
-
 /**
  * 格式化钱包地址
  * @param addr 钱包地址
@@ -41,16 +40,28 @@ export function isValidAddress(addr?: string): boolean {
 export function fromWei(
   value: string | number | bigint|BigNumber,
   decimals = 18,
-  fixed = true
+  fixed = true,
+  precision = 4
 ): string {
   if (value === undefined || value === null) return "0";
   try {
     const etherValue = ethers.utils.formatUnits(value.toString(), decimals);
-    return fixed ? parseFloat(etherValue).toFixed(4) : etherValue;
+
+    if (!fixed) return etherValue;
+
+    return truncateDecimal(etherValue, precision);
   } catch (error) {
     console.error("fromWei 转换失败:", error);
     return "0";
   }
+}
+
+function truncateDecimal(value: string, decimals: number): string {
+  if (!value.includes('.')) return value;
+
+  const [integer, fraction = ''] = value.split('.');
+  const truncated = fraction.slice(0, decimals);
+  return `${integer}.${truncated.padEnd(decimals, '0')}`;
 }
 
 /**
@@ -133,6 +144,30 @@ export function TokenName() {
   return "BRT";
 }
 
+export function formatDate(dateString) {
+  // 解析 ISO 格式的日期字符串
+  const date = new Date(dateString);
+
+  // 获取日期部分：MM/DD/YYYY
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，所以加 1
+  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+
+  const formattedDate = `${month}/${day}/${year}`;
+
+  // 获取时间部分：HH:mm:ss
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+  // 返回包含日期和时间的对象
+  return {
+    date: formattedDate,
+    time: formattedTime
+  };
+}
 export async function ensureBNBChain(): Promise<boolean> {
   const { ethereum } = window;
 

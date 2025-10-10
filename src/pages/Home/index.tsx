@@ -7,6 +7,8 @@ import union from "@/assets/img/union.png";
 import homeTickets from "@/assets/img/home-tickets.png";
 import homeSwap from "@/assets/img/home-swap.png";
 import homeZc from "@/assets/img/home-zc.png";
+import { useLocation } from "react-router-dom";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import homeNode from "@/assets/img/home-node.png";
 import star from "@/assets/img/star.png";
 import aboutToken from "@/assets/img/about-token.png";
@@ -15,8 +17,7 @@ import React, { useEffect, useState } from "react";
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { Drawer, Spin } from "antd";
-// import ContractRequest from "@/Hooks/ContractRequest.ts";
-// import ContractSend from "@/Hooks/ContractSend.ts";
+import { Totast } from "@/Hooks/Utils.ts";
 import BuyTicketPage from "./component/BuyTicketPage/index.tsx";
 const HomeTitle: React.FC<{
   className?: string;
@@ -33,15 +34,40 @@ const HomeTitle: React.FC<{
     </div>
   );
 };
-const PageBody: React.FC = () => {
+const PageBody: React.FC = ({ userInfo }) => {
   const navigate = useNavigate();
+
+  // 获取邀请码
+  const { search } = useLocation();
+
+  const query = new URLSearchParams(search);
+
+  const inviteUrlValue = query.get("invite") ? query.get("invite") : "";
+
+  let inviteUrlArr: string[] = [];
+
+  if (inviteUrlValue) {
+    if (inviteUrlValue.indexOf("?") != -1) {
+      inviteUrlArr = inviteUrlValue.split("?");
+    } else {
+      inviteUrlArr = [inviteUrlValue];
+    }
+  }
+  const invite: string = inviteUrlArr[0];
+  if (invite) {
+    //有邀请人则进行回显
+    localStorage.setItem("invite", invite);
+  }
   //   // 控制显示是否显示购买门票
   const [showBuyTicket, setShowBuyTicket] = useState(false);
   //   //门票弹窗是否展示事件
   const buyTicketIsShowChange = (val: boolean) => {
     setShowBuyTicket(val);
   };
-  
+  const navigatePath = (path) => {
+    Totast("敬请期待", "warning");
+  };
+
   return (
     <div className="home-page">
       <Header showLogo showConnect />
@@ -69,11 +95,11 @@ const PageBody: React.FC = () => {
               <img src={homeSwap} className="tab-icon" alt="" />
               <span>交易</span>
             </div>
-            <div onClick={() => navigate("/crowd")} className="tab-item">
+            <div onClick={() => navigatePath("/crowd")} className="tab-item">
               <img src={homeZc} className="tab-icon" alt="" />
               <span>众筹</span>
             </div>
-            <div className="tab-item">
+            <div onClick={() => navigatePath("")} className="tab-item">
               <img src={homeNode} className="tab-icon" alt="" />
               <span>节点</span>
             </div>
@@ -94,21 +120,21 @@ const PageBody: React.FC = () => {
         </div>
         <div className="token-row">
           <span className="key">发行总量：</span>
-          <span className="val">21亿枚</span>
+          <span className="val">-亿枚</span>
         </div>
         <div className="proportion-box">
           <img src={proportion} className="proportion-img" alt="" />
           <div className="proportion-item left">
             <div className="label">Swap</div>
-            <div className="num">2100万枚</div>
+            <div className="num">-万枚</div>
           </div>
           <div className="proportion-item center">
             <div className="label">Swap</div>
-            <div className="num">2100万枚</div>
+            <div className="num">-万枚</div>
           </div>
           <div className="proportion-item right">
             <div className="label">Swap</div>
-            <div className="num">2100万枚</div>
+            <div className="num">-万枚</div>
           </div>
         </div>
       </div>
@@ -121,19 +147,19 @@ const PageBody: React.FC = () => {
         </div>
         <div className="top3-info">
           <div className="top3-box top1">
-            <span className="amount">1,205,000</span>
+            <span className="amount">-</span>
             <span className="unit">USDT</span>
-            <span className="address">0x0e8…dE903</span>
+            <span className="address">-</span>
           </div>
           <div className="top3-box top2">
-            <span className="amount">1,205,000</span>
+            <span className="amount">-</span>
             <span className="unit">USDT</span>
-            <span className="address">0x0e8…dE903</span>
+            <span className="address">-</span>
           </div>
           <div className="top3-box top3">
-            <span className="amount">1,205,000</span>
+            <span className="amount">-</span>
             <span className="unit">USDT</span>
-            <span className="address">0x0e8…dE903</span>
+            <span className="address">-</span>
           </div>
         </div>
         <div className="rank-list">
@@ -143,7 +169,7 @@ const PageBody: React.FC = () => {
             <span>总投资</span>
           </div>
           <div className="rank-body">
-            {[1, 2, 3, 4, 5, 9, 6, 7, 8, 10].map((rank, index) => {
+            {/* {[1, 2, 3, 4, 5, 9, 6, 7, 8, 10].map((rank, index) => {
               return (
                 <div className="rank-item">
                   <span>{index + 4}</span>
@@ -151,7 +177,7 @@ const PageBody: React.FC = () => {
                   <span>922,389.00 USDT</span>
                 </div>
               );
-            })}
+            })} */}
           </div>
         </div>
       </div>
@@ -166,18 +192,15 @@ const PageBody: React.FC = () => {
         title=""
         placement="bottom"
       >
-        <BuyTicketPage
-          onClose={() => buyTicketIsShowChange(false)}
-        />
+        <BuyTicketPage onClose={() => buyTicketIsShowChange(false)} />
       </Drawer>
-
-     
     </div>
   );
 };
 const Home: React.FC = () => {
   // 当前钱包地址
   const wallertAddress = userAddress().address;
+
   useEffect(() => {
     if (!wallertAddress) {
       ensureWalletConnected();

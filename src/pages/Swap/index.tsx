@@ -9,6 +9,7 @@ import usdt from "@/assets/img/usdt.png";
 import toggle from "@/assets/img/toggle.png";
 import more from "@/assets/img/records-more.png";
 import { ethers, BigNumber } from "ethers";
+import { Totast } from "@/Hooks/Utils.ts";
 import { fromWei, toWei } from "@/Hooks/Utils";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import ContractList from "@/Contract/Contract.ts";
@@ -38,6 +39,12 @@ const Swap: React.FC = () => {
       getPageInfo();
     }
   }, [wallertAddress]);
+
+  // 按钮加载
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  // 兑换比例
+  const [ratios, setRatios] = useState<BigNumber>(BigNumber.from(0));
 
   //usdt 余额
   const [usdTokenBalance, setUsdTokenBalance] = useState<BigNumber>(
@@ -123,7 +130,20 @@ const Swap: React.FC = () => {
         methodsName: "sellFee",
         params: [],
       }),
+      ContractRequest({
+        tokenName: "CaPool",
+        methodsName: "getUsdtToCaAmount",
+        params: [toWei(1)],
+      }),
+      ContractRequest({
+        tokenName: "CaPool",
+        methodsName: "getUsdtToCaAmount",
+        params: [toWei(1)],
+      }),
     ]);
+
+    setRatios(balanceResult[6].value?.value);
+
     if (
       balanceResult[0].status === "fulfilled" &&
       balanceResult[0].value?.value
@@ -163,7 +183,6 @@ const Swap: React.FC = () => {
       }))
     );
   };
-
   const swapRateChange = (index) => {
     clearCheckStatus();
     setSwapNumList((prevList) =>
@@ -172,17 +191,13 @@ const Swap: React.FC = () => {
         status: i === index ? true : item.status, // 如果是目标下标，status 设置为 true，否则保持原值
       }))
     );
-
     const rateItem = swapNumList[index];
-
     let inputAmount: BigNumber = BigNumber.from(0); // 默认值是 0
-
     if (swapType == 1) {
       inputAmount = inputAmount = caTokenBalance.mul(rateItem.value).div(1000);
     } else {
       inputAmount = usdTokenBalance.mul(rateItem.value).div(1000);
     }
-
     swapInputChange(fromWei(inputAmount));
   };
 
@@ -210,11 +225,9 @@ const Swap: React.FC = () => {
         methodsName: "getUsdtToCaAmount",
         params: [toWei(amount)],
       });
-
       setOutputSwapAmount(caValue.value);
     }
   };
-
   const estimateAmount = (amount: BigNumber) => {
     let result: BigNumber;
 
@@ -230,13 +243,16 @@ const Swap: React.FC = () => {
 
   //开始兑换
   const confirmBtnClick = async () => {
+    if (buttonLoading == true) {
+      return;
+    }
+    setButtonLoading(true)
     let path: string[] = [];
     if (swapType === 1) {
       path = [
         ContractList["CaToken"].address,
         ContractList["USDTToken"].address,
       ];
-
       try {
         //2. 检查授权额度
         const allowanceRes = await ContractRequest({
@@ -245,7 +261,8 @@ const Swap: React.FC = () => {
           params: [wallertAddress, ContractList["CaPool"].address],
         });
         // 2. 如果额度不足，则发起 approve 授权
-        if (allowanceRes.value.lt(BigNumber.from(inputSwapAmount))) {
+
+        if (allowanceRes.value.lt(toWei(inputSwapAmount))) {
           const approveRes = await ContractSend({
             tokenName: "CaToken",
             methodsName: "approve",
@@ -256,10 +273,12 @@ const Swap: React.FC = () => {
           });
           if (!approveRes || !approveRes.value) {
             console.error("USDT 授权失败");
+            setButtonLoading(false);
             return; // 授权失败则中止
           }
         }
       } catch (error) {
+        setButtonLoading(false);
         console.error("交易出错:", error);
       }
     } else {
@@ -269,12 +288,12 @@ const Swap: React.FC = () => {
         ContractList["CaToken"].address,
       ];
 
-      
-      //判断我的gasAmount 是否>=输入值
-      if (userInfo.gasAmount.gte(BigNumber.from(inputSwapAmount))) {
-          //弹窗提示
-
-          return;
+      //判断我的gasAmount 是否<输入值
+      if (userInfo.gasAmount.lt(toWei(inputSwapAmount))) {
+        //弹窗提示
+        setButtonLoading(false);
+        Totast("GAS余额不足", "warning"); // 邀请人地址不正确
+        return;
       }
 
       // 1. 检查授权额度
@@ -285,7 +304,7 @@ const Swap: React.FC = () => {
       });
 
       // 2. 如果额度不足，则发起 approve 授权
-      if (allowanceRes.value.lt(BigNumber.from(inputSwapAmount))) {
+      if (allowanceRes.value.lt(toWei(inputSwapAmount))) {
         const approveRes = await ContractSend({
           tokenName: "USDTToken",
           methodsName: "approve",
@@ -296,22 +315,24 @@ const Swap: React.FC = () => {
         });
         if (!approveRes || !approveRes.value) {
           console.error("USDT 授权失败");
+          setButtonLoading(false);
           return; // 授权失败则中止
         }
       }
     }
-
     const swapRes = await ContractSend({
       tokenName: "CaPool",
       methodsName: "swap", // 假设兑换方法名为 usdtToCa
       params: [toWei(inputSwapAmount), path],
     });
     if (swapRes && swapRes.value) {
+      setButtonLoading(false);
       // 兑换成功后，刷新页面数据，例如用户余额
       getPageInfo();
       setInputSwapAmount("0");
       clearCheckStatus();
     } else {
+        setButtonLoading(false);
       console.error("兑换失败");
     }
   };
@@ -323,7 +344,7 @@ const Swap: React.FC = () => {
         <div className="swap-page">
           <div className="scale-tip">
             <img src={tip} className="tip-img" alt="" />
-            <span>兑换比例：1 USDT ≈ 102.56 CA</span>
+            <span>兑换比例：1 USDT ≈ {fromWei(ratios)} CA</span>
           </div>
           <div className="select-assets">选择资产</div>
 
@@ -409,9 +430,11 @@ const Swap: React.FC = () => {
             </span>
             <span className="go-get">去获取</span>
           </div>
+
           <Button className="confirm-btn swap-btn" onClick={confirmBtnClick}>
-            兑换
+            {buttonLoading ? <Spin /> : "兑换"}
           </Button>
+
           <div className="records-title">
             <span className="title-text">兑换记录</span>
             <div className="more-box">

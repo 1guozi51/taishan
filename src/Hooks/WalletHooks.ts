@@ -32,7 +32,7 @@ export async function ensureWalletConnected(): Promise<boolean> {
         },
         // rpcUrls: ['https://bsc-dataseed.binance.org/'],//远程节点地址
         rpcUrls: ['https://bsc-testnet-rpc.publicnode.com/'],//远程节点地址
-        blockExplorerUrls: ['https://bscscan.com']
+        blockExplorerUrls: ['http://143.92.39.28:9030/api']
     };
     let accounts: string[] = [];
     try {

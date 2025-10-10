@@ -18,7 +18,6 @@ const Header: React.FC<{
   const address = walletAddress
     ? walletAddress.slice(0, 6) + "..." + walletAddress.slice(-4)
     : "";
-  console.log("wallet", walletAddress);
   const navigate = useNavigate();
   const [menuStatus, setMenuStatus] = useState<boolean>(false);
   return (
