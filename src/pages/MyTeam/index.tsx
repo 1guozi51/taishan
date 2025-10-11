@@ -2,21 +2,20 @@ import "./index.scss";
 import { useState, useEffect } from "react";
 import copy from "@/assets/img/copy.png";
 import wallet from "@/assets/img/wallet.png";
-import { Button } from "antd-mobile";
+import { Button, InfiniteScroll } from "antd-mobile";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
-import { InfiniteScroll } from "antd-mobile";
 import { Spin, Empty } from "antd";
 import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
+import { useNavigate } from "react-router-dom";
 
 const MyTeam: React.FC = () => {
+  const navigate = useNavigate();
   const wallertAddress = userAddress().address;
-  // const userInfo = JSON.parse(localStorage.getItem("userInfo") || {});
   const [teamInfo, setTeamInfo] = useState({});
   const [location, setLocation] = useState("");
+  const [tabIndex, setTabIndex] = useState(1); //1团队列表 2代表33团队
   const [list, setList] = useState([]);
-  // 数据是否加载
-  const [dataLoading, setDataLoading] = useState(false);
   // 列表是否加载
   const [listLoding, setListLoding] = useState(false);
   // 是否还有更多数据可以加载
@@ -25,8 +24,40 @@ const MyTeam: React.FC = () => {
     address: wallertAddress,
     current: 1,
     size: 10,
-    total: "", //总数
+    total: 0, //总数
   });
+  //重置请求参数和请求数据
+  const resetList = () => {
+    setDataParam({
+      size: 10,
+      current: 1,
+      total: 0,
+      address:wallertAddress,
+    });
+    setList([]);
+  };
+
+  const tabChange = (type) => {
+    console.log("type==", type);
+    resetList();
+    setTabIndex(type);
+    if (type == 1) {
+      getDataList({
+        Url: "user/teamChild",
+        Data: { ...dataParam },
+      });
+    } else {
+      getDataList33({
+        Url: "user/team33Child",
+        Data: {
+          address: wallertAddress,
+        },
+      });
+    }
+  };
+  const PathNav = (url) => {
+    navigate(url);
+  };
   const copyAction = () => {
     //获取window浏览器地址
     const input = document.createElement("textarea");
@@ -50,13 +81,11 @@ const MyTeam: React.FC = () => {
       }
     });
   };
-  const getDataList = async () => {
+  const getDataList = async ({ Url, Data }) => {
     setListLoding(true);
     const result = await NetworkRequest({
-      Url: "user/teamChild",
-      Data: {
-        ...dataParam,
-      },
+      Url,
+      Data,
     });
     if (result.data.code == 200) {
       setList(result.data.data.records);
@@ -75,13 +104,28 @@ const MyTeam: React.FC = () => {
     }
   };
 
+  const getDataList33 = async ({ Url, Data }) => {
+    setListLoding(true);
+    await NetworkRequest({
+      Url,
+      Data,
+    }).then(res=>{
+       setListLoding(false);
+       console.log("res===",res)
+        if(res.data.code==200){
+          setList(res.data.data)
+        }
+    })
+  };
   // 获取更多团队列表
   const loadMoreAction = async () => {
-    console.log("进来了获取更多列表");
-    const nexPage = dataParam.current + 1;
+    console.log("获取更多团队列表=")
+    if(tabIndex==2){
+      return
+    }
     setDataParam((prevState) => ({
       ...prevState,
-      current: nexPage,
+      current: dataParam.current + 1,
     }));
     await NetworkRequest({
       Url: "user/teamChild",
@@ -101,7 +145,7 @@ const MyTeam: React.FC = () => {
   };
   useEffect(() => {
     getPageInfo();
-    getDataList();
+     tabChange(1)
   }, []);
   return (
     <>
@@ -131,26 +175,38 @@ const MyTeam: React.FC = () => {
         <div className="awardButton">
           <div className="record boxBorder">
             <div>累计领取奖励(USDT)</div>
-            <div>{fromWei(teamInfo.teamReward)}</div>
-            <Button>记录</Button>
+            <div>{fromWei(teamInfo.teamUsdtReward)}</div>
+            <Button
+              onClick={() => {
+                PathNav("/recordList?type=team&id=101");
+              }}
+            >
+              记录
+            </Button>
           </div>
           <div className="record boxBorder">
             <div>待领取奖励(USDT)</div>
-            <div>{fromWei(teamInfo.teamClaimReward)}</div>
-            <Button>记录</Button>
+            <div>{fromWei(teamInfo.teamUsdtClaimReward)}</div>
+            <Button>领取</Button>
           </div>
         </div>
 
         <div className="awardButton">
           <div className="record boxBorder">
             <div>累计领取奖励(CA)</div>
-            <div>{fromWei(teamInfo.caReward)}</div>
-            <Button>记录</Button>
+            <div>{fromWei(teamInfo.teamCaReward)}</div>
+            <Button
+              onClick={() => {
+                PathNav("/recordList?type=team&id=102");
+              }}
+            >
+              记录
+            </Button>
           </div>
           <div className="record boxBorder">
             <div>待领取奖励(CA)</div>
-            <div>{fromWei(teamInfo.caClaimReward)}</div>
-            <Button>记录</Button>
+            <div>{fromWei(teamInfo.teamCaClaimReward)}</div>
+            <Button>领取</Button>
           </div>
         </div>
 
@@ -165,42 +221,61 @@ const MyTeam: React.FC = () => {
             }}
           />
         </div>
-        <div className="title">团队列表</div>
+        <div className="title-option">
+          <div
+            className={`${tabIndex == 1 ? "tab-active" : ""}`}
+            onClick={() => {
+              tabChange(1);
+            }}
+          >
+            团队列表
+          </div>
+          <div
+            className={`tab-left ${tabIndex == 2 ? "tab-active" : ""}`}
+            onClick={() => {
+              tabChange(2);
+            }}
+          >
+            33团队
+          </div>
+        </div>
         <div className="tabTltle">
           <div>钱包地址</div>
           <div>加入时间</div>
           <div>业绩(CA)</div>
         </div>
-        {list.length == 0 ? (
-          <Empty />
-        ) : (
-          list.map((e, index) => {
-            return (
-              <div className="contentList" key={index}>
-                <div>
-                  <div className="imgBox">
-                    <img src={wallet} alt="" />
+        <div className="list-box">
+          {list.length == 0 ? (
+            <Empty />
+          ) : (
+            list.map((e, index) => {
+              return (
+                <div className="contentList" key={index}>
+                  <div>
+                    <div className="imgBox">
+                      <img src={wallet} alt="" />
+                    </div>
+                    <span>{SubAddress(e.address)}</span>
                   </div>
-                  <span>{SubAddress(e.address)}</span>
+                  <div>
+                    {formatDate(e.createTime).date} <br></br>
+                    {formatDate(e.createTime).time}
+                  </div>
+                  <div>{fromWei(e.teamPerf)}</div>
                 </div>
-                <div>
-                  {formatDate(e.createTime).date} <br></br>
-                  {formatDate(e.createTime).time}
+              );
+            })
+          )}
+          <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
+            <div>
+              {listLoding && (
+                <div className="loding flex flexCenter">
+                  <Spin />
                 </div>
-                <div>{fromWei(e.teamPerf)}</div>
-              </div>
-            );
-          })
-        )}
-        <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
-          <div>
-            {listLoding && (
-              <div className="loding flex flexCenter">
-                <Spin />
-              </div>
-            )}
-          </div>
-        </InfiniteScroll>
+              )}
+            </div>
+          </InfiniteScroll>
+        </div>
       </div>
     </>
   );

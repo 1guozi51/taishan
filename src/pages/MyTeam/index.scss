@@ -1,20 +1,20 @@
-.teamInfo{
-  background: url('@/assets/img/teamCard.png') no-repeat;
+.teamInfo {
+  background: url("@/assets/img/teamCard.png") no-repeat;
   background-size: 100% 100%;
   padding: 16px 12px;
   color: #fff;
-  div{
+  div {
     display: flex;
     justify-content: space-between;
   }
-  div:nth-child(1){
+  div:nth-child(1) {
     font-family: AlibabaPuHuiTi;
     font-size: 14px;
     font-weight: normal;
     line-height: normal;
     letter-spacing: 0px;
   }
-  div:nth-child(2){ 
+  div:nth-child(2) {
     font-size: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1471);
     margin-bottom: 12px;
@@ -23,11 +23,11 @@
   }
 }
 
-.awardButton{
+.awardButton {
   display: flex;
   gap: 12px;
   margin-top: 12px;
-  .record{
+  .record {
     flex: 1;
     box-sizing: border-box;
     border: 1px solid transparent;
@@ -36,89 +36,101 @@
     text-align: center;
     background: linear-gradient(180deg, #021e74 10%, #020d40 90%);
     position: relative;
-    div:nth-child(1){ 
+    div:nth-child(1) {
       font-family: AlibabaPuHuiTi;
       font-size: 12px;
       font-weight: normal;
       line-height: normal;
       letter-spacing: 0px;
-      color: #67BAFF;
+      color: #67baff;
     }
-    div:nth-child(2){ 
+    div:nth-child(2) {
       font-size: 16px;
-      color: #FFFFFF;
+      color: #ffffff;
       margin: 7px auto 15px;
     }
-    button{
+    button {
       width: 100%;
       height: 40px;
       border-radius: 45px;
-      border: 1px solid #67BAFF;
+      border: 1px solid #67baff;
       font-size: 14px;
       font-family: AlibabaPuHuiTi;
-      color: #67BAFF;
+      color: #67baff;
       background: #020f47;
       box-sizing: border-box;
     }
   }
-  .record:nth-child(2){
-    button{
+  .record:nth-child(2) {
+    button {
       border: unset;
       color: #000000;
-      background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
+      background: linear-gradient(
+        270deg,
+        #ab46ff 0%,
+        #00b7ff 48%,
+        #00ffed 100%
+      );
     }
   }
-  
 }
 
-.intiveBox{
+.intiveBox {
   position: relative;
   display: flex;
   align-items: center;
   height: 44px;
   padding: 0 12px;
   margin-top: 12px;
-  div:nth-child(1){
+  div:nth-child(1) {
     font-family: AlibabaPuHuiTi;
     font-size: 12px;
     font-weight: normal;
     line-height: normal;
     letter-spacing: 0px;
-    color: #67BAFF;
+    color: #67baff;
   }
-  div:nth-child(2){
+  div:nth-child(2) {
     font-family: AlibabaPuHuiTi;
     font-size: 12px;
     font-weight: normal;
     line-height: normal;
     letter-spacing: 0px;
-    color: #FFFFFF;
+    color: #ffffff;
     width: 60%;
     text-overflow: ellipsis;
-    overflow: hidden; 
-    white-space: nowrap; 
+    overflow: hidden;
+    white-space: nowrap;
   }
-  img{
+  img {
     width: 16px;
     height: 16px;
     margin-left: auto;
   }
 }
+.tab-left {
+  margin-left: 24px;
+}
 
-.title{
+.tab-active {
+  color: #00b7ff;
+}
+.title-option {
   font-family: AlibabaPuHuiTi;
   font-size: 16px;
   font-weight: normal;
   line-height: normal;
   letter-spacing: 0px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 20px;
+  display: flex;
+  align-items: center;
 }
-.tabTltle{
+.tabTltle {
   margin-top: 11px;
   display: flex;
   margin-bottom: 10px;
-  div{
+  div {
     flex: 1;
     font-family: AlibabaPuHuiTi;
     font-size: 12px;
@@ -127,17 +139,18 @@
     letter-spacing: 0px;
     color: rgba(255, 255, 255, 0.65);
   }
-  div:last-child , div:nth-child(2){
+  div:last-child,
+  div:nth-child(2) {
     text-align: right;
   }
 }
 
-.contentList{
+.contentList {
   display: flex;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
   padding-bottom: 12px;
   margin-bottom: 12px;
-  div{
+  div {
     display: flex;
     align-items: center;
     font-family: AlibabaPuHuiTi;
@@ -145,28 +158,31 @@
     font-weight: normal;
     line-height: normal;
     letter-spacing: 0px;
-    color: #FFFFFF;
+    color: #ffffff;
     flex: 1;
-    span{
+    span {
       margin-left: 6px;
     }
   }
-  div:last-child , div:nth-child(2){
+  div:last-child,
+  div:nth-child(2) {
     justify-content: right;
     text-align: right;
   }
-  .imgBox{
-    background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
+  .imgBox {
+    background: linear-gradient(270deg, #ab46ff 0%, #00b7ff 48%, #00ffed 100%);
     width: 32px;
     height: 32px;
     align-items: center;
     display: flex;
     justify-content: center;
     border-radius: 50%;
-    img{
+    img {
       width: 16px;
       height: 16px;
     }
   }
 }
-
+.list-box {
+  margin-top: 24px;
+}

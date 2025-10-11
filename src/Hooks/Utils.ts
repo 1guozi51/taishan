@@ -159,13 +159,12 @@ export function formatDate(dateString) {
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
-
   const formattedTime = `${hours}:${minutes}:${seconds}`;
-
   // 返回包含日期和时间的对象
   return {
     date: formattedDate,
-    time: formattedTime
+    time: formattedTime,
+    dateTime:formattedDate+' '+formattedTime
   };
 }
 export async function ensureBNBChain(): Promise<boolean> {
@@ -194,3 +193,4 @@ export async function ensureBNBChain(): Promise<boolean> {
     return false;
   }
 }
+ 

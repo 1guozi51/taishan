@@ -274,7 +274,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         <div className="option-input-end">
           <Input
             type="number"
-            placeholder="输入买入数量（10-3000U）"
+            placeholder="输入买入数量（10-3000）"
             className="input-class"
             value={buyNumber}
             onChange={(e) => {

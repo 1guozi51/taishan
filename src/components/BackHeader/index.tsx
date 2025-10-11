@@ -20,7 +20,7 @@ const Header: React.FC<{
           className="back-img"
           alt=""
         />
-        <span className="title">{title}</span>
+        <span className="back-header-title">{title}</span>
         <span
           onClick={() => rightUrl && navigate(rightUrl)}
           className="right-text"

@@ -17,16 +17,24 @@ interface MenuType {
   label: string;
   url: string;
 }
-const menuList: MenuType[] = [
+// const menuList: MenuType[] = [
+//     { label: "首页", url: "/" },
+//     { label: "门票记录", url: "/recordList?type=tickets" },
+//     { label: "我的众筹", url: "/crowd" },
+//     { label: "我的矿机", url: "" },
+//     { label: "Swap", url: "/swap" },
+//     { label: "我的节点", url: "/myNode" },
+//     { label: "我的团队", url: "/myTeam" },
+// ];
+ const menuList: MenuType[] = [
     { label: "首页", url: "/" },
-    { label: "门票记录", url: "" },
-    { label: "我的众筹", url: "/crowd" },
+    { label: "门票记录", url: "/recordList?type=tickets" },
+    { label: "我的众筹", url: "" },
     { label: "我的矿机", url: "" },
     { label: "Swap", url: "/swap" },
     { label: "我的节点", url: "/myNode" },
     { label: "我的团队", url: "/myTeam" },
 ];
- 
 
 const Menu: React.FC<{
   visible: boolean;
