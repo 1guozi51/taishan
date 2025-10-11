@@ -18,6 +18,8 @@ interface ContractResult {
   value: any;
 }
 
+
+
 async function useContractSend({
   tokenName,
   methodsName,

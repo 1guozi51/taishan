@@ -1,6 +1,6 @@
 import Erc20 from "./ABI/Erc20.ts";
 import CaPoolABI from "./ABI/CaPoolABI.ts";
-
+import { CONFIG } from "@/config/env";
 interface ContractItem {
     address: string;
     abi: any[]; // 或具体ABI类型
@@ -11,15 +11,15 @@ interface ContractMap {
 // 测试
 const Contract:ContractMap = {
     "USDTToken": {
-        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "address": CONFIG.contractUSDT,
         "abi": Erc20
     },
     "CaToken": {
-        "address": "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
+        "address": CONFIG.contractCA,
         "abi": Erc20
     },
     "CaPool": {
-        "address": "0xf3f27128C8596915093439671cF223978AA3abae",
+        "address": CONFIG.contractPool,
         "abi": CaPoolABI
     }
 }

@@ -1,8 +1,7 @@
 // NetworkRequest.ts
 import { message } from "antd";
-// const RequestUrl = "https://api.habitld.top/dapp/";
-const RequestUrl = "https://api.soulca.com/";
-// const RequestUrl = "http://143.92.39.28:9030/api/";
+import { CONFIG } from "@/config/env";
+const RequestUrl = CONFIG.apiBase;
 interface NetWorkProps {
     Url: string;
     Method?: "get" | "post" | "put" | "delete";

@@ -5,7 +5,7 @@ import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { Spin } from "antd";
 import i18n, {t} from "i18next";    
-
+import { CONFIG } from "@/config/env";
 const Home = lazy(() => import("@/pages/Home/index.tsx"));
 const Deposit = lazy(() => import("@/pages/Deposit/index.tsx"));
 const Withdraw = lazy(() => import("@/pages/Withdraw/index.tsx"));
@@ -36,6 +36,7 @@ function App() {
       </div>
     );
   }
+    
   return (
     <>
       {walletAddress ? (

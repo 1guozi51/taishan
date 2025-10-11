@@ -9,9 +9,12 @@ import { Spin, Empty } from "antd";
 import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
-
+import {BigNumber} from 'ethers'
+import {concatSign} from '@/Hooks/Utils.ts'
+import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
 const MyTeam: React.FC = () => {
   const navigate = useNavigate();
+  const { signMessage } = UseSignMessage();
   const wallertAddress = userAddress().address;
   const [teamInfo, setTeamInfo] = useState({});
   const [location, setLocation] = useState("");
@@ -143,6 +146,15 @@ const MyTeam: React.FC = () => {
       }
     });
   };
+  //待领取奖励
+  const btnCLick = async () => {
+    const bigNum = BigNumber.from("0x111");  
+    const bigRes =   concatSign(bigNum);
+    const sigResult=await signMessage(bigRes);
+    if (sigResult) {
+      console.log("✅ Signature:", sigResult);
+    }
+  };
   useEffect(() => {
     getPageInfo();
     tabChange(1);
@@ -187,7 +199,13 @@ const MyTeam: React.FC = () => {
           <div className="record boxBorder">
             <div> {t("待领取奖励")}(USDT)</div>
             <div>{fromWei(teamInfo.teamUsdtClaimReward)}</div>
-            <Button>{t("领取")}</Button>
+            <Button
+              onClick={() => {
+                btnCLick();
+              }}
+            >
+              {t("领取")}
+            </Button>
           </div>
         </div>
 
@@ -200,7 +218,7 @@ const MyTeam: React.FC = () => {
                 PathNav("/recordList?type=team&id=102");
               }}
             >
-               {t("记录")}
+              {t("记录")}
             </Button>
           </div>
           <div className="record boxBorder">
@@ -236,7 +254,7 @@ const MyTeam: React.FC = () => {
               tabChange(2);
             }}
           >
-           {t("33社区")}
+            {t("33社区")}
           </div>
         </div>
         <div className="tabTltle">

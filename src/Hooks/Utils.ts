@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { ethers, BigNumber } from "ethers";
+import CryptoJS from "crypto-js";
 /**
  * 格式化钱包地址
  * @param addr 钱包地址
@@ -196,4 +197,19 @@ export async function ensureBNBChain(): Promise<boolean> {
     return false;
   }
 }
+
+export const concatSign = (bigNumber: BigNumber): string => {
+  // 获取当前时间戳（秒）
+  const timestamp = Math.floor(Date.now() / 1000).toString();
+
+  // 拼接参数
+  const combined = `${bigNumber}${timestamp}`;
+
+  // 使用 SHA256 加密
+  const encrypted = CryptoJS.SHA256(combined).toString();
+
+  return encrypted;
+};
+
+
  

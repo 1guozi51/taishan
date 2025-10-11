@@ -1,6 +1,6 @@
 import { userAddress, userChainId } from "@/Store/Store";
 import { message } from "antd";
-
+import { CONFIG } from "@/config/env";
 declare global {
   interface Window {
     ethereum?: any;
@@ -21,19 +21,15 @@ export async function ensureWalletConnected(): Promise<boolean> {
   console.log("当前链ID:", currentChainId);
   setChain(currentChainId);
   const BNB_PARAMS = {
-    chainId: "0x38", // 56 的十六进制 => BSC Mainnet
-    // chainId: '0x61', // 97 的十六进制 => BSC Testnet
-    // chainName: 'BNB Smart Chain Mainnet',
-    chainName: "BNB Smart Chain Testnet",
+    chainId: CONFIG.chainId, // 56 的十六进制 => BSC Mainnet
+    chainName: CONFIG.chainName,
     nativeCurrency: {
       name: "BNB",
       symbol: "BNB",
       decimals: 18,
     },
-    // rpcUrls: ['https://bsc-testnet-rpc.publicnode.com/'],//远程节点地址
-    // blockExplorerUrls: ['http://143.92.39.28:9030/api']
-    rpcUrls: ["https://bsc-dataseed.binance.org/"],
-    blockExplorerUrls: ["https://bscscan.com"],
+    rpcUrls: [CONFIG.rpcUrl],
+    blockExplorerUrls: [CONFIG.blockExplorerUrl],
   };
   let accounts: string[] = [];
   try {
