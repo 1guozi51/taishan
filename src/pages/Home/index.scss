@@ -39,7 +39,8 @@
           rgba(75, 41, 242, 0) 24%,
           #4b29f2 100%
         );
-        font-size: 20px;
+        // font-size: 20px;
+        font-size: 13px;
         color: #fff;
       }
 
@@ -49,7 +50,8 @@
 
         .effect-text1 {
           width: max-content;
-          font-size: 14px;
+          // font-size: 14px;
+          font-size: 11px;
           color: #fff;
         }
 
@@ -139,7 +141,8 @@
     .text2 {
       width: max-content;
       margin: auto;
-      font-size: 12px;
+      // font-size: 12px;
+      font-size: 9px;
       background: linear-gradient(
         270deg,
         #ab46ff 0%,
@@ -263,9 +266,9 @@
         flex: 1;
         height: 100%;
         border-radius: 4px;
-        font-size: 14px;
+        // font-size: 14px;
+        font-size: 9px;
         color: #67baff;
-
         &.active {
           color: #000;
           background: linear-gradient(

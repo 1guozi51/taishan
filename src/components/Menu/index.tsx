@@ -12,29 +12,30 @@ import hide from "@/assets/img/hide-assets.png";
 import more from "@/assets/img/more.png";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { fromWei } from "@/Hooks/Utils";
-
+import i18n, { t } from "i18next";
 interface MenuType {
   label: string;
   url: string;
 }
-// const menuList: MenuType[] = [
-//     { label: "首页", url: "/" },
-//     { label: "门票记录", url: "/recordList?type=tickets" },
-//     { label: "我的众筹", url: "/crowd" },
-//     { label: "我的矿机", url: "" },
-//     { label: "Swap", url: "/swap" },
-//     { label: "我的节点", url: "/myNode" },
-//     { label: "我的团队", url: "/myTeam" },
-// ];
- const menuList: MenuType[] = [
-    { label: "首页", url: "/" },
-    { label: "门票记录", url: "/recordList?type=tickets" },
-    { label: "我的众筹", url: "" },
-    { label: "我的矿机", url: "" },
-    { label: "Swap", url: "/swap" },
-    { label: "我的节点", url: "/myNode" },
-    { label: "我的团队", url: "/myTeam" },
+const menuList: MenuType[] = [
+  { label:  t('首页'), url: "/" },
+  { label: t("门票"), url: "/recordList?type=tickets" },
+  { label: t("众筹"), url: "" },
+  { label: t("矿机"), url: "" },
+  { label: "Swap", url: "/swap" },
+  { label: t("节点"), url: "/myNode" },
+  { label: t("团队"), url: "/myTeam" },
 ];
+
+// const menuList: MenuType[] = [
+//   { label:  t('首页'), url: "/" },
+//   { label: t("门票"), url: "/recordList?type=tickets" },
+//   { label: t("众筹"), url: "/crowd" },
+//   { label: t("矿机"), url: "" },
+//   { label: "Swap", url: "/swap" },
+//   { label: t("节点"), url: "/myNode" },
+//   { label: t("团队"), url: "/myTeam" },
+// ];
 
 const Menu: React.FC<{
   visible: boolean;
@@ -49,6 +50,22 @@ const Menu: React.FC<{
     ? walletAddress.slice(0, 6) + "..." + walletAddress.slice(-4)
     : "";
   //获取用户信息
+
+  // 当前语言
+  const [curLang, setCurLang] = useState<number>(1);
+
+  // 设置语言
+  const changeLanguage = (name: string) => {
+    i18n.changeLanguage(name);
+    if (name == "zh") {
+      setCurLang(1);
+    }
+    if (name == "en") {
+      setCurLang(2);
+    }
+    window.localStorage.setItem("lang", name);
+    window.location.reload();
+  };
 
   const getUserInfo = async () => {
     const userInfoResult = await Promise.allSettled([
@@ -68,7 +85,7 @@ const Menu: React.FC<{
       userInfoResult[1].status === "fulfilled" ? true : false;
     if (userInfoNetWork) {
       setUserInfo(userInfoResult[0].value.data.data);
-      localStorage.setItem('userInfo',JSON.stringify(userInfo))
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
       setGasNumber(userInfoResult[1].value.value.gasAmount);
     }
   };
@@ -79,27 +96,39 @@ const Menu: React.FC<{
         navigate(url);
       }, 200);
     } else {
-      return Totast("敬请期待", "warning"); // 邀请人地址不正确
+      return Totast(t("敬请期待"), "warning"); // 邀请人地址不正确
     }
   };
   const getNodeLabel = (level) => {
     switch (level) {
       case 1:
-        return "小节点";
+        return t('小节点');
       case 2:
-        return "大节点";
+        return t("大节点");
       case 3:
-        return "超级节点";
+        return t("超级节点");
       case 4:
-        return "股东节点";
+        return t("股东节点");
       default:
         return "";
+    }
+  };
+  // 获取当前语言
+  const getCurrLang = () => {
+    const localLang: string = window.localStorage.getItem("lang") ?? "zh";
+    i18n.changeLanguage(localLang);
+    if (localLang == "zh") {
+      setCurLang(1);
+    }
+    if (localLang == "en") {
+      setCurLang(2);
     }
   };
   useEffect(() => {
     document.body.style.overflow = visible ? "hidden" : "";
     if (walletAddress) {
       getUserInfo();
+      getCurrLang();
     }
   }, [visible]);
 
@@ -108,6 +137,7 @@ const Menu: React.FC<{
       <div className={`menu-content ${visible ? "show" : "hide"}`}>
         <div className="connect-info">
           <img onClick={onClose} src={close} className="close-img" alt="" />
+
           <div className="wallet-box">
             <img src={wallet} className="wallet-img" alt="" />
           </div>
@@ -125,23 +155,48 @@ const Menu: React.FC<{
             </div>
           )}
         </div>
+
+        <div className="connect-info">
+            <div className="lang-txt">{t("切换语言")}</div>
+          <div className="langAndClose">
+            <div className="lang flex flexStart">
+              <div
+                className={"item " + (curLang == 1 ? "select" : "")}
+                onClick={() => {
+                  changeLanguage("zh");
+                }}
+              >
+                {t("简体中文")}
+              </div>
+              <div
+                className={"item " + (curLang == 2 ? "select" : "")}
+                onClick={() => {
+                  changeLanguage("en");
+                }}
+              >
+                English
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="menu-info">
           <div className="assets-info">
             <div className="assets-title">
-              <span>我的资产</span>
+              <span>{t("资产")}</span>
               <img src={hide} className="status-img" alt="" />
             </div>
             <div className="balance-box">
               <div className="balance-item">
                 <div className="balance-key">
-                  <span>USDT余额</span>
+                  <span>USDT{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
                 <div className="balance-val">{userInfo.usdtBalance}</div>
               </div>
               <div className="balance-item">
                 <div className="balance-key">
-                  <span>CA余额</span>
+                  <span>CA{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
                 <div className="balance-val">{userInfo.caBalance}</div>
@@ -157,10 +212,10 @@ const Menu: React.FC<{
             </div>
           </div>
           <div className="gas-balance">
-            <div className="gas">GAS余额：{fromWei(gasNumber) || "-"}</div>
+            <div className="gas">GAS{t("余额")}：{fromWei(gasNumber) || "-"}</div>
             <div>
-              <span className="link-text">明细记录</span>
-              <span className="link-text">去获取</span>
+              <span className="link-text">{t("明细记录")}</span>
+              <span className="link-text">{t("获取")}</span>
             </div>
           </div>
           {menuList.map((menu, index) => {
@@ -176,7 +231,7 @@ const Menu: React.FC<{
             );
           })}
 
-          <div className="disconnect-box">断开绑定钱包</div>
+          <div className="disconnect-box">{t("断开绑定钱包")}</div>
         </div>
       </div>
     </>

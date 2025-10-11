@@ -11,7 +11,7 @@ interface ContractMap {
 // 测试
 const Contract:ContractMap = {
     "USDTToken": {
-        "address": "0x8873bB4707351279e921637f0700BE5f9cef1b1B",
+        "address": "0x55d398326f99059fF775485246999027B3197955",
         "abi": Erc20
     },
     "CaToken": {
@@ -19,7 +19,7 @@ const Contract:ContractMap = {
         "abi": Erc20
     },
     "CaPool": {
-        "address": "0x81097251B331564Cc418A1d5B05Af8ec2E1E5437",
+        "address": "0xf3f27128C8596915093439671cF223978AA3abae",
         "abi": CaPoolABI
     }
 }

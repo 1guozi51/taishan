@@ -43,6 +43,9 @@ export function fromWei(
   fixed = true,
   precision = 4
 ): string {
+  if(value==''){
+    return ''
+  }
   if (value === undefined || value === null) return "0";
   try {
     const etherValue = ethers.utils.formatUnits(value.toString(), decimals);

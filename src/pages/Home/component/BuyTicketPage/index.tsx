@@ -8,7 +8,7 @@ import { Totast } from "@/Hooks/Utils.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import Dice from "@/components/Dice";
-import { use } from "i18next";
+import { t } from "i18next";
 
 interface BuyTicketPageClass {
   onClose: () => void;
@@ -82,7 +82,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       setUserInfo(userInfoValue);
     }
     if (userInfo.inviter === ethers.constants.AddressZero && inviteStorage) {
-      setInputAddress(inviteStorage)
+      setInputAddress(inviteStorage);
     }
     setButLoding(false);
   };
@@ -90,9 +90,10 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   const closeBindFloat = () => {
     setShowBindFloat(false);
   };
-
+  
   // 确定购买门票
   const confirmButAction = async () => {
+    return 
     if (!canBuy) {
       return;
     }
@@ -100,22 +101,22 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       userInfo.inviter == ethers.constants.AddressZero &&
       !ethers.utils.isAddress(inputAddress)
     ) {
-      Totast("邀请人地址不正确", "warning"); // 邀请人地址不正确
+      Totast(t("邀请人地址不正确"), "warning"); // 邀请人地址不正确
       return;
     }
     if (userInfo.inviter != ethers.constants.AddressZero) {
-      if (userInfo.gasAmount.gt(BigNumber.from(0))) {
-        //不可以购买
-        Totast("您当前持有GAS,无法购买门票", "warning"); // 您当前持有GAS，无法购买门票
-        return;
-      }
+      // if (userInfo.gasAmount.gt(BigNumber.from(0))) {
+      //   //不可以购买
+      //   Totast(t("您当前持有GAS,无法购买门票"), "warning"); // 您当前持有GAS，无法购买门票
+      //   return;
+      // }
       if (userInfo.ticketNumber.lt(BigNumber.from(1))) {
-        Totast("您无法购买门票", "warning"); // 您当前持有GAS，无法购买门票
+        Totast(t("您无法购买门票"), "warning"); // 您当前持有GAS，无法购买门票
         return;
       }
     }
     if (parseFloat(userBalance) < parseFloat(buyNumber)) {
-      Totast("USDT余额不足", "warning"); // USDT余额不足
+      Totast(t("USDT余额不足"), "warning"); // USDT余额不足
       return;
     }
     setButLoding(true);
@@ -130,6 +131,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         applyAmount = ethers.utils.formatUnits(res.value);
       }
     });
+
     if (parseFloat(applyAmount) < parseFloat(buyNumber)) {
       await ContractSend({
         tokenName: "USDTToken",
@@ -142,7 +144,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         if (res.value) {
           isApply = true;
         } else {
-          Totast("授权失败，请检查网络连接", "error"); // 授权失败，请检查网络连接
+          Totast(t("授权失败,请检查网络连接"), "error"); // 授权失败，请检查网络连接
           return;
         }
       });
@@ -150,7 +152,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       isApply = true;
     }
     if (!isApply) {
-      Totast("检查授权或者授权时发生了错误，请检查网络后重新尝试", "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
+      Totast(t("检查授权或者授权时发生了错误，请检查网络后重新尝试"), "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       return;
     }
 
@@ -166,6 +168,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
             : userInfo.inviter,
         ],
       });
+      console.log("res===", res);
       // 在调用后显示骰子并设置运行状态
       setShowDice(true);
       setRunning(true);
@@ -178,15 +181,15 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
           setShowDice(false);
           Props.onClose();
         }, 1500);
-        Totast("购买成功", "success");
+        Totast(t("购买成功"), "success");
       } else {
         // 交易返回了非成功的结果（例如 res.value === false）
-        Totast("购买失败，交易未成功", "error");
+        Totast(t("购买失败,交易未成功"), "error");
         setShowDice(false);
       }
     } catch (error) {
       // 捕获真正的异常/拒绝（例如网络/链上错误）
-      Totast("购买失败，发生异常", "error");
+      Totast(t("购买失败,发生异常"), "error");
       setShowDice(false);
     } finally {
       // 无论成功或失败，都需要关闭加载状态
@@ -196,12 +199,12 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   // 绑定按钮执行
   const bindInviteAction = async () => {
     if (!inputAddress) {
-      Totast("请输入邀请人地址", "warning"); // 请输入邀请人地址
+      Totast(t("请输入邀请人地址"), "warning"); // 请输入邀请人地址
       return;
     }
     //判断地址是否正确
     if (!ethers.utils.isAddress(inputAddress)) {
-      Totast("邀请人地址不正确", "warning"); // 邀请人地址不正确
+      Totast(t("邀请人地址不正确"), "warning"); // 邀请人地址不正确
       return;
     }
     setShowBindFloat(false);
@@ -237,9 +240,12 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         const caAmount = ethers.utils.formatUnits(res.value);
         const usdtAmount = buyNumber || "0";
         setHintTxt(`${usdtAmount} USDT ≈${caAmount} CA`);
+        console.log("caAmount==", caAmount);
+        console.log("usdtAmount==", usdtAmount);
       }
     });
   }, [buyNumber]);
+
   // removed redundant effect that set state to itself
   useEffect(() => {
     //判断是否在10-3000之间
@@ -257,7 +263,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   return (
     <div className="buyNodePage">
       <div className="titleAndClose">
-        <div className="title">购买门票</div>
+        <div className="title">{t("购买门票")}</div>
         {/*私募节点*/}
         <div
           className="close"
@@ -268,13 +274,15 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       </div>
       <div className="option-box">
         <div className="option-header-top">
-          <div className="txt">购买数量</div>
-          <div className="txt">账户余额： {userBalance}</div>
+          <div className="txt">{t("购买数量")}</div>
+          <div className="txt">
+            {t("账户余额")}： {userBalance}
+          </div>
         </div>
         <div className="option-input-end">
           <Input
             type="number"
-            placeholder="输入买入数量（10-3000）"
+            placeholder={t("输入买入数量(10-3000)")}
             className="input-class"
             value={buyNumber}
             onChange={(e) => {
@@ -290,11 +298,11 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       {userInfo.inviter == "0x0000000000000000000000000000000000000000" ? (
         <div className="option-box">
           <div className="option-header-top">
-            <div className="txt">上级地址</div>
+            <div className="txt">{t("上级地址")}</div>
           </div>
           <div className="option-input-end">
             <Input
-              placeholder="请输入上级地址"
+              placeholder={t("请输入上级地址")}
               value={inputAddress}
               className="input-class"
               onChange={(e) => setInputAddress(e.target.value)}
@@ -305,7 +313,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
 
       <div className="option-box">
         <div className="option-header-top">
-          <div className="txt">获得矿机价值</div>
+          <div className="txt">{t("获得10倍购买额度")}</div>
         </div>
         <div className="option-input-end">
           <Input
@@ -318,7 +326,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       </div>
       <div className="option-box">
         <div className="option-header-top">
-          <div className="txt">预计可获得2至6倍GAS</div>
+          <div className="txt">{t("2至6倍算力额度")}</div>
         </div>
       </div>
       <div
@@ -334,7 +342,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
               confirmButAction();
             }}
           >
-            {canBuy ? "确认购买" : "购买数量不符合要求"}
+            {canBuy ? t("确认购买") : t("购买数量不符合要求")}
           </div>
         )}
       </div>

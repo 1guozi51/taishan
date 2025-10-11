@@ -18,6 +18,8 @@ import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { Drawer, Spin } from "antd";
 import { Totast } from "@/Hooks/Utils.ts";
+import { t } from "i18next";
+
 import BuyTicketPage from "./component/BuyTicketPage/index.tsx";
 const HomeTitle: React.FC<{
   className?: string;
@@ -65,7 +67,7 @@ const PageBody: React.FC = ({ userInfo }) => {
     setShowBuyTicket(val);
   };
   const navigatePath = (path) => {
-    Totast("敬请期待", "warning");
+    Totast(t("敬请期待"), "warning");
   };
 
   return (
@@ -75,13 +77,15 @@ const PageBody: React.FC = ({ userInfo }) => {
         <img src={homeBg} className="home-bg" alt="" />
         <div className="project-content">
           <img src={soulNode} className="soul-node" alt="" />
-          <div className="ai-network">全球多场景AI分布式推理网络</div>
+          <div className="ai-network">{t("全球多场景AI分布式推理网络")}</div>
           <div className="effect">
             <div className="effect-text1">
-              连接游戏 · 娱乐 · 金融的算力高速公路
+              {t("连接游戏")} · {t("娱乐")} · {t("金融的算力高速公路")}
             </div>
             <img src={union} className="union-img" alt="" />
-            <div className="effect-text2">让每个人都能参与AI时代的收益分配</div>
+            <div className="effect-text2">
+              {t("让每个人都能参与AI时代的收益分配")}
+            </div>
           </div>
           <div className="home-tab">
             <div
@@ -89,61 +93,61 @@ const PageBody: React.FC = ({ userInfo }) => {
               onClick={() => buyTicketIsShowChange(true)}
             >
               <img src={homeTickets} className="tab-icon" alt="" />
-              <span>门票</span>
+              <span>{t("门票")}</span>
             </div>
             <div onClick={() => navigate("/swap")} className="tab-item">
               <img src={homeSwap} className="tab-icon" alt="" />
-              <span>交易</span>
+              <span>{t("交易")}</span>
             </div>
             <div onClick={() => navigatePath("/crowd")} className="tab-item">
               <img src={homeZc} className="tab-icon" alt="" />
-              <span>众筹</span>
+              <span>{t("众筹")}</span>
             </div>
             <div onClick={() => navigatePath("")} className="tab-item">
               <img src={homeNode} className="tab-icon" alt="" />
-              <span>节点</span>
+              <span>{t("节点")}</span>
             </div>
           </div>
         </div>
       </div>
       <HomeTitle
         className="about-token"
-        text1="关于Token"
-        text2="CA Token用于CloudAi整个生态的流通"
+        text1={t("关于Token")}
+        text2={t("CA Token用于CloudFAi整个生态的流通")}
       />
       <img src={aboutToken} className="about-token-img" alt="" />
 
       <div className="token-info">
         <div className="token-row">
-          <span className="key">Token名称：</span>
-          <span className="val">CloudAi（简称：CA）</span>
+          <span className="key">{t("Token名称：")}</span>
+          <span className="val">{t("CloudFAi（简称：CA）")}</span>
         </div>
         <div className="token-row">
-          <span className="key">发行总量：</span>
-          <span className="val">-亿枚</span>
+          <span className="key">{t("发行总量")}：</span>
+          <span className="val">21{t("亿枚")}</span>
         </div>
         <div className="proportion-box">
           <img src={proportion} className="proportion-img" alt="" />
           <div className="proportion-item left">
-            <div className="label">Swap</div>
-            <div className="num">-万枚</div>
+            <div className="label">LP</div>
+            <div className="num">1{t("%")}</div>
           </div>
           <div className="proportion-item center">
-            <div className="label">Swap</div>
-            <div className="num">-万枚</div>
+            <div className="label">{t("基金会")}</div>
+            <div className="num">1{t("%")}</div>
           </div>
           <div className="proportion-item right">
-            <div className="label">Swap</div>
-            <div className="num">-万枚</div>
+            <div className="label">{t("Ai算力池")}</div>
+            <div className="num">98{t("%")}</div>
           </div>
         </div>
       </div>
-      <HomeTitle text1="排行榜" text2="参与CloudAi生态的TOP10榜单" />
+      <HomeTitle text1={t("排行榜")} text2={t("参与CloudFAi生态的TOP10榜单")} />
       <div className="rank-box">
         <div className="rank-tab">
-          <div className="tab-item active">投资榜</div>
-          <div className="tab-item">爆仓榜</div>
-          <div className="tab-item">推荐榜</div>
+          <div className="tab-item active">{t("投资榜")}</div>
+          <div className="tab-item">{t("爆块榜")}</div>
+          <div className="tab-item">{t("推荐榜")}</div>
         </div>
         <div className="top3-info">
           <div className="top3-box top1">
@@ -164,9 +168,9 @@ const PageBody: React.FC = ({ userInfo }) => {
         </div>
         <div className="rank-list">
           <div className="rank-head">
-            <span>排名</span>
-            <span>用户</span>
-            <span>总投资</span>
+            <span>{t("排名")}</span>
+            <span>{t("用户")}</span>
+            <span>{t("总投资")}</span>
           </div>
           <div className="rank-body">
             {/* {[1, 2, 3, 4, 5, 9, 6, 7, 8, 10].map((rank, index) => {

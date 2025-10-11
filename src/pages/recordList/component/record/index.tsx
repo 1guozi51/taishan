@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { userAddress } from "@/Store/Store.ts";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { InfiniteScroll } from "antd-mobile";
-import { Spin, Empty } from "antd";
+import { Spin} from "antd";
+import { t } from "i18next";
+
 import { fromWei, formatDate } from "@/Hooks/Utils.ts";
 const Record: React.FC = () => {
   const wallertAddress = userAddress().address;
@@ -77,9 +79,9 @@ const Record: React.FC = () => {
       <div className="records-page">
         <div className="records-list">
           <div className="record-head">
-            <span>时间</span>
-            <span>获取GAS</span>
-            <span>支付USDT</span>
+            <span>{t('时间')}</span>
+            <span>{t('获取')}GAS</span>
+            <span>{t('支付')}USDT</span>
           </div>
           {list.length == 0 ? (
             <NoData />

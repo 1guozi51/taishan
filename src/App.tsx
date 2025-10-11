@@ -1,10 +1,10 @@
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
-
 import { userAddress } from "@/Store/Store.ts";
-import {Spin } from "antd";
+import { Spin } from "antd";
+import i18n, {t} from "i18next";    
 
 const Home = lazy(() => import("@/pages/Home/index.tsx"));
 const Deposit = lazy(() => import("@/pages/Deposit/index.tsx"));
@@ -17,22 +17,17 @@ const MyNode = lazy(() => import("@/pages/MyNode/index.tsx"));
 const Node = lazy(() => import("@/pages/Node/index.tsx"));
 const RecordList = lazy(() => import("@/pages/recordList/index.tsx"));
 function App() {
-  console.log("app==");
-  const [walletAddress, setWalletAddress] = useState(null);
-
+  const walletAddress = userAddress((state) => state.address);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    async function fetchWallet() {
-      const address = await userAddress().address; // 异步获取钱包地址
-      if(!address){
-          ensureWalletConnected();
+    const checkWallet = async () => {
+      if (!walletAddress) {
+        await ensureWalletConnected();
       }
-      setWalletAddress(address);
       setLoading(false);
-    }
-    fetchWallet();
-  }, []);
-
- const [loading, setLoading] = useState(true);
+    };
+    checkWallet();
+  }, [walletAddress]);
 
   if (loading) {
     return (
@@ -43,7 +38,7 @@ function App() {
   }
   return (
     <>
-      {wallertAddress ? (
+      {walletAddress ? (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/deposit" element={<Deposit />} />
@@ -58,7 +53,7 @@ function App() {
         </Routes>
       ) : (
         <div className="loding">
-           <Route path="*" element={<div>请先连接钱包</div>} />
+          <div>请先连接钱包</div>
         </div>
       )}
     </>

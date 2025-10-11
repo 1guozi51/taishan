@@ -1,7 +1,7 @@
 import "./index.scss";
 import { useEffect, useState } from "react";
 import { userAddress } from "@/Store/Store.ts";
-import { Input, Button } from "antd-mobile";
+import { Input, Button, Toast } from "antd-mobile";
 import Header from "@/components/Header";
 import tip from "@/assets/img/swap-tip.png";
 import ca from "@/assets/img/ca.png";
@@ -16,6 +16,7 @@ import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { Spin } from "antd";
+import { t } from "i18next";
 interface UserInfo {
   inviter: string;
   layerDirectCount: number;
@@ -246,7 +247,7 @@ const Swap: React.FC = () => {
     if (buttonLoading == true) {
       return;
     }
-    setButtonLoading(true)
+    setButtonLoading(true);
     let path: string[] = [];
     if (swapType === 1) {
       path = [
@@ -272,14 +273,14 @@ const Swap: React.FC = () => {
             ],
           });
           if (!approveRes || !approveRes.value) {
-            console.error("USDT 授权失败");
+            Toast(t("Ca授权失败"), "warning");
             setButtonLoading(false);
             return; // 授权失败则中止
           }
         }
       } catch (error) {
         setButtonLoading(false);
-        console.error("交易出错:", error);
+        Toast(t("交易出错"), "warning");
       }
     } else {
       // usdt to ca
@@ -292,7 +293,7 @@ const Swap: React.FC = () => {
       if (userInfo.gasAmount.lt(toWei(inputSwapAmount))) {
         //弹窗提示
         setButtonLoading(false);
-        Totast("GAS余额不足", "warning"); // 邀请人地址不正确
+        Totast(t("GAS余额不足"), "warning"); // 邀请人地址不正确
         return;
       }
 
@@ -314,7 +315,7 @@ const Swap: React.FC = () => {
           ],
         });
         if (!approveRes || !approveRes.value) {
-          console.error("USDT 授权失败");
+          Toast(t("USDT授权失败"), "warning");
           setButtonLoading(false);
           return; // 授权失败则中止
         }
@@ -332,21 +333,23 @@ const Swap: React.FC = () => {
       setInputSwapAmount("0");
       clearCheckStatus();
     } else {
-        setButtonLoading(false);
-      console.error("兑换失败");
+      setButtonLoading(false);
+      Toast(t("兑换失败"), "warning");
     }
   };
 
   return (
     <>
-      <Header title="Swap" recordText="兑换记录" />
+      <Header title="Swap" recordText={t("兑换记录")} />
       {wallertAddress ? (
         <div className="swap-page">
           <div className="scale-tip">
             <img src={tip} className="tip-img" alt="" />
-            <span>兑换比例：1 USDT ≈ {fromWei(ratios)} CA</span>
+            <span>
+              {t("兑换比例")}：1 USDT ≈ {fromWei(ratios)} CA
+            </span>
           </div>
-          <div className="select-assets">选择资产</div>
+          <div className="select-assets">{t("选择资产")}</div>
 
           <div className="from-box">
             <div className="token-info">
@@ -355,7 +358,7 @@ const Swap: React.FC = () => {
                 <span>{swapType == 1 ? "CA" : "USDT"}</span>
               </div>
               <div className="balance">
-                余额：
+                {t("余额")}：
                 {swapType == 1
                   ? fromWei(caTokenBalance)
                   : fromWei(usdTokenBalance)}
@@ -394,7 +397,7 @@ const Swap: React.FC = () => {
                 <span>{swapType == 1 ? "USDT" : "CA"}</span>
               </div>
               <div className="balance">
-                余额：
+                {t("余额")}：
                 {swapType == 1
                   ? fromWei(usdTokenBalance)
                   : fromWei(caTokenBalance)}
@@ -403,7 +406,7 @@ const Swap: React.FC = () => {
             <div className="get-amount">{fromWei(outputSwapAmount)}</div>
           </div>
           <div className="swap-data">
-            <span className="key">兑换滑点</span>
+            <span className="key">{t("兑换滑点")}</span>
             <span className="val">
               {swapType == 1
                 ? feeObj.sellFee.div(100).toString()
@@ -412,7 +415,7 @@ const Swap: React.FC = () => {
             </span>
           </div>
           <div className="swap-data">
-            <span className="key">预计获得：</span>
+            <span className="key">{t("预计获得")}：</span>
             <span className="val">
               {estimateAmount(outputSwapAmount)}
               {swapType == 2 ? " CA" : " USDT"}
@@ -420,32 +423,31 @@ const Swap: React.FC = () => {
           </div>
           {swapType == 1 ? null : (
             <div className="swap-data">
-              <span className="key">消耗GAS数</span>
+              <span className="key">{t("消耗GAS数")}</span>
               <span className="val">{inputSwapAmount} GAS</span>
             </div>
           )}
           <div className="gas-balance">
             <span className="balance">
-              GAS余额：{fromWei(userInfo.gasAmount, 18, false)}
+              {t("最大购买额度")}：{fromWei(userInfo.gasAmount, 18, false)}
             </span>
-            <span className="go-get">去获取</span>
           </div>
 
           <Button className="confirm-btn swap-btn" onClick={confirmBtnClick}>
-            {buttonLoading ? <Spin /> : "兑换"}
+            {buttonLoading ? <Spin /> : t("兑换")}
           </Button>
 
           <div className="records-title">
-            <span className="title-text">兑换记录</span>
+            <span className="title-text">{t('兑换记录')}</span>
             <div className="more-box">
-              <span>全部记录</span>
+              <span>{t('全部记录')}</span>
               <img src={more} alt="" />
             </div>
           </div>
           <div className="records-head">
-            <span>时间</span>
-            <span>交易对</span>
-            <span>状态</span>
+            <span>{t('时间')}</span>
+            <span>{t('交易对')}</span>
+            <span>{t('状态')}</span>
           </div>
           {/* {[1, 2, 3, 4, 5, 5].map((_, index) => {
           return (

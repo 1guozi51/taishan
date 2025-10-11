@@ -1,6 +1,6 @@
 import "./index.scss";
 import BackHeader from "@/components/BackHeader";
-import { useState, useEffect } from "react";
+import i18n, { t } from "i18next";
 import { useLocation } from "react-router-dom";
 import TicketRecord from "./component/record/index";
 import Team from "./component/Team/index";
@@ -14,11 +14,11 @@ const RecordList: React.FC = () => {
   const getBackHeaderTitle = (val: string | null) => {
     switch (val) {
       case "tickets":
-        return "门票记录";
+        return t('门票');
       case "team":
-        return "领取记录";
+        return t('领取记录');
       default:
-        return "记录";
+        return ('记录');
     }
   };
 
@@ -29,7 +29,7 @@ const RecordList: React.FC = () => {
       case "team":
         return <Team pathParam={searchParams}/>;
       default:
-        return <div>暂无记录</div>;
+        return <div>{t('暂无记录')}</div>;
     }
   };
 

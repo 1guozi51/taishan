@@ -5,6 +5,8 @@ import { useState } from "react";
 import closeImg from '@/assets/img/closeImg.png'
 import nodeImg from '@/assets/img/nodeImg.png'
 import { useNavigate } from 'react-router-dom'
+import { t } from "i18next";
+
 const Home: React.FC<{
   popState: boolean,
   setPopState: () => void
@@ -28,7 +30,7 @@ const Home: React.FC<{
         >
           <div className='PopBox'>
             <div className='popTitle'>
-              <div>购买节点</div>
+              <div>{t('购买节点')}</div>
               <img src={closeImg} alt="" onClick={() => { setPopState() }} />
             </div>
             <div>

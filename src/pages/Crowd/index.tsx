@@ -8,7 +8,7 @@ import more from '@/assets/img/records-more.png'
 const Crowd: React.FC = () => {
     return (
         <>
-            <Header title='众筹' recordText='我的众筹' />
+            <Header title='众筹' recordText='众筹' />
             <div className='crowd-page'>
                 <div className="djs-box">
                     <div className='now-period'>第180期预约倒计时</div>

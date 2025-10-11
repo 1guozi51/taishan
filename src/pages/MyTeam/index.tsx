@@ -8,6 +8,7 @@ import { userAddress } from "@/Store/Store.ts";
 import { Spin, Empty } from "antd";
 import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
 import { useNavigate } from "react-router-dom";
+import { t } from "i18next";
 
 const MyTeam: React.FC = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const MyTeam: React.FC = () => {
       size: 10,
       current: 1,
       total: 0,
-      address:wallertAddress,
+      address: wallertAddress,
     });
     setList([]);
   };
@@ -109,19 +110,18 @@ const MyTeam: React.FC = () => {
     await NetworkRequest({
       Url,
       Data,
-    }).then(res=>{
-       setListLoding(false);
-       console.log("res===",res)
-        if(res.data.code==200){
-          setList(res.data.data)
-        }
-    })
+    }).then((res) => {
+      setListLoding(false);
+      console.log("res===", res);
+      if (res.data.code == 200) {
+        setList(res.data.data);
+      }
+    });
   };
   // 获取更多团队列表
   const loadMoreAction = async () => {
-    console.log("获取更多团队列表=")
-    if(tabIndex==2){
-      return
+    if (tabIndex == 2) {
+      return;
     }
     setDataParam((prevState) => ({
       ...prevState,
@@ -145,7 +145,7 @@ const MyTeam: React.FC = () => {
   };
   useEffect(() => {
     getPageInfo();
-     tabChange(1)
+    tabChange(1);
   }, []);
   return (
     <>
@@ -155,7 +155,7 @@ const MyTeam: React.FC = () => {
         <div className="teamInfo">
           <div>
             {" "}
-            <span>团队人数</span> <span>直推人数</span>{" "}
+            <span>{t("团队人数")}</span> <span>{t("直推人数")}</span>{" "}
           </div>
           <div>
             {" "}
@@ -164,7 +164,7 @@ const MyTeam: React.FC = () => {
           </div>
           <div>
             {" "}
-            <span>团队业绩</span> <span>小区业绩</span>{" "}
+            <span>{t("团队业绩")}</span> <span>{t("小区业绩")}</span>{" "}
           </div>
           <div>
             {" "}
@@ -174,44 +174,44 @@ const MyTeam: React.FC = () => {
         </div>
         <div className="awardButton">
           <div className="record boxBorder">
-            <div>累计领取奖励(USDT)</div>
+            <div className="record-txt">{t("累计领取奖励")}(USDT)</div>
             <div>{fromWei(teamInfo.teamUsdtReward)}</div>
             <Button
               onClick={() => {
                 PathNav("/recordList?type=team&id=101");
               }}
             >
-              记录
+              {t("记录")}
             </Button>
           </div>
           <div className="record boxBorder">
-            <div>待领取奖励(USDT)</div>
+            <div> {t("待领取奖励")}(USDT)</div>
             <div>{fromWei(teamInfo.teamUsdtClaimReward)}</div>
-            <Button>领取</Button>
+            <Button>{t("领取")}</Button>
           </div>
         </div>
 
         <div className="awardButton">
           <div className="record boxBorder">
-            <div>累计领取奖励(CA)</div>
+            <div>{t("累计领取奖励")}(CA)</div>
             <div>{fromWei(teamInfo.teamCaReward)}</div>
             <Button
               onClick={() => {
                 PathNav("/recordList?type=team&id=102");
               }}
             >
-              记录
+               {t("记录")}
             </Button>
           </div>
           <div className="record boxBorder">
-            <div>待领取奖励(CA)</div>
+            <div>{t("待领取奖励")}(CA)</div>
             <div>{fromWei(teamInfo.teamCaClaimReward)}</div>
-            <Button>领取</Button>
+            <Button>{t("领取")}</Button>
           </div>
         </div>
 
         <div className="intiveBox boxBorder">
-          <div>邀请链接：</div>
+          <div>{t("邀请链接")}：</div>
           <div>{location}...</div>
           <img
             src={copy}
@@ -228,7 +228,7 @@ const MyTeam: React.FC = () => {
               tabChange(1);
             }}
           >
-            团队列表
+            {t("团队列表")}
           </div>
           <div
             className={`tab-left ${tabIndex == 2 ? "tab-active" : ""}`}
@@ -236,13 +236,13 @@ const MyTeam: React.FC = () => {
               tabChange(2);
             }}
           >
-            33团队
+           {t("33社区")}
           </div>
         </div>
         <div className="tabTltle">
-          <div>钱包地址</div>
-          <div>加入时间</div>
-          <div>业绩(CA)</div>
+          <div>{t("钱包地址")}</div>
+          <div>{t("加入时间")}</div>
+          <div>{t("业绩")}(CA)</div>
         </div>
         <div className="list-box">
           {list.length == 0 ? (
