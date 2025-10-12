@@ -9,46 +9,51 @@ import { Spin, Empty } from "antd";
 import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
-import {BigNumber} from 'ethers'
-import {concatSign} from '@/Hooks/Utils.ts'
+import { BigNumber } from "ethers";
+import { concatSign } from "@/Hooks/Utils.ts";
 import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
 const MyTeam: React.FC = () => {
   const navigate = useNavigate();
   const { signMessage } = UseSignMessage();
   const wallertAddress = userAddress().address;
+  // const wallertAddress = "0x1c028e874b6071194da0e24d1504507f717d2588";
   const [teamInfo, setTeamInfo] = useState({});
   const [location, setLocation] = useState("");
   const [tabIndex, setTabIndex] = useState(1); //1团队列表 2代表33团队
+  const [btnLoading, setBtnLoading] = useState(false);
   const [list, setList] = useState([]);
   // 列表是否加载
   const [listLoding, setListLoding] = useState(false);
   // 是否还有更多数据可以加载
   const [isMore, setIsMore] = useState(false);
+  const [total, setTotal] = useState("");
+  const [current, setCurrent] = useState(1);
   const [dataParam, setDataParam] = useState({
     address: wallertAddress,
-    current: 1,
     size: 10,
-    total: 0, //总数
   });
   //重置请求参数和请求数据
   const resetList = () => {
     setDataParam({
       size: 10,
-      current: 1,
-      total: 0,
       address: wallertAddress,
     });
+    setCurrent(1);
+    setTotal("");
     setList([]);
   };
 
   const tabChange = (type) => {
-    console.log("type==", type);
     resetList();
     setTabIndex(type);
     if (type == 1) {
       getDataList({
         Url: "user/teamChild",
-        Data: { ...dataParam },
+        Data: {
+          current: 1,
+          size: 10,
+          address: wallertAddress,
+        },
       });
     } else {
       getDataList33({
@@ -126,14 +131,12 @@ const MyTeam: React.FC = () => {
     if (tabIndex == 2) {
       return;
     }
-    setDataParam((prevState) => ({
-      ...prevState,
-      current: dataParam.current + 1,
-    }));
+    const nexPage = current + 1;
+    setCurrent(nexPage);
     await NetworkRequest({
       Url: "user/teamChild",
       Data: {
-        ...dataParam,
+        address: wallertAddress, size: 10, current: nexPage
       },
     }).then((res) => {
       if (res.success) {
@@ -143,16 +146,40 @@ const MyTeam: React.FC = () => {
         } else {
           setIsMore(false);
         }
+        console.log("list====", list);
       }
     });
   };
-  //待领取奖励
-  const btnCLick = async () => {
-    const bigNum = BigNumber.from("0x111");  
-    const bigRes =   concatSign(bigNum);
-    const sigResult=await signMessage(bigRes);
+  //待领取奖励 type 领取对应类型的奖励
+  const claimTeamCLick = async (type, amount) => {
+    if (fromWei(amount) == 0) {
+      Totast("不能领取", "warning");
+      return;
+    }
+    if (btnLoading) return; // 防止重复点击
+    const bigRes = concatSign(fromWei(amount));
+    setBtnLoading(true);
+    const sigResult = await signMessage(bigRes);
     if (sigResult) {
-      console.log("✅ Signature:", sigResult);
+      await NetworkRequest({
+        Url: "userRecord/claimTeam",
+        Method: "POST",
+        Data: {
+          address: wallertAddress,
+          type,
+          msg: bigRes,
+          signature: sigResult,
+        },
+      })
+        .then((res) => {
+          Totast("领取成功", "success");
+          getPageInfo();
+        })
+        .finally(() => {
+          setBtnLoading(false);
+        });
+    } else {
+      setBtnLoading(false);
     }
   };
   useEffect(() => {
@@ -171,8 +198,8 @@ const MyTeam: React.FC = () => {
           </div>
           <div>
             {" "}
-            <span>{teamInfo.teamCount}</span>{" "}
-            <span>{teamInfo.directCount}</span>{" "}
+            <span>{teamInfo.teamCount || 0}</span>{" "}
+            <span>{teamInfo.directCount || 0}</span>{" "}
           </div>
           <div>
             {" "}
@@ -200,8 +227,9 @@ const MyTeam: React.FC = () => {
             <div> {t("待领取奖励")}(USDT)</div>
             <div>{fromWei(teamInfo.teamUsdtClaimReward)}</div>
             <Button
+              disabled={btnLoading}
               onClick={() => {
-                btnCLick();
+                claimTeamCLick(101, teamInfo.teamUsdtClaimReward);
               }}
             >
               {t("领取")}
@@ -224,7 +252,14 @@ const MyTeam: React.FC = () => {
           <div className="record boxBorder">
             <div>{t("待领取奖励")}(CA)</div>
             <div>{fromWei(teamInfo.teamCaClaimReward)}</div>
-            <Button>{t("领取")}</Button>
+            <Button
+              disabled={btnLoading}
+              onClick={() => {
+                claimTeamCLick(103, teamInfo.teamCaClaimReward);
+              }}
+            >
+              {t("领取")}
+            </Button>
           </div>
         </div>
 

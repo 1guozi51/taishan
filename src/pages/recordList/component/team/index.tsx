@@ -34,11 +34,9 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   });
   // 获取更多团队列表
   const loadMoreAction = async () => {
-    const nexPage = dataParam.current + 1;
-
     setDataParam((prevState) => ({
       ...prevState,
-      current: nexPage,
+      current: prevState.current + 1,
     }));
     await NetworkRequest({
       Url: "userRecord/rewardRecord",
@@ -56,7 +54,6 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
       }
     });
   };
-
   const getDataList = useCallback(async () => {
     setListLoding(true);
     const result = await NetworkRequest({
@@ -67,7 +64,6 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
     });
     if (result.data.code === 200) {
       setList(result.data.data.records);
-
       setDataParam((prevState) => ({
         ...prevState,
         total: result.data.data.total,
@@ -84,15 +80,15 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   }, [dataParam]);
   useEffect(() => {
     getDataList();
-  }, [getDataList]);
+  }, []);
   return (
     <>
       <div className="records-page">
         <div className="records-list">
           <div className="record-head">
-            <span>{t('时间')}</span>
-            <span>{t('是否领取')}</span>
-            <span>{t('收益')}</span>
+            <span>{t("时间")}</span>
+            <span>{t("是否领取")}</span>
+            <span>{t("收益")}</span>
           </div>
           {list.length == 0 ? (
             <NoData />
@@ -101,8 +97,8 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
               {list.map((item, index) => {
                 return (
                   <div className="record-item" key={index}>
-                    <span>{formatDate(item.blockTime).dateTime}</span>
-                    <span>{item.status==1?t('待领取'):t("已领取")}</span>
+                    <span>{formatDate(item.createTime).dateTime}</span>
+                    <span>{item.status == 1 ? t("待领取") : t("已领取")}</span>
                     <span>{fromWei(item.amount)}</span>
                   </div>
                 );

@@ -32,7 +32,7 @@ export const UseSignMessage = () => {
         return null;
       }
 
-      antdMessage.success("签名成功");
+      // antdMessage.success("签名成功");
       return signature;
     } catch (error: any) {
       // 用户拒绝签名或其他错误

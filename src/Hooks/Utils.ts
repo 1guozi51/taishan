@@ -16,7 +16,27 @@ export function formatAddress(
   if (!addr) return "";
   return `${addr.slice(0, prefixLen)}....${addr.slice(-suffixLen)}`;
 }
-
+/**
+ * 根据数字的位数生成掩码
+ * @param {number|string} value - 原始数值或字符串
+ * @param {string} char - 替换字符（默认 *）
+ * @param {boolean|string} convert - 是否转换字符：
+ *   - false: 不转换
+ *   - true: 转为 "*"
+ *   - 字符串: 转为该字符
+ * @returns {string}
+ */
+export const getMask = (value, char = '*', convert = false) => {
+  if (value === null || value === undefined) return '';
+  // 把值转成字符串计算长度
+  const str = String(value);
+  const length = str.length;
+  // 根据 convert 参数确定使用哪个字符
+  let symbol = char;
+  if (convert === true) symbol = '*';
+  else if (typeof convert === 'string') symbol = convert;
+  return symbol.repeat(length);
+};
 /**
  * 检查是否是有效的以太坊地址
  * @param addr 钱包地址
@@ -197,18 +217,36 @@ export async function ensureBNBChain(): Promise<boolean> {
     return false;
   }
 }
-
-export const concatSign = (bigNumber: BigNumber): string => {
+export const concatSign = (bigNumber:string): string => {
   // 获取当前时间戳（秒）
   const timestamp = Math.floor(Date.now() / 1000).toString();
 
   // 拼接参数
   const combined = `${bigNumber}${timestamp}`;
+  
+  return combined;
+};
+/**
+ * 将用户输入的代币数量（如 "1.5"）转换为 BigNumber（带指定精度）
+ * @param value 用户输入的数值（字符串或数字）
+ * @param decimals 精度，默认 18
+ * @returns {ethers.BigNumber} BigNumber 类型的整数值
+ */
+export const toBigNumberUnits = (
+  value: string | number,
+  decimals: number = 18
+): ethers.BigNumber => {
+  if (value === null || value === undefined || value === "") {
+    throw new Error("Invalid value: value is required");
+  }
 
-  // 使用 SHA256 加密
-  const encrypted = CryptoJS.SHA256(combined).toString();
-
-  return encrypted;
+  try {
+    // ethers.utils.parseUnits 只接受字符串
+    return ethers.utils.parseUnits(String(value), decimals);
+  } catch (err) {
+    console.error("❌ toBigNumberUnits error:", err);
+    throw new Error("Invalid number format");
+  }
 };
 
 

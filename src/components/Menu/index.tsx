@@ -9,16 +9,41 @@ import wallet from "@/assets/img/wallet.png";
 import node from "@/assets/img/node-level.png";
 import member from "@/assets/img/member-level.png";
 import hide from "@/assets/img/hide-assets.png";
+import showEyes from "@/assets/img/eyes.png";
 import more from "@/assets/img/more.png";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
-import { fromWei } from "@/Hooks/Utils";
+import { fromWei, SubAddress} from "@/Hooks/Utils";
 import i18n, { t } from "i18next";
+import { defaultUserInfo, fillNullWithDefault } from "./type.ts";
 interface MenuType {
   label: string;
   url: string;
 }
+
+interface UserInfo {
+  activate: string | null;
+  address: string | null;
+  caBalance: number | null;
+  caReward: number | null;
+  communityPerf: number | null;
+  createTime: string | null;
+  directCount: number | null;
+  directTotalCount: number | null;
+  inviterAddress: string | null;
+  layer: number | null;
+  nodeLevel: number | null;
+  parentAddress: string | null;
+  selfInvest: number | null;
+  sort: number | null;
+  teamCount: number | null;
+  teamNodePerf: number | null;
+  teamPerf: number | null;
+  teamReward: number | null;
+  usdtBalance: number | null;
+  userLevel: number | null;
+}
 const menuList: MenuType[] = [
-  { label:  t('首页'), url: "/" },
+  { label: t("首页"), url: "/" },
   { label: t("门票"), url: "/recordList?type=tickets" },
   { label: t("众筹"), url: "" },
   { label: t("矿机"), url: "" },
@@ -41,19 +66,16 @@ const Menu: React.FC<{
   visible: boolean;
   onClose: () => void;
 }> = ({ visible, onClose }) => {
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
   const [gasNumber, setGasNumber] = useState("");
+  const [eyesShow, setEyesShow] = useState<boolean>(false);
   const navigate = useNavigate();
   const walletAddress = userAddress().address;
   //格式化地址 0x0e8…dE396
-  const address = walletAddress
-    ? walletAddress.slice(0, 6) + "..." + walletAddress.slice(-4)
-    : "";
+  const address = SubAddress(userAddress().address);
   //获取用户信息
-
   // 当前语言
   const [curLang, setCurLang] = useState<number>(1);
-
   // 设置语言
   const changeLanguage = (name: string) => {
     i18n.changeLanguage(name);
@@ -65,6 +87,10 @@ const Menu: React.FC<{
     }
     window.localStorage.setItem("lang", name);
     window.location.reload();
+  };
+
+  const eyesChange = () => {
+    setEyesShow(!eyesShow);
   };
 
   const getUserInfo = async () => {
@@ -81,10 +107,13 @@ const Menu: React.FC<{
     ]);
     const userInfoNetWork =
       userInfoResult[0].status === "fulfilled" ? true : false;
-    const caPoolUserInfo =
-      userInfoResult[1].status === "fulfilled" ? true : false;
     if (userInfoNetWork) {
-      setUserInfo(userInfoResult[0].value.data.data);
+      setUserInfo(
+        fillNullWithDefault<UserInfo>(
+          userInfoResult[0].value.data.data,
+          defaultUserInfo
+        )
+      );
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       setGasNumber(userInfoResult[1].value.value.gasAmount);
     }
@@ -102,7 +131,7 @@ const Menu: React.FC<{
   const getNodeLabel = (level) => {
     switch (level) {
       case 1:
-        return t('小节点');
+        return t("小节点");
       case 2:
         return t("大节点");
       case 3:
@@ -134,6 +163,7 @@ const Menu: React.FC<{
 
   return (
     <>
+    
       <div className={`menu-content ${visible ? "show" : "hide"}`}>
         <div className="connect-info">
           <img onClick={onClose} src={close} className="close-img" alt="" />
@@ -157,7 +187,7 @@ const Menu: React.FC<{
         </div>
 
         <div className="connect-info">
-            <div className="lang-txt">{t("切换语言")}</div>
+          <div className="lang-txt">{t("切换语言")}</div>
           <div className="langAndClose">
             <div className="lang flex flexStart">
               <div
@@ -179,12 +209,16 @@ const Menu: React.FC<{
             </div>
           </div>
         </div>
-
         <div className="menu-info">
           <div className="assets-info">
             <div className="assets-title">
               <span>{t("资产")}</span>
-              <img src={hide} className="status-img" alt="" />
+              <img
+                src={eyesShow ? showEyes : hide}
+                onClick={eyesChange}
+                className="status-img"
+                alt=""
+              />
             </div>
             <div className="balance-box">
               <div className="balance-item">
@@ -192,27 +226,29 @@ const Menu: React.FC<{
                   <span>USDT{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
-                <div className="balance-val">{userInfo.usdtBalance}</div>
+                <div className="balance-val">{fromWei(userInfo.usdtBalance)}</div>
               </div>
               <div className="balance-item">
                 <div className="balance-key">
                   <span>CA{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
-                <div className="balance-val">{userInfo.caBalance}</div>
+                <div className="balance-val">{fromWei(userInfo.caBalance)}</div>
               </div>
             </div>
             <div className="btn-list">
-              {/* <div onClick={() => navigate('/deposit')} className='btn cz-btn'>
-                                充值
-                            </div>
-                            <div onClick={() => navigate('/withdraw')} className='btn tx-btn'>
-                                提现
-                            </div> */}
+              {/* <div onClick={() => navigate("/deposit")} className="btn cz-btn">
+                {t("充值")}
+              </div> */}
+              <div onClick={() => navigate("/withdraw")} className="btn tx-btn">
+                {t("提现")}
+              </div>
             </div>
           </div>
           <div className="gas-balance">
-            <div className="gas">GAS{t("余额")}：{fromWei(gasNumber) || "-"}</div>
+            <div className="gas">
+              GAS{t("余额")}：{fromWei(gasNumber) || "-"}
+            </div>
             <div>
               <span className="link-text">{t("明细记录")}</span>
               <span className="link-text">{t("获取")}</span>

@@ -1,15 +1,15 @@
-import { Buffer } from 'buffer'
+import { Buffer } from "buffer";
 if (!window.Buffer) {
-    window.Buffer = Buffer
+  window.Buffer = Buffer;
 }
-import { createRoot } from 'react-dom/client'
-import { HashRouter , BrowserRouter} from "react-router-dom";
-import './index.css'
-import App from './App.tsx'
-import './i18n.ts'
+import { createRoot } from "react-dom/client";
+import { HashRouter, BrowserRouter } from "react-router-dom";
+import "./index.css";
+import App from "./App.tsx";
+import "./i18n.ts";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <App />
   </BrowserRouter>
-)
+);

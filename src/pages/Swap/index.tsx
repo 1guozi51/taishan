@@ -204,7 +204,6 @@ const Swap: React.FC = () => {
 
   const swapInputChange = async (amount) => {
     setInputSwapAmount(amount);
-
     if (amount == null || amount <= 0) {
       setOutputSwapAmount(BigNumber.from(0));
       return;

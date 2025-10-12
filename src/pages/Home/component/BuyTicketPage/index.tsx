@@ -90,10 +90,9 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   const closeBindFloat = () => {
     setShowBindFloat(false);
   };
-  
   // 确定购买门票
   const confirmButAction = async () => {
-    return 
+    return;
     if (!canBuy) {
       return;
     }
