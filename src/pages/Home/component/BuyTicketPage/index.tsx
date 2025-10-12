@@ -67,7 +67,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         params: [wallertAddress],
       }),
     ]);
-
     const UserBalance =
       ChainResult[0].status === "fulfilled"
         ? ChainResult[0].value.value
@@ -92,27 +91,31 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   };
   // 确定购买门票
   const confirmButAction = async () => {
-     
     if (!canBuy) {
       return;
     }
-    if (
-      userInfo.inviter == ethers.constants.AddressZero &&
-      !ethers.utils.isAddress(inputAddress)
-    ) {
-      Totast(t("邀请人地址不正确"), "warning"); // 邀请人地址不正确
-      return;
-    }
-    if (userInfo.inviter != ethers.constants.AddressZero) {
-      // if (userInfo.gasAmount.gt(BigNumber.from(0))) {
-      //   //不可以购买
-      //   Totast(t("您当前持有GAS,无法购买门票"), "warning"); // 您当前持有GAS，无法购买门票
-      //   return;
-      // }
-      if (userInfo.ticketNumber.lt(BigNumber.from(1))) {
-        Totast(t("您无法购买门票"), "warning"); // 您当前持有GAS，无法购买门票
+    if (userInfo.inviter == ethers.constants.AddressZero) {
+      if (!ethers.utils.isAddress(inputAddress)) {
+        Totast(t("邀请人地址不正确"), "warning"); // 邀请人地址不正确
         return;
       }
+      const inviterUser = await ContractRequest({
+        tokenName: "CaPool",
+        methodsName: "userInfo",
+        params: [inputAddress],
+      });
+
+      if (inviterUser.value.inviter == ethers.constants.AddressZero) {
+         Totast(t("邀请人无效"), "warning"); // 邀请人无效
+        return;
+      }
+    }
+
+    if (
+      userInfo.inviter != ethers.constants.AddressZero &&
+      userInfo.ticketNumber.eq(BigNumber.from(0))
+    ) {
+      Totast(t("您无法购买门票"), "warning"); // 无法购买门票
     }
     if (parseFloat(userBalance) < parseFloat(buyNumber)) {
       Totast(t("USDT余额不足"), "warning"); // USDT余额不足
@@ -167,7 +170,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
             : userInfo.inviter,
         ],
       });
-      console.log("res===", res);
       // 在调用后显示骰子并设置运行状态
       setShowDice(true);
       setRunning(true);
@@ -215,13 +217,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   const BuyInputChange = (e: any) => {
     setBuyNumber(e.target.value);
   };
-  //    useEffect(() => {
-  //       const t = setTimeout(() => {
-  //         setTarget(3);
-  //         setRunning(false);
-  //       }, 3000);
-  //       return () => clearTimeout(t);
-  //     }, []);
   useEffect(() => {
     getPageInfo();
   }, []);
@@ -239,12 +234,9 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         const caAmount = ethers.utils.formatUnits(res.value);
         const usdtAmount = buyNumber || "0";
         setHintTxt(`${usdtAmount} USDT ≈${caAmount} CA`);
-        console.log("caAmount==", caAmount);
-        console.log("usdtAmount==", usdtAmount);
       }
     });
   }, [buyNumber]);
-
   // removed redundant effect that set state to itself
   useEffect(() => {
     //判断是否在10-3000之间

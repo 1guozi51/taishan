@@ -88,7 +88,7 @@ const Record: React.FC = () => {
               {list.map((item, index) => {
                 return (
                   <div className="record-item" key={index}>
-                    <span>{formatDate(item.createTime).dateTime}</span>
+                    <span>{formatDate(item.blockTime).dateTime}</span>
                     <span>{fromWei(item.gas)}</span>
                     <span>{fromWei(item.amount)}</span>
                   </div>

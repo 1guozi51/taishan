@@ -48,7 +48,7 @@ const menuList: MenuType[] = [
   { label: t("众筹"), url: "" },
   { label: t("矿机"), url: "" },
   { label: "Swap", url: "/swap" },
-  { label: t("节点"), url: "/myNode" },
+  { label: t("节点"), url: "" },
   { label: t("团队"), url: "/myTeam" },
 ];
 
@@ -226,14 +226,14 @@ const Menu: React.FC<{
                   <span>USDT{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
-                <div className="balance-val">{fromWei(userInfo.usdtBalance)}</div>
+                <div className="balance-val">{fromWei(userInfo.usdtBalance)||0}</div>
               </div>
               <div className="balance-item">
                 <div className="balance-key">
                   <span>CA{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
-                <div className="balance-val">{fromWei(userInfo.caBalance)}</div>
+                <div className="balance-val">{fromWei(userInfo.caBalance)||0}</div>
               </div>
             </div>
             <div className="btn-list">
