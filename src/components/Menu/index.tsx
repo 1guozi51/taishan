@@ -144,7 +144,7 @@ const Menu: React.FC<{
   };
   // 获取当前语言
   const getCurrLang = () => {
-    const localLang: string = window.localStorage.getItem("lang") ?? "zh";
+    const localLang: string = window.localStorage.getItem("lang") ?? "en";
     i18n.changeLanguage(localLang);
     if (localLang == "zh") {
       setCurLang(1);

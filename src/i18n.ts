@@ -13,8 +13,8 @@ i18n
             en: { translation: en },
             zh: { translation: zh },
         },
-        lng: window.localStorage.getItem("lang") ?? "zh", // 设置默认语言
-        fallbackLng: 'zh', // 找不到语言时回退用中文
+        lng: window.localStorage.getItem("lang") ?? "en", // 设置默认语言
+        fallbackLng: 'en', // 找不到语言时回退用中文
         interpolation: {
             escapeValue: false,
         },

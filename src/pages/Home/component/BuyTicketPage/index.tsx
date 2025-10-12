@@ -92,7 +92,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   };
   // 确定购买门票
   const confirmButAction = async () => {
-    return;
+     
     if (!canBuy) {
       return;
     }

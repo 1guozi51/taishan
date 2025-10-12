@@ -123,5 +123,6 @@
   "资产类型": "Asset Type",
   "提现数量": "Withdrawal Amount",
   "实际到账": "Actual Amount Received",
-  "确认提现": "Confirm Withdrawal"
+  "确认提现": "Confirm Withdrawal",
+  "普通节点":"Regular Node"
 }
