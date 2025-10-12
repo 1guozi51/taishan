@@ -110,12 +110,14 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         return;
       }
     }
+    
 
     if (
       userInfo.inviter != ethers.constants.AddressZero &&
       userInfo.ticketNumber.eq(BigNumber.from(0))
     ) {
       Totast(t("您无法购买门票"), "warning"); // 无法购买门票
+      return;
     }
     if (parseFloat(userBalance) < parseFloat(buyNumber)) {
       Totast(t("USDT余额不足"), "warning"); // USDT余额不足

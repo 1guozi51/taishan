@@ -133,12 +133,12 @@ const PageBody: React.FC = ({ userInfo }) => {
             <div className="num">1{t("%")}</div>
           </div>
           <div className="proportion-item center">
-            <div className="label">{t("基金会")}</div>
-            <div className="num">1{t("%")}</div>
-          </div>
-          <div className="proportion-item right">
             <div className="label">{t("Ai算力池")}</div>
             <div className="num">98{t("%")}</div>
+          </div>
+          <div className="proportion-item right">
+            <div className="label">{t("基金会")}</div>
+            <div className="num">1{t("%")}</div>
           </div>
         </div>
       </div>

@@ -17,8 +17,7 @@ interface TeamRecord {
 const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   //通过searchParams参数获取id值
   const typeId = pathParam.get("id");
-  console.log("typeId", typeId);
-
+  // const wallertAddress = "0x658b8ff0bac39276a02b7f32944c69158d82a97b";
   const wallertAddress = userAddress((state) => state.address);
   const [list, setList] = useState<TeamRecord[]>([]);
   // 列表是否加载
@@ -28,15 +27,15 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   const [dataParam, setDataParam] = useState({
     address: wallertAddress,
     current: 1,
-    size: 10,
+    size: 200,
     type: typeId,
     total: "", //总数
   });
+  const [current, setCurrent] = useState(1);
   // 获取更多团队列表
   const loadMoreAction = async () => {
     setDataParam((prevState) => ({
       ...prevState,
-      current: prevState.current + 1,
     }));
     await NetworkRequest({
       Url: "userRecord/rewardRecord",
@@ -99,11 +98,15 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                   <div className="record-item" key={index}>
                     <span>{formatDate(item.createTime).dateTime}</span>
                     <span>{item.status == 1 ? t("待领取") : t("已领取")}</span>
-                    <span>{fromWei(item.amount)}</span>
+                    <span>
+                      {typeId == 101
+                        ? fromWei(item.usdtAmount)
+                        : fromWei(item.caAmount)}
+                    </span>
                   </div>
                 );
               })}
-              <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
+              {/* <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
                 <div>
                   {listLoding && (
                     <div className="loding flex flexCenter">
@@ -111,7 +114,7 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                     </div>
                   )}
                 </div>
-              </InfiniteScroll>
+              </InfiniteScroll> */}
             </div>
           )}
         </div>

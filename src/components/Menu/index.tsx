@@ -137,7 +137,7 @@ const Menu: React.FC<{
       case 3:
         return t("超级节点");
       case 4:
-        return t("股东节点");
+        return t("社区节点");
       default:
         return "";
     }
@@ -163,7 +163,6 @@ const Menu: React.FC<{
 
   return (
     <>
-    
       <div className={`menu-content ${visible ? "show" : "hide"}`}>
         <div className="connect-info">
           <img onClick={onClose} src={close} className="close-img" alt="" />

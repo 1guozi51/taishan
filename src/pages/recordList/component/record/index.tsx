@@ -18,7 +18,7 @@ const Record: React.FC = () => {
   const [dataParam, setDataParam] = useState({
     address: wallertAddress,
     current: 1,
-    size: 10,
+    size: 200,
     total: "", //总数
   });
   // 获取更多团队列表
@@ -54,7 +54,6 @@ const Record: React.FC = () => {
     });
     if (result.data.code == 200) {
       setList(result.data.data.records);
-
       setDataParam((prevState) => ({
         ...prevState,
         total: result.data.data.total,
@@ -94,7 +93,7 @@ const Record: React.FC = () => {
                   </div>
                 );
               })}
-              <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
+              {/* <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
                 <div>
                   {listLoding && (
                     <div className="loding flex flexCenter">
@@ -102,7 +101,7 @@ const Record: React.FC = () => {
                     </div>
                   )}
                 </div>
-              </InfiniteScroll>
+              </InfiniteScroll> */}
             </div>
           )}
         </div>
