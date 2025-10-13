@@ -16,38 +16,16 @@ import {
   toWei,
 } from "@/Hooks/Utils.ts";
 import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
-
+import type { UserInfo } from "@/types/user";
 import {
   defaultUserInfo,
   fillNullWithDefault,
 } from "@/components/Menu/type.ts";
 
-interface UserInfo {
-  activate: string | null;
-  address: string | null;
-  caBalance: number | null;
-  caReward: number | null;
-  communityPerf: number | null;
-  createTime: string | null;
-  directCount: number | null;
-  directTotalCount: number | null;
-  inviterAddress: string | null;
-  layer: number | null;
-  nodeLevel: number | null;
-  parentAddress: string | null;
-  selfInvest: number | null;
-  sort: number | null;
-  teamCount: number | null;
-  teamNodePerf: number | null;
-  teamPerf: number | null;
-  teamReward: number | null;
-  usdtBalance: number | null;
-  userLevel: number | null;
-}
+ 
 
 const Withdraw: React.FC = () => {
   const { signMessage } = UseSignMessage();
-
   //钱包地址
   const walletAddress = userAddress().address;
   //当前是typeindex 1 为usdt 2为ca

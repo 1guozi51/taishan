@@ -9,18 +9,9 @@ import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import Dice from "@/components/Dice";
 import { t } from "i18next";
-
+import type { UserInfoAbi } from "@/types/user";
 interface BuyTicketPageClass {
   onClose: () => void;
-}
-
-interface UserInfo {
-  inviter: string;
-  layerDirectCount: BigNumber;
-  directCount: BigNumber;
-  preAmount: BigNumber;
-  gasAmount: BigNumber;
-  ticketNumber: BigNumber;
 }
 
 function BuyTicketPage(Props: BuyTicketPageClass) {
@@ -30,7 +21,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   // 用户余额
   const [userBalance, setUserBalance] = useState<string>("0");
   // 用户信息
-  const [userInfo, setUserInfo] = useState<UserInfo>({});
+  const [userInfo, setUserInfo] = useState<UserInfoAbi>({});
 
   // 是否可以购买样式
   const [canBuy, setCanBuy] = useState<boolean>(false);
@@ -77,7 +68,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
     const userInfoValue = ChainResult[1].value.value;
     setUserBalance(UserBalance);
     if (userInfoResult) {
-      console.log("userInfoValue", userInfoValue);
       setUserInfo(userInfoValue);
     }
     if (userInfo.inviter === ethers.constants.AddressZero && inviteStorage) {
@@ -104,14 +94,11 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         methodsName: "userInfo",
         params: [inputAddress],
       });
-
       if (inviterUser.value.inviter == ethers.constants.AddressZero) {
-         Totast(t("邀请人无效"), "warning"); // 邀请人无效
+        Totast(t("邀请人无效"), "warning"); // 邀请人无效
         return;
       }
     }
-    
-
     if (
       userInfo.inviter != ethers.constants.AddressZero &&
       userInfo.ticketNumber.eq(BigNumber.from(0))

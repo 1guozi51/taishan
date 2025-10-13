@@ -17,14 +17,9 @@ import ContractSend from "@/Hooks/ContractSend.ts";
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { Spin } from "antd";
 import { t } from "i18next";
-interface UserInfo {
-  inviter: string;
-  layerDirectCount: number;
-  directCount: number;
-  preAmount: bigint;
-  gasAmount: BigNumber;
-  ticketNumber: bigint;
-}
+import type { UserInfoAbi } from "@/types/user";
+
+ 
 
 interface SwapFee {
   buyFee: BigNumber;
@@ -94,7 +89,7 @@ const Swap: React.FC = () => {
   ]);
 
   // 用户信息
-  const [userInfo, setUserInfo] = useState<UserInfo>({});
+  const [userInfo, setUserInfo] = useState<UserInfoAbi>({});
   //swap切换
   const swapTypeChange = () => {
     setInputSwapAmount("0");
@@ -165,7 +160,7 @@ const Swap: React.FC = () => {
       const userInfoValue = balanceResult[2].value.value;
       setUserInfo(userInfoValue);
     } else {
-      setUserInfo({} as UserInfo);
+      setUserInfo({} as UserInfoAbi);
     }
 
     setFeeObj((prevState) => ({

@@ -124,5 +124,22 @@
   "提现数量": "Withdrawal Amount",
   "实际到账": "Actual Amount Received",
   "确认提现": "Confirm Withdrawal",
-  "普通节点":"Regular Node"
+  "超级节点": "Super Node",
+  "大节点": "Major Node",
+  "小节点": "Minor Node",
+  "社区节点": "Community Node",
+  "全网购买门票的5%均分大超级节点": "5% of all network ticket purchases are shared equally among Major Super Nodes",
+  "30000U矿机放大4倍12万U额度": "30,000U miner amplified 4x to 120,000U capacity",
+  "全网动静产币均分2%": "2% of total dynamic and static mining output shared equally across the network",
+  "全网众筹静态10%产出总额2%": "2% of total 10% static crowdfunding output shared network-wide",
+  "获得F7会员等级(限时3个月)": "Obtain F7 membership level (valid for 3 months)",
+  "3000U矿机放大3倍10000U矿机放大3倍3万U额度": "3,000U miner amplified 3x, 10,000U miner amplified 3x, up to 30,000U capacity",
+  "全网众筹静态10%产出总额x 1%": "1% of total 10% static crowdfunding output shared network-wide",
+  "获得F6会员等级(限时3个月)": "Obtain F6 membership level (valid for 3 months)",
+  "获得F4会员等级(限时3个月)": "Obtain F4 membership level (valid for 3 months)",
+   "3000U矿机放大3倍9000U额度": "3,000U miner amplified 3x to 9,000U capacity",
+  "全网动静产币均红3%": "3% of total dynamic and static mining output shared network-wide",
+  "500U矿机放大3倍1500U额度": "500U miner amplified 3x to 1,500U capacity",
+  "获得F2会员等级(限时3个月)": "Obtain F2 membership level (valid for 3 months)"
+
 }

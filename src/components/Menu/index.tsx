@@ -12,35 +12,14 @@ import hide from "@/assets/img/hide-assets.png";
 import showEyes from "@/assets/img/eyes.png";
 import more from "@/assets/img/more.png";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
-import { fromWei, SubAddress} from "@/Hooks/Utils";
+import { fromWei, SubAddress } from "@/Hooks/Utils";
 import i18n, { t } from "i18next";
 import { defaultUserInfo, fillNullWithDefault } from "./type.ts";
+import type { UserInfo, UserInfoAbi } from "@/Hooks/InterFaceHooks.ts";
+
 interface MenuType {
   label: string;
   url: string;
-}
-
-interface UserInfo {
-  activate: string | null;
-  address: string | null;
-  caBalance: number | null;
-  caReward: number | null;
-  communityPerf: number | null;
-  createTime: string | null;
-  directCount: number | null;
-  directTotalCount: number | null;
-  inviterAddress: string | null;
-  layer: number | null;
-  nodeLevel: number | null;
-  parentAddress: string | null;
-  selfInvest: number | null;
-  sort: number | null;
-  teamCount: number | null;
-  teamNodePerf: number | null;
-  teamPerf: number | null;
-  teamReward: number | null;
-  usdtBalance: number | null;
-  userLevel: number | null;
 }
 const menuList: MenuType[] = [
   { label: t("首页"), url: "/" },
@@ -48,7 +27,7 @@ const menuList: MenuType[] = [
   { label: t("众筹"), url: "" },
   { label: t("矿机"), url: "" },
   { label: "Swap", url: "/swap" },
-  { label: t("节点"), url: "" },
+  { label: t("节点"), url: "/myNode" },
   { label: t("团队"), url: "/myTeam" },
 ];
 
@@ -61,13 +40,12 @@ const menuList: MenuType[] = [
 //   { label: t("节点"), url: "/myNode" },
 //   { label: t("团队"), url: "/myTeam" },
 // ];
-
 const Menu: React.FC<{
   visible: boolean;
   onClose: () => void;
 }> = ({ visible, onClose }) => {
   const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
-  const [gasNumber, setGasNumber] = useState("");
+  const [userInfoAbi, setUserInfoAbi] = useState<UserInfoAbi>();
   const [eyesShow, setEyesShow] = useState<boolean>(false);
   const navigate = useNavigate();
   const walletAddress = userAddress().address;
@@ -105,6 +83,7 @@ const Menu: React.FC<{
         params: [walletAddress],
       }),
     ]);
+
     const userInfoNetWork =
       userInfoResult[0].status === "fulfilled" ? true : false;
     if (userInfoNetWork) {
@@ -115,7 +94,7 @@ const Menu: React.FC<{
         )
       );
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      setGasNumber(userInfoResult[1].value.value.gasAmount);
+      setUserInfoAbi(userInfoResult[1].value.value);
     }
   };
   const handleClick = (url: string) => {
@@ -177,6 +156,7 @@ const Menu: React.FC<{
               <span>{getNodeLabel(userInfo.nodeLevel)}</span>
             </div>
           ) : null}
+
           {userInfo.userLevel == 0 ? null : (
             <div className="member-box">
               <img src={member} className="member-img" alt="" />
@@ -225,14 +205,18 @@ const Menu: React.FC<{
                   <span>USDT{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
-                <div className="balance-val">{fromWei(userInfo.usdtBalance)||0}</div>
+                <div className="balance-val">
+                  {fromWei(userInfo.usdtBalance) || 0}
+                </div>
               </div>
               <div className="balance-item">
                 <div className="balance-key">
                   <span>CA{t("余额")}</span>
                   <img src={more} className="more-img" alt="" />
                 </div>
-                <div className="balance-val">{fromWei(userInfo.caBalance)||0}</div>
+                <div className="balance-val">
+                  {fromWei(userInfo.caBalance) || 0}
+                </div>
               </div>
             </div>
             <div className="btn-list">
@@ -246,11 +230,11 @@ const Menu: React.FC<{
           </div>
           <div className="gas-balance">
             <div className="gas">
-              GAS{t("余额")}：{fromWei(gasNumber) || "-"}
+              MAS{t("余额")}：{fromWei(userInfoAbi?.profitQuota) || "-"}
             </div>
             <div>
-              <span className="link-text">{t("明细记录")}</span>
-              <span className="link-text">{t("获取")}</span>
+              {/* <span className="link-text">{t("明细记录")}</span>
+              <span className="link-text">{t("获取")}</span> */}
             </div>
           </div>
           {menuList.map((menu, index) => {
@@ -272,5 +256,4 @@ const Menu: React.FC<{
     </>
   );
 };
-
 export default Menu;

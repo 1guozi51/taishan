@@ -9,105 +9,176 @@ import closeImg from "@/assets/img/closeImg.png";
 import popNodeBg from "@/assets/img/popNodeBg.png";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
-import { defaultUserInfo, fillNullWithDefault } from "@/components/Menu/type.ts";
+import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
+import { concatSign } from "@/Hooks/Utils.ts";
+import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
+import { useNavigate } from "react-router-dom";
 
+import {
+  defaultUserInfo,
+  fillNullWithDefault,
+} from "@/components/Menu/type.ts";
+import BackHeader from "@/components/BackHeader";
 import { t } from "i18next";
 import noNode from "@/assets/img/noNode.png";
 import CloudNode from "@/assets/img/CloudNode.png";
 import { Button } from "antd-mobile";
-interface UserInfo {
-  activate: string | null;
-  address: string | null;
-  caBalance: number | null;
-  caReward: number | null;
-  communityPerf: number | null;
-  createTime: string | null;
-  directCount: number | null;
-  directTotalCount: number | null;
-  inviterAddress: string | null;
-  layer: number | null;
-  nodeLevel: number | null;
-  parentAddress: string | null;
-  selfInvest: number | null;
-  sort: number | null;
-  teamCount: number | null;
-  teamNodePerf: number | null;
-  teamPerf: number | null;
-  teamReward: number | null;
-  usdtBalance: number | null;
-  userLevel: number | null;
-}
+import type { UserInfo } from "@/types/user";
 const MyNode: React.FC = () => {
-  const walletAddress = userAddress().address;
+  const navigate = useNavigate();
 
+  const walletAddress = userAddress().address;
+  const { signMessage } = UseSignMessage(); //获取钱包签名
   const nodeList = [
     {
+      id: 0,
+      value: "0",
+    },
+    {
       id: 1,
-      name: "超级节点",
+      value: "3",
+      nodeImg: nodeImg,
+      name: t("社区节点"),
       list: [
-        "10000U矿机放大3倍3万U额度",
-        "全网动静产币均红2%",
-        "全网众筹静态10%产出总额x 1%",
-        "获得F6会员等级(限时3个月)",
+        t("全网购买门票的5%均分大超级节点"),
+        t("30000U矿机放大4倍12万U额度"),
+        t("全网动静产币均分2%"),
+        t("全网众筹静态10%产出总额2%"),
+        t("获得F7会员等级(限时3个月)"),
       ],
     },
     {
       id: 2,
-      name: "大节点",
+      value: "2",
+      nodeImg: nodeImg1,
+      name: t("超级节点"),
       list: [
-        "3000U矿机放大3倍9000U额度",
-        "全网动静产币均红2%",
-        "全网众筹静态10%产出总额x 1%",
-        "获得F4会员等级(限时3个月)",
+        t("3000U矿机放大3倍10000U矿机放大3倍3万U额度"),
+        t("全网动静产币均分2%"),
+        t("全网众筹静态10%产出总额x 1%"),
+        t("获得F6会员等级(限时3个月)"),
       ],
     },
     {
       id: 3,
-      name: "小节点",
+      value: "1",
+      nodeImg: nodeImg2,
+      name: t("大节点"),
       list: [
-        "500U矿机放大3倍1500U额度",
-        "全网动静产币均红3%",
-        "全网众筹静态10%产出总额x 1%",
-        "获得F2会员等级(限时3个月)",
+        t("3000U矿机放大3倍9000U额度"),
+        t("全网动静产币均分2%"),
+        t("全网众筹静态10%产出总额x 1%"),
+        t("获得F4会员等级(限时3个月)"),
+      ],
+    },
+    {
+      id: 4,
+      nodeImg: nodeImg3,
+      value: "4",
+      name: t("小节点"),
+      list: [
+        t("500U矿机放大3倍1500U额度"),
+        t("全网动静产币均分3%"),
+        t("全网众筹静态10%产出总额x 1%"),
+        t("获得F2会员等级(限时3个月)"),
       ],
     },
   ];
-
-  const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
-
-  const [nodeState, setNodeState] = useState<boolean>(true);
-
+  const [userInfo, setUserInfo] = useState<UserInfo>({});
+  const [teamInfo, setTeamInfo] = useState({});
+  const [btnLoading, setBtnLoading] = useState(false);
+  //是否购买节点
+  const [nodeState, setNodeState] = useState<boolean>(false);
+  //节点信息
+  const [nodeInfo, setNodeInfo] = useState<any | null>(null);
+  //获取页面数据
   const getPageData = async () => {
-    await NetworkRequest({
-      Url: "user/info",
-      Data: { address: walletAddress },
-    }).then((res) => {
-     console.log("userInfo=",res) 
-      
-      if (res.data.code == 200) {
-        setUserInfo(
-          fillNullWithDefault<UserInfo>(res.data.data, defaultUserInfo)
-        );
-      }
-    });
-     console.log("userInfo=",userInfo) 
+    const infoResult = await Promise.allSettled([
+      //得到用户数据
+      NetworkRequest({
+        Url: "user/info",
+        Data: { address: walletAddress },
+      }),
+      NetworkRequest({
+        Url: "user/teamInfo",
+        Data: {
+          address: walletAddress,
+        },
+      }),
+    ]);
+    setUserInfo(infoResult[0].value.data.data);
+    //获取团队信息
+    setTeamInfo(infoResult[1].value.data.data);
+  };
+  //得到当前等级信息 图标 节点名称 对应的专属权益
+  useEffect(() => {
+    //得到对应节点信息 展示相关内容
+    const found =
+      nodeList.find(
+        (item) => String(item.value) === String((userInfo as any)?.nodeLevel)
+      ) || null;
+    setNodeInfo(found);
+  }, [userInfo]);
+  useEffect(() => {
+    if ((userInfo as any)?.nodeLevel == 0) {
+      setNodeState(false);
+    } else {
+      setNodeState(true);
+    }
+  }, [userInfo]);
+  //跳转页面
+  const PathNav = (url) => {
+    navigate(url);
+  };
+  //待领取奖励 type 领取对应类型的奖励
+  const claimTeamClick = async (type, amount) => {
+    if (fromWei(amount) == 0) {
+      Totast("不能领取", "warning");
+      return;
+    }
+    if (btnLoading) return; // 防止重复点击
+    const bigRes = concatSign(fromWei(amount));
+    setBtnLoading(true);
+    const sigResult = await signMessage(bigRes);
+    if (sigResult) {
+      await NetworkRequest({
+        Url: "userRecord/claimTeam",
+        Method: "POST",
+        Data: {
+          address: walletAddress,
+          type,
+          msg: bigRes,
+          signature: sigResult,
+        },
+      })
+        .then((res) => {
+          Totast("领取成功", "success");
+          getPageData();
+        })
+        .finally(() => {
+          setBtnLoading(false);
+        });
+    } else {
+      setBtnLoading(false);
+    }
   };
   useEffect(() => {
     getPageData();
   }, []);
   return (
     <>
+      <BackHeader title="节点" />
       <div className="nodeBox">
-        {nodeState ? (
+        {nodeState == true ? (
           <>
             <div className="nodeImg">
-              <img src={nodeImg} alt="" />
-              <div>{t("普通节点")}</div>
+              <img src={nodeInfo?.nodeImg} alt="" />
+              <div>{nodeInfo?.name}</div>
             </div>
             <div className="CloudNode">
               <img src={CloudNode} alt="" />
               <span>CLOUDAI NODE NUMBER</span>
-              <div>0</div>
+              <div>{fromWei(userInfo.teamNodePerf) || 0}</div>
             </div>
           </>
         ) : (
@@ -120,44 +191,79 @@ const MyNode: React.FC = () => {
         )}
         <div className="awardButton">
           <div className="record boxBorder">
-            <div>{t("累计领取收益")}(CAR)</div>
-            <div>0</div>
-            <Button>{t("明细")}</Button>
+            <div>{t("累计领取收益")}(USDT)</div>
+            <div>{fromWei(teamInfo.nodeUsdtReward)}</div>
+            <Button
+              onClick={() => {
+                PathNav("/recordList?type=team&id=103");
+              }}
+            >
+              {t("明细")}
+            </Button>
           </div>
           <div className="record boxBorder">
-            <div>{t("待领取收益")}(CAR)</div>
-            <div>0</div>
-            <Button>{t("领取")}</Button>
+            <div>{t("待领取收益")}(USDT)</div>
+            <div>{fromWei(teamInfo.nodeUsdtClaimReward)}</div>
+            <Button
+              disabled={btnLoading}
+              onClick={() => {
+                claimTeamClick(103, teamInfo.nodeUsdtClaimReward);
+              }}
+            >
+              {t("领取")}
+            </Button>
           </div>
         </div>
-        {nodeState ? (
+
+        <div className="awardButton">
+          <div className="record boxBorder">
+            <div>{t("累计领取收益")}(CA)</div>
+            <div>{fromWei(teamInfo.nodeCaReward)}</div>
+            <Button
+              onClick={() => {
+                PathNav("/recordList?type=team&id=104");
+              }}
+            >
+              {t("明细")}
+            </Button>
+          </div>
+          <div className="record boxBorder">
+            <div>{t("待领取收益")}(CA)</div>
+            <div>{fromWei(teamInfo.nodeCaClaimReward)}</div>
+            <Button
+              disabled={btnLoading}
+              onClick={() => {
+                claimTeamClick(104, teamInfo.nodeCaClaimReward);
+              }}
+            >
+              {t("领取")}
+            </Button>
+          </div>
+        </div>
+        {nodeState == true ? (
           <>
             <div className="equityBox">
               <div className="title">{t("专属权益")}</div>
-              <div>
-                {" "}
-                <img src={equityIcon} alt="" /> {t("10000U矿机放大3倍3万U额度")}{" "}
-              </div>
-              <div>
-                {" "}
-                <img src={equityIcon} alt="" /> {t("全网动静产币均分红2%")}
-              </div>
-              <div>
-                {" "}
-                <img src={equityIcon} alt="" />{" "}
-                {t("全网众筹静态10%产出总额x 1%")}{" "}
-              </div>
-              <div>
-                {" "}
-                <img src={equityIcon} alt="" /> {t("获得F6会员等级(限时3个月)")}{" "}
-              </div>
+              {nodeInfo?.list.map((item, index) => {
+                return (
+                  <div key={index}>
+                    {" "}
+                    <img src={equityIcon} alt="" /> {item}{" "}
+                  </div>
+                );
+              })}
             </div>
           </>
         ) : (
           <>
-            <Button className="payNode" onClick={() => {}}>
+            {/* <Button
+              className="payNode"
+              onClick={() => {
+                PathNav("/node");
+              }}
+            >
               {t("选购节点")}
-            </Button>
+            </Button> */}
           </>
         )}
       </div>

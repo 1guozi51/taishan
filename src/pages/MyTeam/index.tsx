@@ -9,14 +9,15 @@ import { Spin, Empty } from "antd";
 import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
-import { BigNumber } from "ethers";
 import { concatSign } from "@/Hooks/Utils.ts";
 import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
+import BackHeader from "@/components/BackHeader";
+
 const MyTeam: React.FC = () => {
   const navigate = useNavigate();
   const { signMessage } = UseSignMessage();
   const wallertAddress = userAddress().address;
-  // const wallertAddress = "0x1c028e874b6071194da0e24d1504507f717d2588";
+  // const wallertAddress = "0x708fa021d9a6a827eca68ca490042a57c1621c5d";
   const [teamInfo, setTeamInfo] = useState({});
   const [location, setLocation] = useState("");
   const [tabIndex, setTabIndex] = useState(1); //1团队列表 2代表33团队
@@ -136,7 +137,9 @@ const MyTeam: React.FC = () => {
     await NetworkRequest({
       Url: "user/teamChild",
       Data: {
-        address: wallertAddress, size: 10, current: nexPage
+        address: wallertAddress,
+        size: 10,
+        current: nexPage,
       },
     }).then((res) => {
       if (res.success) {
@@ -151,7 +154,7 @@ const MyTeam: React.FC = () => {
     });
   };
   //待领取奖励 type 领取对应类型的奖励
-  const claimTeamCLick = async (type, amount) => {
+  const claimTeamClick = async (type, amount) => {
     if (fromWei(amount) == 0) {
       Totast("不能领取", "warning");
       return;
@@ -188,9 +191,11 @@ const MyTeam: React.FC = () => {
   }, []);
   return (
     <>
+     <BackHeader title='团队' /> 
       <div
         style={{ padding: "0 16px", background: "#03022c", minHeight: "100vh" }}
       >
+       
         <div className="teamInfo">
           <div>
             {" "}
@@ -229,7 +234,7 @@ const MyTeam: React.FC = () => {
             <Button
               disabled={btnLoading}
               onClick={() => {
-                claimTeamCLick(101, teamInfo.teamUsdtClaimReward);
+                claimTeamClick(101, teamInfo.teamUsdtClaimReward);
               }}
             >
               {t("领取")}
@@ -255,7 +260,7 @@ const MyTeam: React.FC = () => {
             <Button
               disabled={btnLoading}
               onClick={() => {
-                claimTeamCLick(103, teamInfo.teamCaClaimReward);
+                claimTeamClick(103, teamInfo.teamCaClaimReward);
               }}
             >
               {t("领取")}
@@ -295,7 +300,7 @@ const MyTeam: React.FC = () => {
         <div className="tabTltle">
           <div>{t("钱包地址")}</div>
           <div>{t("加入时间")}</div>
-          <div>{t("业绩")}(CA)</div>
+          <div>{t("业绩")}</div>
         </div>
         <div className="list-box">
           {list.length == 0 ? (

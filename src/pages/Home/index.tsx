@@ -19,7 +19,6 @@ import { userAddress } from "@/Store/Store.ts";
 import { Drawer, Spin } from "antd";
 import { Totast } from "@/Hooks/Utils.ts";
 import { t } from "i18next";
-
 import BuyTicketPage from "./component/BuyTicketPage/index.tsx";
 const HomeTitle: React.FC<{
   className?: string;
@@ -36,7 +35,7 @@ const HomeTitle: React.FC<{
     </div>
   );
 };
-const PageBody: React.FC = ({ userInfo }) => {
+const PageBody: React.FC = () => {
   const navigate = useNavigate();
 
   // 获取邀请码
@@ -103,7 +102,7 @@ const PageBody: React.FC = ({ userInfo }) => {
               <img src={homeZc} className="tab-icon" alt="" />
               <span>{t("众筹")}</span>
             </div>
-            <div onClick={() => navigatePath("")} className="tab-item">
+            <div onClick={() => navigatePath("/myNode")} className="tab-item">
               <img src={homeNode} className="tab-icon" alt="" />
               <span>{t("节点")}</span>
             </div>

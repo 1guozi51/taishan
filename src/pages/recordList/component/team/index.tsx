@@ -99,7 +99,7 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                     <span>{formatDate(item.createTime).dateTime}</span>
                     <span>{item.status == 1 ? t("待领取") : t("已领取")}</span>
                     <span>
-                      {typeId == 101
+                      {typeId == 101||typeId == 103
                         ? fromWei(item.usdtAmount)
                         : fromWei(item.caAmount)}
                     </span>
