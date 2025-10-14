@@ -1,7 +1,7 @@
 // NetworkRequest.ts
 import { message } from "antd";
-import { CONFIG } from "@/config/env";
-const RequestUrl = CONFIG.apiBase;
+import EnvManager from "@/config/EnvManager";
+const RequestUrl = EnvManager.apiBase;
 interface NetWorkProps {
     Url: string;
     Method?: "get" | "post" | "put" | "delete";

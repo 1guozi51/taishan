@@ -1,6 +1,7 @@
 import { userAddress, userChainId } from "@/Store/Store";
 import { message } from "antd";
-import { CONFIG } from "@/config/env";
+import EnvManager from "@/config/EnvManager";
+
 declare global {
   interface Window {
     ethereum?: any;
@@ -21,15 +22,15 @@ export async function ensureWalletConnected(): Promise<boolean> {
   console.log("当前链ID:", currentChainId);
   setChain(currentChainId);
   const BNB_PARAMS = {
-    chainId: CONFIG.chainId, // 56 的十六进制 => BSC Mainnet
-    chainName: CONFIG.chainName,
+    chainId: EnvManager.chainId, // 56 的十六进制 => BSC Mainnet
+    chainName: EnvManager.chainName,
     nativeCurrency: {
       name: "BNB",
       symbol: "BNB",
       decimals: 18,
     },
-    rpcUrls: [CONFIG.rpcUrl],
-    blockExplorerUrls: [CONFIG.blockExplorerUrl],
+    rpcUrls: [EnvManager.rpcUrl],
+    blockExplorerUrls: [EnvManager.blockExplorerUrl],
   };
   let accounts: string[] = [];
   try {

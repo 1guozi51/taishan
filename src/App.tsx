@@ -5,7 +5,6 @@ import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { Spin } from "antd";
 import i18n, {t} from "i18next";    
-import { CONFIG } from "@/config/env";
 const Home = lazy(() => import("@/pages/Home/index.tsx"));
 const Deposit = lazy(() => import("@/pages/Deposit/index.tsx"));
 const Withdraw = lazy(() => import("@/pages/Withdraw/index.tsx"));
@@ -16,6 +15,8 @@ const MyTeam = lazy(() => import("@/pages/MyTeam/index.tsx"));
 const MyNode = lazy(() => import("@/pages/MyNode/index.tsx"));
 const Node = lazy(() => import("@/pages/Node/index.tsx"));
 const RecordList = lazy(() => import("@/pages/recordList/index.tsx"));
+import EnvManager from "@/config/EnvManager";
+EnvManager.print()
 function App() {
   const walletAddress = userAddress((state) => state.address);
   const [loading, setLoading] = useState(true);
