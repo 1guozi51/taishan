@@ -13,7 +13,7 @@ export interface UserInfo {
   directTotalCount: number | null;
   inviterAddress: string | null;
   layer: number | null;
-  nodeLevel: number | null;
+  nodeLevel: number | 0;
   parentAddress: string | null;
   selfInvest: number | null;
   sort: number | null;

@@ -59,9 +59,10 @@ const PageBody: React.FC = () => {
     //有邀请人则进行回显
     localStorage.setItem("invite", invite);
   }
-  //   // 控制显示是否显示购买门票
+  // 控制显示是否显示购买门票
   const [showBuyTicket, setShowBuyTicket] = useState(false);
-  //   //门票弹窗是否展示事件
+
+  //门票弹窗是否展示事件
   const buyTicketIsShowChange = (val: boolean) => {
     setShowBuyTicket(val);
   };
@@ -102,7 +103,7 @@ const PageBody: React.FC = () => {
               <img src={homeZc} className="tab-icon" alt="" />
               <span>{t("众筹")}</span>
             </div>
-            <div onClick={() => navigatePath("/myNode")} className="tab-item">
+            <div onClick={() => navigate("/myNode")} className="tab-item">
               <img src={homeNode} className="tab-icon" alt="" />
               <span>{t("节点")}</span>
             </div>

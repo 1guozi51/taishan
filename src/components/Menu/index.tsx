@@ -128,7 +128,7 @@ const Menu: React.FC<{
     if (localLang == "zh") {
       setCurLang(1);
     }
-    if (localLang == "en") {
+    if (localLang == "en") {  
       setCurLang(2);
     }
   };
