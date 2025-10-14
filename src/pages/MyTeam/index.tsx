@@ -288,14 +288,14 @@ const MyTeam: React.FC = () => {
           >
             {t("团队列表")}
           </div>
-          <div
+          {/* <div
             className={`tab-left ${tabIndex == 2 ? "tab-active" : ""}`}
             onClick={() => {
               tabChange(2);
             }}
           >
             {t("33社区")}
-          </div>
+          </div> */}
         </div>
         <div className="tabTltle">
           <div>{t("钱包地址")}</div>

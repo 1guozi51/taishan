@@ -1,68 +1,78 @@
-.nodeBox{
-  background: url('@/assets/img/nodeBg.png') no-repeat;
+.nodeBox {
+  background: url("@/assets/img/nodeBg.png") no-repeat;
   background-size: 100% 274px;
   background-color: #03022c;
   min-height: 100vh;
   padding: 1px 15px;
-  .nodeContent{
+  .nodeContent {
     margin: 62px auto;
     width: fit-content;
     text-align: center;
-    div:nth-child(1){ 
+    div:nth-child(1) {
       font-family: AlibabaPuHuiTi;
       font-size: 32px;
       letter-spacing: 0px;
-      color: #FFFFFF;
+      color: #ffffff;
     }
-    div:nth-child(2){ 
+    div:nth-child(2) {
       font-family: AlibabaPuHuiTi;
       font-size: 14px;
       letter-spacing: 0px;
-      color: #FFFFFF;
+      color: #ffffff;
       margin-top: 14.5px;
     }
-    div:nth-child(3){
+    div:nth-child(3) {
       font-family: AlibabaPuHuiTi;
       font-size: 12px;
       letter-spacing: 0px;
-      color: #67BAFF;
+      color: #67baff;
       margin-top: 4.5px;
     }
   }
-  
-  .nodeItem{
+
+  .nodeItem {
     padding: 12px;
     box-sizing: border-box;
     border-radius: 8px;
     margin-bottom: 12px;
-    background: linear-gradient(180deg, rgba(2, 61, 202, 0.6491) 0%, rgba(1, 15, 56, 0.4536) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(2, 61, 202, 0.6491) 0%,
+      rgba(1, 15, 56, 0.4536) 100%
+    );
     box-sizing: border-box;
     border: 1px solid;
-    border-image: linear-gradient(180deg, #6B93FA 0%, rgba(107, 147, 250, 0.4508) 100%) ;
+    border-image: linear-gradient(
+      180deg,
+      #6b93fa 0%,
+      rgba(107, 147, 250, 0.4508) 100%
+    );
     position: relative;
     z-index: 2;
-    .title{
+    .title {
       display: flex;
-      div:nth-child(2){
+      div:nth-child(2) {
         font-family: AlibabaPuHuiTi;
         font-size: 16px;
         font-weight: normal;
         line-height: normal;
         letter-spacing: 0px;
-        color: #FFFFFF;
+        color: #ffffff;
         margin-left: 4px;
       }
-      div:nth-child(3){
-        font-family: AlibabaPuHuiTi;
-        font-size: 11px;
-        font-weight: normal;
-        line-height: normal;
+      // div:nth-child(3){
+      //   font-family: AlibabaPuHuiTi;
+      //   font-size: 11px;
+      //   font-weight: normal;
+      //   line-height: normal;
+      //   text-align: right;
+      //   letter-spacing: 0px;
+      //   color: rgba(255, 255, 255, 0.4495);
+      //   margin-left: auto;
+      // }
+      div:nth-child(3) {
         text-align: right;
-        letter-spacing: 0px;
-        color: rgba(255, 255, 255, 0.4495);
         margin-left: auto;
-      }
-      div:nth-child(4){
         display: flex;
         align-items: center;
         font-family: AlibabaPuHuiTi;
@@ -70,79 +80,79 @@
         font-weight: normal;
         line-height: normal;
         letter-spacing: 0px;
-        color: #FFFFFF;
+        color: #ffffff;
         height: 20px;
-        margin-left: 6px;
-        span:nth-child(1){
-          background: linear-gradient(180deg, #FEEBB6 0%, #FCD280 100%);
+        span:nth-child(1) {
+          background: linear-gradient(180deg, #feebb6 0%, #fcd280 100%);
           color: #000000;
           display: block;
           line-height: 20px;
           width: 34px;
           text-align: center;
         }
-        span:nth-child(2){ 
+        span:nth-child(2) {
           line-height: 20px;
-          width: 34px;
+          // width: 34px;
+          padding-left: 2px;
+          padding-right: 2px;
           text-align: center;
         }
         box-sizing: border-box;
         border: 0.5px solid;
-        border-image: linear-gradient(180deg, #FEEBB7 0%, #F6CE7C 100%) 0.5;
+        border-image: linear-gradient(180deg, #feebb7 0%, #f6ce7c 100%) 0.5;
       }
-      img{
+      img {
         width: 24px;
         height: 24px;
       }
     }
-    .equityBox{
-      background: url('@/assets/img/equityBg2.png') no-repeat;
+    .equityBox {
+      background: url("@/assets/img/equityBg2.png") no-repeat;
       background-size: 100% 100%;
       padding: 8px 0 15px 12px;
       display: flex;
       flex-direction: column;
       gap: 7px;
       margin-top: 15px;
-      .title{
+      .title {
         font-family: AlibabaPuHuiTi;
         font-size: 14px;
         font-weight: normal;
         line-height: normal;
         letter-spacing: 0px;
-        color: #FFFFFF;
+        color: #ffffff;
         margin-bottom: 4px;
       }
-      div{
+      div {
         font-family: AlibabaPuHuiTi;
         font-size: 12px;
         font-weight: normal;
         line-height: normal;
         letter-spacing: 0px;
-        color: #67BAFF;
+        color: #67baff;
       }
-      img{
+      img {
         width: 12px;
         height: 12px;
         margin-right: 2px;
       }
     }
-    .Bottom{
+    .Bottom {
       display: flex;
       align-items: center;
       margin-top: 12px;
-      div{
+      div {
         font-family: AlibabaPuHuiTi;
         font-size: 14px;
         font-weight: normal;
         line-height: normal;
         letter-spacing: 0px;
-        color: #67BAFF;
+        color: #67baff;
       }
-      button{
+      button {
         margin-left: auto;
         line-height: 100%;
       }
     }
   }
 }
-

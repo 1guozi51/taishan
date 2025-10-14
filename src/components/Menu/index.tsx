@@ -230,7 +230,7 @@ const Menu: React.FC<{
           </div>
           <div className="gas-balance">
             <div className="gas">
-              MAS{t("余额")}：{fromWei(userInfoAbi?.profitQuota) || "-"}
+              MAX{t("余额")}：{fromWei(userInfoAbi?.profitQuota) || "-"}
             </div>
             <div>
               {/* <span className="link-text">{t("明细记录")}</span>

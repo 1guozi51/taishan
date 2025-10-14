@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   perspective: 800px;
-  transition: transform 1.2s cubic-bezier(.2,.8,.2,1);
+  transition: transform 3s cubic-bezier(.2,.8,.2,1);
   user-select: none;
 }
 
@@ -17,7 +17,7 @@
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(.2,.8,.2,1);
+  transition: transform 3s cubic-bezier(.2,.8,.2,1);
 }
 
 /* 基本的点位布局 */
@@ -82,7 +82,7 @@
 
 /* 当根节点处于 spinning 时，让 cube 使用动画（inline transform 会覆盖动画结束状态，所以在停止时 JS 会写入 transform） */
 .dice-root.spinning .cube {
-  animation: dice-spin 0.8s linear infinite;
+  animation: dice-spin 3s linear infinite;
 }
 
 /* rolling 动画：随机旋转模拟骰子滚动，使用 .rolling 时根据 value 设置最终 transform（在 JS 中通过切换 class 控制最终值） */

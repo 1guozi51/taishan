@@ -31,6 +31,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   const [running, setRunning] = useState(false);
 
   const [target, setTarget] = useState<number | null>(null);
+
   const [showDice, setShowDice] = useState<boolean>(false);
   //获取输入的购买数量
   const [buyNumber, setBuyNumber] = useState<string>("");
@@ -79,6 +80,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   const closeBindFloat = () => {
     setShowBindFloat(false);
   };
+ 
   // 确定购买门票
   const confirmButAction = async () => {
     if (!canBuy) {
@@ -146,7 +148,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       Totast(t("检查授权或者授权时发生了错误，请检查网络后重新尝试"), "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       return;
     }
-
     try {
       // 使用 await 获取 ContractSend 的返回结果并明确处理成功/失败情况
       const res = await ContractSend({
@@ -169,9 +170,12 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         setTimeout(() => {
           setRunning(false);
           setShowDice(false);
+          Totast(
+            t(`购买成功,恭喜你获得${buyNumber * res.value}MAX`),
+            "success"
+          );
           Props.onClose();
-        }, 1500);
-        Totast(t("购买成功"), "success");
+        }, 5500);
       } else {
         // 交易返回了非成功的结果（例如 res.value === false）
         Totast(t("购买失败,交易未成功"), "error");

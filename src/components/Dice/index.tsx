@@ -41,8 +41,8 @@ const Dice: React.FC<DiceProps> = ({ size = 64, disabled = false, onRoll, runnin
     if (disabled || rolling || spinning) return;
     setRolling(true);
     const next = Math.floor(Math.random() * 6) + 1;
-    // 让动画比以前更长一些以便看见过程
-    const duration = 1200;
+  // 让动画时长与 CSS 动画一致（3s）
+  const duration = 3000;
     // 在开始时触发一个更强的旋转（视觉上看得到翻转）
     setTransform(`rotateX(${720}deg) rotateY(${360}deg)`);
     // 最终停在目标面的 transform
@@ -74,29 +74,29 @@ const Dice: React.FC<DiceProps> = ({ size = 64, disabled = false, onRoll, runnin
   React.useEffect(() => {
     if (typeof target === "number" && target >= 1 && target <= 6) {
       // 如果目前处于持续旋转状态，则先停止 spinning，再过渡到目标面
-      if (spinning) {
-        setSpinning(false);
-        // 确保动画样式停用后再设置最终 transform
-        setTimeout(() => {
-          setRolling(true);
-          const final = getTransformForValue(target, 1);
-          setTransform(final);
-          setTimeout(() => {
-            setValue(target);
-            setRolling(false);
-            if (onRoll) onRoll(target);
-          }, 1200);
-        }, 60);
+          if (spinning) {
+            setSpinning(false);
+            // 确保动画样式停用后再设置最终 transform
+            setTimeout(() => {
+              setRolling(true);
+              const final = getTransformForValue(target, 1);
+              setTransform(final);
+              setTimeout(() => {
+                setValue(target);
+                setRolling(false);
+                if (onRoll) onRoll(target);
+              }, 3000);
+            }, 60);
       } else {
         // 非 spinning 直接过渡
         setRolling(true);
         const final = getTransformForValue(target, 1);
         setTransform(final);
-        setTimeout(() => {
-          setValue(target);
-          setRolling(false);
-          if (onRoll) onRoll(target);
-        }, 1200);
+            setTimeout(() => {
+              setValue(target);
+              setRolling(false);
+              if (onRoll) onRoll(target);
+            }, 3000);
       }
     }
   }, [target, spinning, onRoll]);
