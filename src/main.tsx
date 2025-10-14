@@ -1,4 +1,5 @@
 import { Buffer } from "buffer";
+import "@/hooks/suppressConsole";
 if (!window.Buffer) {
   window.Buffer = Buffer;
 }

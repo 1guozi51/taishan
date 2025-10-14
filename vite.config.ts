@@ -2,33 +2,36 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import eslint from "vite-plugin-eslint";
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    eslint({
-      failOnError: false,
-      failOnWarning: false,
-      cache: false,
-      include: ["src/**/*.ts", "src/**/*.tsx"],
-    }),
-  ],
-  resolve: {
-    alias: {
-      buffer: "buffer", // VERY IMPORTANT
-      "@": path.resolve("./src"),
+import removeConsole from "vite-plugin-remove-console";
+
+export default defineConfig(({ mode }) => {
+  const isProd = mode === "production";
+
+  return {
+    plugins: [
+      react(),
+      eslint({
+        failOnError: false,
+        failOnWarning: false,
+        cache: false,
+        include: ["src/**/*.ts", "src/**/*.tsx"],
+      }),
+      isProd && removeConsole({ exclude: [] }), // 构建时移除所有 console
+    ],
+
+    resolve: {
+      alias: {
+        buffer: "buffer",
+        "@": path.resolve("./src"),
+      },
     },
-  },
-  optimizeDeps: {
-    include: ["buffer"], // Force buffer to be pre-bundled
-  },
-  server: {
-    host: true, // 允许局域网访问
-    port: 3333,
-  },
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/],
+
+    optimizeDeps: { include: ["buffer"] },
+    server: { host: true, port: 3333 },
+
+    build: {
+      minify: "esbuild",
+      esbuild: { drop: isProd ? ["console", "debugger"] : [] },
     },
-  },
+  };
 });
