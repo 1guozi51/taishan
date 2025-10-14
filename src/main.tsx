@@ -1,8 +1,9 @@
 import { Buffer } from "buffer";
-import "@/hooks/suppressConsole";
 if (!window.Buffer) {
   window.Buffer = Buffer;
 }
+import "@/hooks/suppressConsole";
+
 import { createRoot } from "react-dom/client";
 import { HashRouter, BrowserRouter } from "react-router-dom";
 import "./index.css";

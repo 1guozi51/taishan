@@ -26,15 +26,15 @@ export function formatAddress(
  *   - 字符串: 转为该字符
  * @returns {string}
  */
-export const getMask = (value, char = '*', convert = false) => {
-  if (value === null || value === undefined) return '';
+export const getMask = (value, char = "*", convert = false) => {
+  if (value === null || value === undefined) return "";
   // 把值转成字符串计算长度
   const str = String(value);
   const length = str.length;
   // 根据 convert 参数确定使用哪个字符
   let symbol = char;
-  if (convert === true) symbol = '*';
-  else if (typeof convert === 'string') symbol = convert;
+  if (convert === true) symbol = "*";
+  else if (typeof convert === "string") symbol = convert;
   return symbol.repeat(length);
 };
 /**
@@ -59,13 +59,13 @@ export function isValidAddress(addr?: string): boolean {
  * @returns 格式化后的字符串
  */
 export function fromWei(
-  value: string | number | bigint|BigNumber,
+  value: string | number | bigint | BigNumber,
   decimals = 18,
   fixed = true,
   precision = 4
 ): string {
-  if(value==''){
-    return ''
+  if (value == "") {
+    return "";
   }
   if (value === undefined || value === null) return "0";
   try {
@@ -81,11 +81,11 @@ export function fromWei(
 }
 
 function truncateDecimal(value: string, decimals: number): string {
-  if (!value.includes('.')) return value;
+  if (!value.includes(".")) return value;
 
-  const [integer, fraction = ''] = value.split('.');
+  const [integer, fraction = ""] = value.split(".");
   const truncated = fraction.slice(0, decimals);
-  return `${integer}.${truncated.padEnd(decimals, '0')}`;
+  return `${integer}.${truncated.padEnd(decimals, "0")}`;
 }
 
 /**
@@ -173,22 +173,22 @@ export function formatDate(dateString) {
   const date = new Date(dateString);
 
   // 获取日期部分：MM/DD/YYYY
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，所以加 1
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始，所以加 1
+  const day = String(date.getDate()).padStart(2, "0");
   const year = date.getFullYear();
 
   const formattedDate = `${month}/${day}/${year}`;
 
   // 获取时间部分：HH:mm:ss
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
   const formattedTime = `${hours}:${minutes}:${seconds}`;
   // 返回包含日期和时间的对象
   return {
     date: formattedDate,
     time: formattedTime,
-    dateTime:formattedDate+' '+formattedTime
+    dateTime: formattedDate + " " + formattedTime,
   };
 }
 export async function ensureBNBChain(): Promise<boolean> {
@@ -217,13 +217,13 @@ export async function ensureBNBChain(): Promise<boolean> {
     return false;
   }
 }
-export const concatSign = (bigNumber:string): string => {
+export const concatSign = (bigNumber: string): string => {
   // 获取当前时间戳（秒）
   const timestamp = Math.floor(Date.now() / 1000).toString();
 
   // 拼接参数
   const combined = `${bigNumber}${timestamp}`;
-  
+
   return combined;
 };
 /**
@@ -249,5 +249,10 @@ export const toBigNumberUnits = (
   }
 };
 
-
- 
+export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
+  const a = BigNumber.from(big1.toString()); // 1e18
+  const b = BigNumber.from(big2.toString()); // 2e18
+  const sum = a.add(b);
+  console.log("sum==", sum);
+  return sum;
+};

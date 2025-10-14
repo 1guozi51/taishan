@@ -15,6 +15,7 @@ interface BuyTicketPageClass {
 }
 
 function BuyTicketPage(Props: BuyTicketPageClass) {
+  console.log("userInfo==")
   const inviteStorage = localStorage.getItem("invite") || "";
   // 当前钱包地址
   const wallertAddress = userAddress().address;
@@ -59,6 +60,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         params: [wallertAddress],
       }),
     ]);
+
     const UserBalance =
       ChainResult[0].status === "fulfilled"
         ? ChainResult[0].value.value
@@ -68,6 +70,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
     const userInfoResult = ChainResult[1].status === "fulfilled" ? true : false;
     const userInfoValue = ChainResult[1].value.value;
     setUserBalance(UserBalance);
+
     if (userInfoResult) {
       setUserInfo(userInfoValue);
     }

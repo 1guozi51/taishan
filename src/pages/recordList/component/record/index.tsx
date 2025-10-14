@@ -10,6 +10,7 @@ import { t } from "i18next";
 import { fromWei, formatDate } from "@/Hooks/Utils.ts";
 const Record: React.FC = () => {
   const wallertAddress = userAddress().address;
+  // const wallertAddress ='0x4Fd0983823040C26de701341c5f79DB5ecDcb064';
   const [list, setList] = useState([]);
   // 列表是否加载
   const [listLoding, setListLoding] = useState(false);

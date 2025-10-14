@@ -30,7 +30,7 @@ export async function ensureWalletConnected(): Promise<boolean> {
       decimals: 18,
     },
     rpcUrls: [EnvManager.rpcUrl],
-    blockExplorerUrls: [EnvManager.blockExplorerUrl],
+    blockExplorerUrls: [EnvManager.blockExplorerUrls],
   };
   let accounts: string[] = [];
   try {

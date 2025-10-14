@@ -125,6 +125,11 @@ const MyNode: React.FC = () => {
               <img src={noNode} alt="" />
               <div>{t("暂无节点,请购买")}</div>
             </div>
+            <div className="CloudNode">
+              <img src={CloudNode} alt="" />
+              <span>CLOUDAI NODE NUMBER</span>
+              <div>{fromWei(userInfo.teamNodePerf) || 0}</div>
+            </div>
           </>
         )}
         <div className="awardButton">

@@ -1,1149 +1,433 @@
 const abi = [
-  {
-    inputs: [],
-    name: "AccessControlBadConfirmation",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
-        name: "neededRole",
-        type: "bytes32",
-      },
-    ],
-    name: "AccessControlUnauthorizedAccount",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "target",
-        type: "address",
-      },
-    ],
-    name: "AddressEmptyCode",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address[]",
-        name: "_user",
-        type: "address[]",
-      },
-      {
-        internalType: "address[]",
-        name: "_inviter",
-        type: "address[]",
-      },
-    ],
-    name: "bind",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-    ],
-    name: "claim",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "implementation",
-        type: "address",
-      },
-    ],
-    name: "ERC1967InvalidImplementation",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "ERC1967NonPayable",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "FailedCall",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "grantRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "defaultAdmin",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "upgrader",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_exchequer",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_dynamicAddress",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_feeAddress",
-        type: "address",
-      },
-    ],
-    name: "initialize",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "InvalidInitialization",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "NotInitializing",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "callerConfirmation",
-        type: "address",
-      },
-    ],
-    name: "renounceRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_buyFee",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_sellFee",
-        type: "uint256",
-      },
-    ],
-    name: "setFee",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "inviter",
-        type: "address",
-      },
-    ],
-    name: "ticket",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "UUPSUnauthorizedCallContext",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "slot",
-        type: "bytes32",
-      },
-    ],
-    name: "UUPSUnsupportedProxiableUUID",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "inviter",
-        type: "address",
-      },
-    ],
-    name: "Bind",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "version",
-        type: "uint64",
-      },
-    ],
-    name: "Initialized",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "destroy",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "cliamAmout",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "teamAmout",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "nodeAmout",
-        type: "uint256",
-      },
-    ],
-    name: "MinerCliam",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "revokeRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "previousAdminRole",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "newAdminRole",
-        type: "bytes32",
-      },
-    ],
-    name: "RoleAdminChanged",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleGranted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleRevoked",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_exchequer",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_feeAddress",
-        type: "address",
-      },
-    ],
-    name: "setExchequer",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_address",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_gasAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_ticketNumber",
-        type: "uint256",
-      },
-    ],
-    name: "setUserGas",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        internalType: "address[]",
-        name: "path",
-        type: "address[]",
-      },
-    ],
-    name: "swap",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "gas",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "minerValue",
-        type: "uint256",
-      },
-    ],
-    name: "Ticket",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "implementation",
-        type: "address",
-      },
-    ],
-    name: "Upgraded",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newImplementation",
-        type: "address",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "upgradeToAndCall",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "contract IERC20",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "address[]",
-        name: "_address",
-        type: "address[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "amounts",
-        type: "uint256[]",
-      },
-    ],
-    name: "withdrawUser",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "sendUser",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "erc20",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "WithdrawUser",
-    type: "event",
-  },
-  {
-    stateMutability: "payable",
-    type: "receive",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "blacklist",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "buyFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "CaToken",
-    outputs: [
-      {
-        internalType: "contract IERC20",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "crowdfundList",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "number",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "totalAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "joinAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "successNumber",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "redeemAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "returnAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "makeMinerAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "makeMinerValue",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "crowdfundMaxValue",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "crowdfundMinValue",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "crowdfundPre",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "DEFAULT_ADMIN_ROLE",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "dynamicAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "exchequer",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "feeAddress",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "getCaToUsdtAmount",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-    ],
-    name: "getRoleAdmin",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "getUsdtToCaAmount",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "hasRole",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "minerInfo",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "time",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "per",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "releaseValue",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "releaseValueDebt",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "flg",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "multipleRange",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "_address",
-        type: "address",
-      },
-    ],
-    name: "pending",
-    outputs: [
-      {
-        internalType: "uint256[]",
-        name: "amounts",
-        type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "preIndex",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "proxiableUUID",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "releaseRate",
-    outputs: [
-      {
-        internalType: "uint32",
-        name: "",
-        type: "uint32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "releaseTimeUint",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "sellFee",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "interfaceId",
-        type: "bytes4",
-      },
-    ],
-    name: "supportsInterface",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "ticketDistributeRatio",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalPreAmount",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "UPGRADE_INTERFACE_VERSION",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "UPGRADER_ROLE",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "UsdtToken",
-    outputs: [
-      {
-        internalType: "contract IERC20",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "userInfo",
-    outputs: [
-      {
-        internalType: "address",
-        name: "inviter",
-        type: "address",
-      },
-      {
-        internalType: "uint32",
-        name: "directCount",
-        type: "uint32",
-      },
-      {
-        internalType: "uint256",
-        name: "preAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "preIndex",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "gasAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "profitQuota",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "ticketNumber",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
-export default abi;
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "target",
+                    "type": "address"	
+                }
+            ],
+            "name": "AddressEmptyCode",
+            "type": "error"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "implementation",
+                    "type": "address"
+                }
+            ],
+            "name": "ERC1967InvalidImplementation",
+            "type": "error"
+        },
+        {
+            "inputs": [],
+            "name": "ERC1967NonPayable",
+            "type": "error"
+        },
+        {
+            "inputs": [],
+            "name": "FailedCall",
+            "type": "error"
+        },
+        {
+            "inputs": [],
+            "name": "InvalidInitialization",
+            "type": "error"
+        },
+        {
+            "inputs": [],
+            "name": "NotInitializing",
+            "type": "error"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                }
+            ],
+            "name": "OwnableInvalidOwner",
+            "type": "error"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                }
+            ],
+            "name": "OwnableUnauthorizedAccount",
+            "type": "error"
+        },
+        {
+            "inputs": [],
+            "name": "UUPSUnauthorizedCallContext",
+            "type": "error"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "slot",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "UUPSUnsupportedProxiableUUID",
+            "type": "error"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "inviter",
+                    "type": "address"
+                }
+            ],
+            "name": "Bind",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "pid",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "IDO",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "uint64",
+                    "name": "version",
+                    "type": "uint64"
+                }
+            ],
+            "name": "Initialized",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "previousOwner",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "OwnershipTransferred",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "implementation",
+                    "type": "address"
+                }
+            ],
+            "name": "Upgraded",
+            "type": "event"
+        },
+        {
+            "inputs": [],
+            "name": "UPGRADE_INTERFACE_VERSION",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "balance",
+                            "type": "uint256"
+                        }
+                    ],
+                    "internalType": "struct CANodeIDO.PoolInfo",
+                    "name": "pool",
+                    "type": "tuple"
+                }
+            ],
+            "name": "addPool",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_inviter",
+                    "type": "address"
+                }
+            ],
+            "name": "bind",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "pid",
+                    "type": "uint256"
+                }
+            ],
+            "name": "ido",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "initialOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "initialize",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "inviter",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "nodeInfo",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "pid",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isNode",
+                    "type": "bool"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "isClaim",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "poolInfo",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "balance",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "proxiableUUID",
+            "outputs": [
+                {
+                    "internalType": "bytes32",
+                    "name": "",
+                    "type": "bytes32"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "addr",
+                    "type": "address"
+                }
+            ],
+            "name": "setFoundation",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "pid",
+                    "type": "uint256"
+                },
+                {
+                    "components": [
+                        {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "balance",
+                            "type": "uint256"
+                        }
+                    ],
+                    "internalType": "struct CANodeIDO.PoolInfo",
+                    "name": "pool",
+                    "type": "tuple"
+                }
+            ],
+            "name": "setPool",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newImplementation",
+                    "type": "address"
+                },
+                {
+                    "internalType": "bytes",
+                    "name": "data",
+                    "type": "bytes"
+                }
+            ],
+            "name": "upgradeToAndCall",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        }
+    ]
+export default abi

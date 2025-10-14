@@ -7,6 +7,7 @@ export interface EnvConfig {
   contractPool: string;
   contractUsdt: string;
   contractCa: string;
+  contractIdoPool: string;
   chainId: string;
   rpcUrl: string;
   blockExplorerUrls: string;
@@ -20,6 +21,7 @@ export default class EnvConfigProvider {
     return {
       poolContract: "0x8405714ECA124D436Ff58BAe222dBf32cFe8b803",
       apiBase: "http://143.92.39.28:9030/api/",
+      contractIdoPool:"0x77C596103cc479eaCBe5862B514C18C5CCCd35a8",//购买节点的合约地址
       contractPool: "0xf3f27128C8596915093439671cF223978AA3abae",
       contractUsdt: "0x55d398326f99059fF775485246999027B3197955",
       contractCa: "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
@@ -36,7 +38,8 @@ export default class EnvConfigProvider {
       poolContract: "0x268e52d5814880E00B60780AE9D8c7f1Ac1b4A8c",
       apiBase: "https://api.soulca.com/",
       contractPool: "0xf3f27128C8596915093439671cF223978AA3abae",
-      contractUsdt: "0x55d398326f99059fF775485246999027B3197955",
+      contractIdoPool:"0x77C596103cc479eaCBe5862B514C18C5CCCd35a8",//购买节点的合约地址
+      contractUsdt: "0x55d398326f99059fF775485246999027B3197955",// 
       contractCa: "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
       chainId: "0x38",
       rpcUrl: "https://bsc-dataseed.binance.org/",

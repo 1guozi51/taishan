@@ -5,7 +5,7 @@ import { userAddress } from "@/Store/Store.ts";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { InfiniteScroll } from "antd-mobile";
 import { Spin } from "antd";
-import { fromWei, formatDate } from "@/Hooks/Utils.ts";
+import { fromWei, formatDate, BigNumberAdd } from "@/Hooks/Utils.ts";
 import { t } from "i18next";
 
 interface TeamRecord {
@@ -17,7 +17,7 @@ interface TeamRecord {
 const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   //通过searchParams参数获取id值
   const typeId = pathParam.get("id");
-  // const wallertAddress = "0x658b8ff0bac39276a02b7f32944c69158d82a97b";
+  // const wallertAddress = "0x4Fd0983823040C26de701341c5f79DB5ecDcb064";
   const wallertAddress = userAddress((state) => state.address);
   const [list, setList] = useState<TeamRecord[]>([]);
   // 列表是否加载
@@ -27,7 +27,7 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   const [dataParam, setDataParam] = useState({
     address: wallertAddress,
     current: 1,
-    size: 200,
+    size: 300,
     type: typeId,
     total: "", //总数
   });
@@ -99,9 +99,9 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                     <span>{formatDate(item.createTime).dateTime}</span>
                     <span>{item.status == 1 ? t("待领取") : t("已领取")}</span>
                     <span>
-                      {typeId == 101||typeId == 103
-                        ? fromWei(item.usdtAmount)
-                        : fromWei(item.caAmount)}
+                      {typeId == 101 || typeId == 103
+                        ? fromWei(BigNumberAdd(item.usdtAmount, item.fees))
+                        : fromWei(BigNumberAdd(item.caAmount, item.fees))}
                     </span>
                   </div>
                 );
