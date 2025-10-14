@@ -17,7 +17,6 @@ const MyTeam: React.FC = () => {
   const navigate = useNavigate();
   const { signMessage } = UseSignMessage();
   const wallertAddress = userAddress().address;
-  // const wallertAddress = "0x708fa021d9a6a827eca68ca490042a57c1621c5d";
   const [teamInfo, setTeamInfo] = useState({});
   const [location, setLocation] = useState("");
   const [tabIndex, setTabIndex] = useState(1); //1团队列表 2代表33团队
@@ -49,7 +48,8 @@ const MyTeam: React.FC = () => {
     setTabIndex(type);
     if (type == 1) {
       getDataList({
-        Url: "user/teamChild",
+        Url: "user/invitations",
+        Method: "post",
         Data: {
           current: 1,
           size: 10,
@@ -91,10 +91,11 @@ const MyTeam: React.FC = () => {
       }
     });
   };
-  const getDataList = async ({ Url, Data }) => {
+  const getDataList = async ({ Url, Method, Data }) => {
     setListLoding(true);
     const result = await NetworkRequest({
       Url,
+      Method,
       Data,
     });
     if (result.data.code == 200) {
@@ -135,7 +136,8 @@ const MyTeam: React.FC = () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({
-      Url: "user/teamChild",
+      Url: "user/invitations",
+      Method: "post",
       Data: {
         address: wallertAddress,
         size: 10,
@@ -191,11 +193,10 @@ const MyTeam: React.FC = () => {
   }, []);
   return (
     <>
-     <BackHeader title='团队' /> 
+      <BackHeader title="团队" />
       <div
         style={{ padding: "0 16px", background: "#03022c", minHeight: "100vh" }}
       >
-       
         <div className="teamInfo">
           <div>
             {" "}
@@ -319,7 +320,7 @@ const MyTeam: React.FC = () => {
                     {formatDate(e.createTime).date} <br></br>
                     {formatDate(e.createTime).time}
                   </div>
-                  <div>{fromWei(e.teamPerf)}</div>
+                  <div>{fromWei(e.selfInvest)}</div>
                 </div>
               );
             })

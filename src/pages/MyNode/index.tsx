@@ -24,7 +24,6 @@ const MyNode: React.FC = () => {
   const walletAddress = userAddress().address;
   // const walletAddress = '0x4Fd0983823040C26de701341c5f79DB5ecDcb064';
   const { signMessage } = UseSignMessage(); //获取钱包签名
- 
   const [userInfo, setUserInfo] = useState<UserInfo>({});
   const [teamInfo, setTeamInfo] = useState({});
   const [btnLoading, setBtnLoading] = useState(false);
@@ -55,7 +54,6 @@ const MyNode: React.FC = () => {
   //得到当前等级信息 图标 节点名称 对应的专属权益
   useEffect(() => {
     //得到对应节点信息 展示相关内容
-    console.log("userInfo=useEffect=", userInfo);
     let nodeLevel = userInfo.nodeLevel || 0;
     if (nodeLevel == 0) {
       setNodeState(false);

@@ -70,7 +70,7 @@ export const nodeList = [
 
 export const nodeBuyList = [
   {
-    id: 2,
+    id: 0,
     value: "3",
     nodeImg: nodeImg1,
     name: t("超级节点"),
@@ -84,7 +84,7 @@ export const nodeBuyList = [
     ],
   },
   {
-    id: 3,
+    id: 1,
     value: "2",
     nodeImg: nodeImg2,
     name: t("大节点"),
@@ -98,7 +98,7 @@ export const nodeBuyList = [
     ],
   },
   {
-    id: 4,
+    id: 2,
     nodeImg: nodeImg3,
     value: "1",
     name: t("小节点"),
