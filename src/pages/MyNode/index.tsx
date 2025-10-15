@@ -199,14 +199,14 @@ const MyNode: React.FC = () => {
           </>
         ) : (
           <>
-            {/* <Button
+            <Button
               className="payNode"
               onClick={() => {
                 PathNav("/node");
               }}
             >
               {t("选购节点")}
-            </Button> */}
+            </Button>
           </>
         )}
       </div>

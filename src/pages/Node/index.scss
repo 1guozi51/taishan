@@ -60,19 +60,20 @@
         color: #ffffff;
         margin-left: 4px;
       }
-      // div:nth-child(3){
-      //   font-family: AlibabaPuHuiTi;
-      //   font-size: 11px;
-      //   font-weight: normal;
-      //   line-height: normal;
-      //   text-align: right;
-      //   letter-spacing: 0px;
-      //   color: rgba(255, 255, 255, 0.4495);
-      //   margin-left: auto;
-      // }
-      div:nth-child(3) {
+      div:nth-child(3){
+        font-family: AlibabaPuHuiTi;
+        font-size: 11px;
+        font-weight: normal;
+        line-height: normal;
         text-align: right;
+        letter-spacing: 0px;
+        color: rgba(255, 255, 255, 0.4495);
         margin-left: auto;
+      }
+      div:nth-child(4) {
+        text-align: right;
+        margin-left: 14px;
+        // margin-left: auto;
         display: flex;
         align-items: center;
         font-family: AlibabaPuHuiTi;

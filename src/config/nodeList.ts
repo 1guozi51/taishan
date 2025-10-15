@@ -74,6 +74,7 @@ export const nodeBuyList = [
     value: "3",
     nodeImg: nodeImg1,
     name: t("超级节点"),
+    balance: 0, //剩余数量
     price: 11000,
     number: 50,
     list: [
@@ -85,6 +86,7 @@ export const nodeBuyList = [
   },
   {
     id: 1,
+    balance: 0, //剩余数量
     value: "2",
     nodeImg: nodeImg2,
     name: t("大节点"),
@@ -99,6 +101,7 @@ export const nodeBuyList = [
   },
   {
     id: 2,
+    balance: 0, //剩余数量
     nodeImg: nodeImg3,
     value: "1",
     name: t("小节点"),

@@ -1,20 +1,28 @@
 import "./index.scss";
 import { useState, useEffect } from "react";
 import equityIcon from "@/assets/img/equityIcon.png";
-import { Button } from "antd-mobile";
+import { Button, Modal } from "antd-mobile";
+import { Spin } from "antd";
+
 import { nodeBuyList } from "@/config/nodeList";
 import BuyNodePopup from "./components/BuyNodePopup";
 import { userAddress } from "@/Store/Store.ts";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
-import { ethers } from "ethers";
+import { fromWei } from "@/Hooks/Utils";
+import { useNavigate } from "react-router-dom";
+import { BigNumber } from "ethers";
 interface NodeListClass {
   id: number;
   name: string;
   number: number;
-  price: number;
-  content: string[];
+  price: BigNumber;
+  balance: BigNumber;
+  nodeImg: string;
+  list: string[];
+  value: string;
 }
 const MyNode: React.FC = () => {
+  const navigate = useNavigate();
   //获取的地址
   const wallertAddress = userAddress().address;
   // 当前用户是否为节点
@@ -22,26 +30,21 @@ const MyNode: React.FC = () => {
 
   const [nodeState, setNodeState] = useState<boolean>(false);
 
-  const [nodePopState, setnodePopState] = useState<boolean>(false);
+  const [nodePopState, setNodePopState] = useState<boolean>(false);
 
-  // 选中的节点索引
-  const [selectNodeIndex, setSelectNodeIndex] = useState<boolean>(false);
   // 股东节点
   const [supNodeAddress] = useState<string[]>([
     "0xc6626ecd5e2f39a90b0d83f1abad2ec01a061c9c",
     "0x457869cc033f95de9d5579929d15be1059861ecd",
   ]);
-// 购买按钮加载
-  const [butLoding, setButLoding] = useState(false);
+  // 数据是否加载完成
+  const [butLoding, setButLoding] = useState(true);
   // 购买选中的节点
   const [selectNodeItem, setSelectNodeItem] = useState<NodeListClass>();
-  // 界面显示 1购买节点 2我的节点
-  const [showNodeContent, setShowNodeContent] = useState<number>(1);
   // 用户购买的节点数
   const [userBuyNodeId, setUserBuyNodeId] = useState<number>(-1);
-
-
-   const [nodeList, setNodeList] = useState<NodeListClass[]>(nodeBuyList);
+  const [usdtBalance, setUsdtBalance] = useState<BigNumber>(BigNumber.from(0));
+  const [nodeList, setNodeList] = useState<NodeListClass[]>(nodeBuyList);
   // 查询当前用户是否为节点
   const searchUserIsNode = async () => {
     setButLoding(true);
@@ -53,6 +56,7 @@ const MyNode: React.FC = () => {
         params: [wallertAddress],
       })
     );
+
     nodeList.map((item: NodeListClass) => {
       promiseSend.push(
         ContractRequest({
@@ -62,14 +66,17 @@ const MyNode: React.FC = () => {
         })
       );
     });
-
+    promiseSend.push(
+      ContractRequest({
+        tokenName: "USDTToken",
+        methodsName: "balanceOf",
+        params: [wallertAddress],
+      })
+    );
     const Result = await Promise.allSettled(promiseSend);
     console.log("result==", Result);
-   
-    return
     if (Result[0].status === "fulfilled") {
       const result = Result[0].value.value;
-      console.log(result);
       setUserIsNode(result.isNode);
       if (result.isNode) {
         setUserBuyNodeId(parseInt(result.pid.toString()));
@@ -77,96 +84,143 @@ const MyNode: React.FC = () => {
     }
     if (Result[1].status === "fulfilled") {
       const result = Result[1].value.value;
-      console.log(result);
       setNodeList((prev) => {
         const newList = [...prev];
         newList[0] = {
           ...newList[0],
-          price: Number(ethers.utils.formatUnits(result.amount)),
+          price: result.amount,
+          balance: result.balance,
         };
         return newList;
       });
     }
     if (Result[2].status === "fulfilled") {
       const result = Result[2].value.value;
-      console.log(result);
       setNodeList((prev) => {
         const newList = [...prev];
         newList[1] = {
           ...newList[1],
-          price: Number(ethers.utils.formatUnits(result.amount)),
+          price: result.amount,
+          balance: result.balance,
         };
         return newList;
       });
     }
     if (Result[3].status === "fulfilled") {
       const result = Result[3].value.value;
-      console.log(result);
       setNodeList((prev) => {
         const newList = [...prev];
         newList[2] = {
           ...newList[2],
-          price: Number(ethers.utils.formatUnits(result.amount)),
+          price: result.amount,
+          balance: result.balance,
         };
         return newList;
       });
     }
-    console.log("nodeList===", nodeList);
+    if (Result[4].status === "fulfilled") {
+      const result = Result[4].value.value;
+      setUsdtBalance(result);
+    }
     setButLoding(false);
+  };
+
+  //购买成功弹窗返回购买节点的信息
+  const buySuccessChange = (e) => {
+    searchUserIsNode()
+    const handler = Modal.show({
+      title: "欢迎加入",
+      closeOnMaskClick: true,
+      bodyClassName: "successPop",
+      content: (
+        <>
+          <div className="title2">CloudFAi全球节点</div>
+          <div className="payNode">
+            <img src={e.nodeImg} alt="" />
+            <div className="text">获得{e.name}</div>
+          </div>
+          <Button
+            className="btn coloursBT"
+            onClick={() => {
+              handler.close();
+              navigate("/myNode");
+            }}
+          >
+            查看节点中心
+          </Button>
+        </>
+      ),
+    });
+  };
+  const buyNodeClick = (e: NodeListClass) => {
+    setSelectNodeItem(e);
+    setNodePopState(true);
   };
   useEffect(() => {
     searchUserIsNode();
   }, []);
   return (
     <>
-      <div className="nodeBox">
-        <div className="nodeContent">
-          <div>5560</div>
-          <div>CloudAi全球节点总数</div>
-          <div>未售节点：1280</div>
+      {butLoding ? (
+        <div className="loading">
+          <Spin />
         </div>
-        {nodeList.map((e, index) => {
-          return (
-            <div className="nodeItem boxBorder" key={index}>
-              <div className="title">
-                <img src={e.nodeImg} alt="" />
-                <div> {e.name} </div>
-                {/* <div>剩余2 </div> */}
-                <div>
-                  {" "}
-                  <span>限量</span> <span>{e.number}个 </span>
+      ) : (
+        <div className="nodeBox">
+          <div className="nodeContent">
+            <div>5560</div>
+            <div>CloudAi全球节点总数</div>
+            <div>未售节点：1280</div>
+          </div>
+          {nodeList.map((e, index) => {
+            return (
+              <div className="nodeItem boxBorder" key={index}>
+                <div className="title">
+                  <img src={e.nodeImg} alt="" />
+                  <div> {e.name} </div>
+                  <div>剩余{e.balance.toString()} </div>
+                  <div>
+                    {" "}
+                    <span>限量</span> <span>{e.number}个 </span>
+                  </div>
+                </div>
+                <div className="equityBox">
+                  <div className="title">专属权益</div>
+                  {e.list.map((e, index) => {
+                    return (
+                      <div key={index}>
+                        {" "}
+                        <img src={equityIcon} alt="" /> {e}{" "}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="Bottom">
+                  <div> {fromWei(e.price)} USDT/个 </div>
+                  <Button
+                    disabled={userIsNode}
+                    className="coloursBT"
+                    onClick={() => buyNodeClick(e)}
+                    style={{ width: "92px", height: "32px" }}
+                  >
+                    购买
+                  </Button>
                 </div>
               </div>
-              <div className="equityBox">
-                <div className="title">专属权益</div>
-                {e.list.map((e, index) => {
-                  return (
-                    <div key={index}>
-                      {" "}
-                      <img src={equityIcon} alt="" /> {e}{" "}
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="Bottom">
-                <div> {e.price} USDT/个 </div>
-                <Button
-                  className="coloursBT"
-                  onClick={() => setnodePopState(true)}
-                  style={{ width: "92px", height: "32px" }}
-                >
-                  购买
-                </Button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <BuyNodePopup
-        popState={nodePopState}
-        setPopState={() => setnodePopState(false)}
-        setNodeState={() => setNodeState(true)}
-      ></BuyNodePopup>
+            );
+          })}
+        </div>
+      )}
+      {nodePopState ? (
+        <BuyNodePopup
+          popState={nodePopState}
+          selectNodeItem={selectNodeItem}
+          usdtBalance={usdtBalance}
+          buySuccessChange={buySuccessChange}
+          setPopState={() => setNodePopState(false)}
+          setNodeState={() => setNodeState(true)}
+        ></BuyNodePopup>
+      ) : null}
     </>
   );
 };
