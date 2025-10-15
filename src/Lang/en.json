@@ -137,9 +137,21 @@
   "全网众筹静态10%产出总额x 1%": "1% of total 10% static crowdfunding output shared network-wide",
   "获得F6会员等级(限时3个月)": "Obtain F6 membership level (valid for 3 months)",
   "获得F4会员等级(限时3个月)": "Obtain F4 membership level (valid for 3 months)",
-   "3000U矿机放大3倍9000U额度": "3,000U miner amplified 3x to 9,000U capacity",
+  "3000U矿机放大3倍9000U额度": "3,000U miner amplified 3x to 9,000U capacity",
   "全网动静产币均红3%": "3% of total dynamic and static mining output shared network-wide",
   "500U矿机放大3倍1500U额度": "500U miner amplified 3x to 1,500U capacity",
-  "获得F2会员等级(限时3个月)": "Obtain F2 membership level (valid for 3 months)"
-
+  "获得F2会员等级(限时3个月)": "Obtain F2 membership level (valid for 3 months)",
+  "CloudFAi全球节点总数": "CloudFAi Global Total Nodes",
+  "CloudFAi全球节点": "CloudFAi Global Nodes",
+  "未售节点": "Unsold Nodes",
+  "限量": "Limited",
+  "个": "pcs",
+  "购买": "Purchase",
+  "欢迎加入": "Welcome to Join",
+  "获得": "Obtain",
+  "查看节点中心": "View Node Center",
+  "节点已售完": "Nodes Sold Out",
+  "授权失败,请检查网络连接": "Authorization failed, please check your network connection",
+  "检查授权或者授权时发生了错误,请检查网络后重新尝试": "Authorization check or authorization error occurred, please check the network and try again",
+  "钱包余额": "Wallet Balance"
 }

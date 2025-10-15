@@ -14,12 +14,14 @@ const Header: React.FC<{
   return (
     <>
       <div className="back-header">
-        <img
+       <div className="back-left">
+         <img
           onClick={() => navigate(-1)}
           src={back}
           className="back-img"
           alt=""
         />
+       </div>
         <span className="back-header-title">{title}</span>
         <span
           onClick={() => rightUrl && navigate(rightUrl)}

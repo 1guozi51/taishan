@@ -18,7 +18,7 @@
     .menu-box {
         display: flex;
         align-items: center;
-
+        width: 100px;
         .menu-img {
             width: 24px;
             height: 24px;
@@ -54,7 +54,9 @@
     }
 
     .record-text {
+        width: 100px;
         font-size: 14px;
         color: #67BAFF;
+        text-align: right;
     }
 }

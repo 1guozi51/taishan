@@ -4,7 +4,9 @@
     align-items: center;
     height: 44px;
     padding: 0 16px;
-
+    .back-left{
+        width: 100px;
+    }
     .back-img {
         width: 24px;
         height: 24px;
@@ -13,10 +15,14 @@
     .back-header-title {
         font-size: 18px;
         color: #fff;
+        
     }
 
     .right-text {
+        text-align: right;
         font-size: 14px;
         color: #67BAFF;
+        width: 100px;
+
     }
 }

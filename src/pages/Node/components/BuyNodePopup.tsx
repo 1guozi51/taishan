@@ -9,7 +9,7 @@ import ContractRequest from "@/Hooks/ContractRequest.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 
-import { fromWei, toWei } from "@/Hooks/Utils";
+import { fromWei } from "@/Hooks/Utils";
 import closeImg from "@/assets/img/closeImg.png";
 import { useNavigate } from "react-router-dom";
 import { t } from "i18next";
@@ -50,11 +50,11 @@ const Home: React.FC<{
   // 确定购买节点
   const confirmButAction = async () => {
     if (selectNodeItem.balance.eq(0)) {
-      Totast("节点已售完", "warning"); // 节点已售完
+      Totast(t('节点已售完'), "warning"); // 节点已售完
       return;
     }
     if (usdtBalance.lt(selectNodeItem.price)) {
-      Totast("USDT余额不足", "warning"); // USDT余额不足
+      Totast(t("USDT余额不足"), "warning"); // USDT余额不足
       return;
     }
     setButLoding(true);
@@ -67,6 +67,8 @@ const Home: React.FC<{
     }).then((res) => {
       if (res.value) {
         applyAmount = res.value;
+      }else{
+         setButLoding(false);
       }
     });
     if (applyAmount.lt(selectNodeItem.price)) {
@@ -78,7 +80,8 @@ const Home: React.FC<{
         if (res.value) {
           isApply = true;
         } else {
-          Totast("授权失败，请检查网络连接", "error"); // 授权失败，请检查网络连接
+           setButLoding(false);
+          // Totast("授权失败,请检查网络连接", "error"); // 授权失败，请检查网络连接
           return;
         }
       });
@@ -86,7 +89,8 @@ const Home: React.FC<{
       isApply = true;
     }
     if (!isApply) {
-      Totast("检查授权或者授权时发生了错误，请检查网络后重新尝试", "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
+       setButLoding(false);
+      Totast("检查授权或者授权时发生了错误,请检查网络后重新尝试", "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       return;
     }
     await ContractSend({
@@ -95,7 +99,7 @@ const Home: React.FC<{
       params: [selectNodeItem.id],
     }).then((res) => {
       if (res.value) {
-        Totast("购买成功", "success"); // 购买成功
+        Totast(t("购买成功"), "success"); // 购买成功
         setPopState();
         buySuccessChange(selectNodeItem);
       }
@@ -131,7 +135,7 @@ const Home: React.FC<{
             </div>
             <div className="price">{fromWei(selectNodeItem.price)} USDT</div>
             <div className="balance">
-              钱包余额：{fromWei(usdtBalance) || "0"} USDT
+              {t('钱包余额')}：{fromWei(usdtBalance) || "0"} USDT
             </div>
             <Button
               className="coloursBT"
@@ -145,7 +149,7 @@ const Home: React.FC<{
                   <Spin />
                 </div>
               ) : (
-                <div className="but">确认购买</div>
+                <div className="but">{t('确认购买')}</div>
               )}
             </Button>
           </div>

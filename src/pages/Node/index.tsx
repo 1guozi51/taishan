@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import equityIcon from "@/assets/img/equityIcon.png";
 import { Button, Modal } from "antd-mobile";
 import { Spin } from "antd";
-
+import Header from "@/components/Header";
 import { nodeBuyList } from "@/config/nodeList";
 import BuyNodePopup from "./components/BuyNodePopup";
 import { userAddress } from "@/Store/Store.ts";
@@ -11,6 +11,7 @@ import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { fromWei } from "@/Hooks/Utils";
 import { useNavigate } from "react-router-dom";
 import { BigNumber } from "ethers";
+import { t } from "i18next";
 interface NodeListClass {
   id: number;
   name: string;
@@ -74,7 +75,6 @@ const MyNode: React.FC = () => {
       })
     );
     const Result = await Promise.allSettled(promiseSend);
-    console.log("result==", Result);
     if (Result[0].status === "fulfilled") {
       const result = Result[0].value.value;
       setUserIsNode(result.isNode);
@@ -129,15 +129,15 @@ const MyNode: React.FC = () => {
   const buySuccessChange = (e) => {
     searchUserIsNode()
     const handler = Modal.show({
-      title: "欢迎加入",
+      title: t('欢迎加入'),
       closeOnMaskClick: true,
       bodyClassName: "successPop",
       content: (
         <>
-          <div className="title2">CloudFAi全球节点</div>
+          <div className="title2">{t('CloudFAi全球节点')}</div>
           <div className="payNode">
             <img src={e.nodeImg} alt="" />
-            <div className="text">获得{e.name}</div>
+            <div className="text">{t('获得')}{e.name}</div>
           </div>
           <Button
             className="btn coloursBT"
@@ -146,7 +146,7 @@ const MyNode: React.FC = () => {
               navigate("/myNode");
             }}
           >
-            查看节点中心
+            {t('查看节点中心')}
           </Button>
         </>
       ),
@@ -161,6 +161,7 @@ const MyNode: React.FC = () => {
   }, []);
   return (
     <>
+      <Header title={t('节点')}/>
       {butLoding ? (
         <div className="loading">
           <Spin />
@@ -168,9 +169,8 @@ const MyNode: React.FC = () => {
       ) : (
         <div className="nodeBox">
           <div className="nodeContent">
-            <div>5560</div>
-            <div>CloudAi全球节点总数</div>
-            <div>未售节点：1280</div>
+            <div>5550</div>
+            <div>{t('CloudFAi全球节点总数')}</div>
           </div>
           {nodeList.map((e, index) => {
             return (
@@ -178,14 +178,13 @@ const MyNode: React.FC = () => {
                 <div className="title">
                   <img src={e.nodeImg} alt="" />
                   <div> {e.name} </div>
-                  <div>剩余{e.balance.toString()} </div>
                   <div>
                     {" "}
-                    <span>限量</span> <span>{e.number}个 </span>
+                    <span>{t('限量')}</span> <span>{e.number}{t('个')} </span>
                   </div>
                 </div>
                 <div className="equityBox">
-                  <div className="title">专属权益</div>
+                  <div className="title">{t('专属权益')}</div>
                   {e.list.map((e, index) => {
                     return (
                       <div key={index}>
@@ -196,14 +195,14 @@ const MyNode: React.FC = () => {
                   })}
                 </div>
                 <div className="Bottom">
-                  <div> {fromWei(e.price)} USDT/个 </div>
+                  <div> {fromWei(e.price)} USDT/{t('个')} </div>
                   <Button
                     disabled={userIsNode}
                     className="coloursBT"
                     onClick={() => buyNodeClick(e)}
                     style={{ width: "92px", height: "32px" }}
                   >
-                    购买
+                    {t('购买')}
                   </Button>
                 </div>
               </div>

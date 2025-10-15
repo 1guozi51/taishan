@@ -60,20 +60,20 @@
         color: #ffffff;
         margin-left: 4px;
       }
-      div:nth-child(3){
-        font-family: AlibabaPuHuiTi;
-        font-size: 11px;
-        font-weight: normal;
-        line-height: normal;
+      // div:nth-child(3){
+      //   font-family: AlibabaPuHuiTi;
+      //   font-size: 11px;
+      //   font-weight: normal;
+      //   line-height: normal;
+      //   text-align: right;
+      //   letter-spacing: 0px;
+      //   color: rgba(255, 255, 255, 0.4495);
+      //   margin-left: auto;
+      // }
+      div:nth-child(3) {
         text-align: right;
-        letter-spacing: 0px;
-        color: rgba(255, 255, 255, 0.4495);
+        // margin-left: 14px;
         margin-left: auto;
-      }
-      div:nth-child(4) {
-        text-align: right;
-        margin-left: 14px;
-        // margin-left: auto;
         display: flex;
         align-items: center;
         font-family: AlibabaPuHuiTi;
@@ -88,14 +88,13 @@
           color: #000000;
           display: block;
           line-height: 20px;
-          width: 34px;
+          // width: 34px;
+          padding: 0 4px;
           text-align: center;
         }
         span:nth-child(2) {
           line-height: 20px;
-          // width: 34px;
-          padding-left: 2px;
-          padding-right: 2px;
+                   padding: 0 4px;
           text-align: center;
         }
         box-sizing: border-box;
