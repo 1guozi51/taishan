@@ -17,7 +17,6 @@ const MyTeam: React.FC = () => {
   const navigate = useNavigate();
   const { signMessage } = UseSignMessage();
   const wallertAddress = userAddress().address;
-  // const wallertAddress = '0x1c028e874b6071194da0e24d1504507f717d2588';
   const [teamInfo, setTeamInfo] = useState({});
   const [location, setLocation] = useState("");
   const [tabIndex, setTabIndex] = useState(1); //1团队列表 2代表33团队

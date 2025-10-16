@@ -22,7 +22,6 @@ import { t } from "i18next";
 const MyNode: React.FC = () => {
   const navigate = useNavigate();
   const walletAddress = userAddress().address;
-  // const walletAddress = '0x4Fd0983823040C26de701341c5f79DB5ecDcb064';
   const { signMessage } = UseSignMessage(); //获取钱包签名
   const [userInfo, setUserInfo] = useState<UserInfo>({});
   const [teamInfo, setTeamInfo] = useState({});
@@ -105,7 +104,7 @@ const MyNode: React.FC = () => {
   }, []);
   return (
     <>
-      <BackHeader title="节点" />
+      <BackHeader title={t('节点')} />
       <div className="nodeBox">
         {nodeState == true ? (
           <>
@@ -138,7 +137,7 @@ const MyNode: React.FC = () => {
             <div>{fromWei(teamInfo.nodeUsdtReward)}</div>
             <Button
               onClick={() => {
-                PathNav("/recordList?type=team&id=103");
+                PathNav("/recordList?type=node&id=103");
               }}
             >
               {t("明细")}
@@ -164,7 +163,7 @@ const MyNode: React.FC = () => {
             <div>{fromWei(teamInfo.nodeCaReward)}</div>
             <Button
               onClick={() => {
-                PathNav("/recordList?type=team&id=104");
+                PathNav("/recordList?type=node&id=104");
               }}
             >
               {t("明细")}
@@ -199,14 +198,14 @@ const MyNode: React.FC = () => {
           </>
         ) : (
           <>
-            <Button
+            {/* <Button
               className="payNode"
               onClick={() => {
                 PathNav("/node");
               }}
             >
               {t("选购节点")}
-            </Button>
+            </Button> */}
           </>
         )}
       </div>

@@ -17,7 +17,7 @@ interface TeamRecord {
 const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   //通过searchParams参数获取id值
   const typeId = pathParam.get("id");
-  const wallertAddress = userAddress((state) => state.address);
+  const wallertAddress = userAddress().address;
   const [list, setList] = useState<TeamRecord[]>([]);
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);

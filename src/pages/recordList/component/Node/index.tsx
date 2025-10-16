@@ -1,16 +1,24 @@
 import "./index.scss";
 import NoData from "@/components/NoData";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { userAddress } from "@/Store/Store.ts";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { InfiniteScroll } from "antd-mobile";
 import { Spin } from "antd";
+import { fromWei, formatDate, BigNumberAdd } from "@/Hooks/Utils.ts";
 import { t } from "i18next";
 
-import { fromWei, formatDate } from "@/Hooks/Utils.ts";
-const Record: React.FC = () => {
-  const wallertAddress = userAddress().address;
-  const [list, setList] = useState([]);
+interface TeamRecord {
+  blockTime: string;
+  status: number;
+  amount: string;
+}
+
+const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
+  //通过searchParams参数获取id值
+  const typeId = pathParam.get("id");
+    const wallertAddress = userAddress().address;
+  const [list, setList] = useState<TeamRecord[]>([]);
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
@@ -20,13 +28,14 @@ const Record: React.FC = () => {
     address: wallertAddress,
     current: 1,
     size: 20,
+    type: typeId,
   });
   // 获取更多团队列表
   const loadMoreAction = async () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({
-      Url: "userRecord/withdrawRecord",
+      Url: "userRecord/rewardRecord",
       Data: {
         current: nexPage,
         size: dataParam.size,
@@ -36,7 +45,12 @@ const Record: React.FC = () => {
     }).then((res) => {
       if (res.success) {
         setList((prevList) => [...prevList, ...res.data.data.records]);
-        if (res.data.data.records.length == dataParam.size) {
+        console.log(
+          "res.data.data.records.length ==",
+          res.data.data.records.length
+        );
+        if (res.data.data.records.length === dataParam.size) {
+          console.log("list==", list.length);
           setIsMore(true);
         } else {
           setIsMore(false);
@@ -44,20 +58,20 @@ const Record: React.FC = () => {
       }
     });
   };
-
-  const getDataList = async () => {
+  const getDataList = useCallback(async () => {
     setListLoding(true);
     const result = await NetworkRequest({
-      Url: "userRecord/withdrawRecord",
+      Url: "userRecord/rewardRecord",
       Data: {
         current: 1,
         size: dataParam.size,
+        type: dataParam.type,
         address: dataParam.address,
       },
     });
-    if (result.data.code == 200) {
+    if (result.data.code === 200) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
-      if (result.data.data.records.length == dataParam.size) {
+      if (result.data.data.records.length === dataParam.size) {
         setIsMore(true);
       } else {
         setIsMore(false);
@@ -66,7 +80,7 @@ const Record: React.FC = () => {
     } else {
       setListLoding(false);
     }
-  };
+  }, [dataParam]);
   useEffect(() => {
     getDataList();
   }, []);
@@ -75,9 +89,9 @@ const Record: React.FC = () => {
       <div className="records-page">
         <div className="records-list">
           <div className="record-head">
-            <span>{t("提现时间")}</span>
-            <span>{t("提现状态")}</span>
-            <span>{t("提现金额")}</span>
+            <span>{t("时间")}</span>
+            <span>{t("是否领取")}</span>
+            <span>{t("收益")}</span>
           </div>
           {list.length == 0 ? (
             <NoData />
@@ -86,9 +100,13 @@ const Record: React.FC = () => {
               {list.map((item, index) => {
                 return (
                   <div className="record-item" key={index}>
-                    <span>{formatDate(item.applyTime).dateTime}</span>
-                    <span>{item.status == 1 ? t("待确认") : t("已完成")}</span>
-                    <span>{fromWei(item.applyAmount)}</span>
+                    <span>{formatDate(item.createTime).dateTime}</span>
+                    <span>{item.status == 1 ? t("待领取") : t("已领取")}</span>
+                    <span>
+                      {typeId == 101 || typeId == 103
+                        ? fromWei(BigNumberAdd(item.usdtAmount, item.fees),18,true,7)
+                        : fromWei(BigNumberAdd(item.caAmount, item.fees),18,true,7)}
+                    </span>
                   </div>
                 );
               })}
@@ -109,4 +127,4 @@ const Record: React.FC = () => {
   );
 };
 
-export default Record;
+export default Team;
