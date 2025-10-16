@@ -18,8 +18,6 @@ export async function ensureWalletConnected(): Promise<boolean> {
   }
 
   const currentChainId = await ethereum.request({ method: "eth_chainId" });
-
-  console.log("当前链ID:", currentChainId);
   setChain(currentChainId);
   const BNB_PARAMS = {
     chainId: EnvManager.chainId, // 56 的十六进制 => BSC Mainnet

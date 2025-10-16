@@ -17,35 +17,40 @@ interface TeamRecord {
 const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
   //通过searchParams参数获取id值
   const typeId = pathParam.get("id");
-  // const wallertAddress = "0x4Fd0983823040C26de701341c5f79DB5ecDcb064";
   const wallertAddress = userAddress((state) => state.address);
   const [list, setList] = useState<TeamRecord[]>([]);
   // 列表是否加载
-  const [listLoding, setListLoding] = useState(false);
+  const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
-  const [isMore, setIsMore] = useState(false);
+  const [isMore, setIsMore] = useState<boolean>(false);
+  const [current, setCurrent] = useState<number>(1);
   const [dataParam, setDataParam] = useState({
     address: wallertAddress,
     current: 1,
-    size: 300,
+    size: 20,
     type: typeId,
-    total: "", //总数
   });
-  const [current, setCurrent] = useState(1);
   // 获取更多团队列表
   const loadMoreAction = async () => {
-    setDataParam((prevState) => ({
-      ...prevState,
-    }));
+    const nexPage = current + 1;
+    setCurrent(nexPage);
     await NetworkRequest({
       Url: "userRecord/rewardRecord",
       Data: {
-        ...dataParam,
+        current: nexPage,
+        size: dataParam.size,
+        type: dataParam.type,
+        address: dataParam.address,
       },
     }).then((res) => {
       if (res.success) {
         setList((prevList) => [...prevList, ...res.data.data.records]);
-        if (res.data.data.records.length === 10) {
+        console.log(
+          "res.data.data.records.length ==",
+          res.data.data.records.length
+        );
+        if (res.data.data.records.length === dataParam.size) {
+          console.log("list==", list.length);
           setIsMore(true);
         } else {
           setIsMore(false);
@@ -58,16 +63,15 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
     const result = await NetworkRequest({
       Url: "userRecord/rewardRecord",
       Data: {
-        ...dataParam,
+        current: 1,
+        size: dataParam.size,
+        type: dataParam.type,
+        address: dataParam.address,
       },
     });
     if (result.data.code === 200) {
-      setList(result.data.data.records);
-      setDataParam((prevState) => ({
-        ...prevState,
-        total: result.data.data.total,
-      }));
-      if (result.data.data.records.length === 10) {
+      setList((prevList) => [...prevList, ...result.data.data.records]);
+      if (result.data.data.records.length === dataParam.size) {
         setIsMore(true);
       } else {
         setIsMore(false);
@@ -106,7 +110,7 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                   </div>
                 );
               })}
-              {/* <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
+              <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
                 <div>
                   {listLoding && (
                     <div className="loding flex flexCenter">
@@ -114,7 +118,7 @@ const Team: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                     </div>
                   )}
                 </div>
-              </InfiniteScroll> */}
+              </InfiniteScroll>
             </div>
           )}
         </div>

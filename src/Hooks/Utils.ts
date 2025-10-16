@@ -253,6 +253,5 @@ export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
   const a = BigNumber.from(big1.toString()); // 1e18
   const b = BigNumber.from(big2.toString()); // 2e18
   const sum = a.add(b);
-  console.log("sum==", sum);
   return sum;
 };

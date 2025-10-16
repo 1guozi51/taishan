@@ -9,7 +9,8 @@ import { t } from "i18next";
 
 import { fromWei, formatDate } from "@/Hooks/Utils.ts";
 const Record: React.FC = () => {
-  const wallertAddress = userAddress().address;
+  // const wallertAddress = userAddress().address;
+  const wallertAddress = "0x1c028e874b6071194da0e24d1504507f717d2588";
   const [list, setList] = useState([]);
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);
@@ -26,7 +27,7 @@ const Record: React.FC = () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({
-      Url: "userRecord/ticketRecord",
+      Url: "userRecord/withdrawRecord",
       Data: {
         current: nexPage,
         size: dataParam.size,
@@ -48,7 +49,7 @@ const Record: React.FC = () => {
   const getDataList = async () => {
     setListLoding(true);
     const result = await NetworkRequest({
-      Url: "userRecord/ticketRecord",
+      Url: "userRecord/withdrawRecord",
       Data: {
         current: 1,
         size: dataParam.size,
@@ -57,7 +58,6 @@ const Record: React.FC = () => {
     });
     if (result.data.code == 200) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
-
       if (result.data.data.records.length == dataParam.size) {
         setIsMore(true);
       } else {
@@ -76,9 +76,9 @@ const Record: React.FC = () => {
       <div className="records-page">
         <div className="records-list">
           <div className="record-head">
-            <span>{t("时间")}</span>
-            <span>{t("获取")}MAX</span>
-            <span>{t("支付")}USDT</span>
+            <span>{t("提现时间")}</span>
+            <span>{t("提现状态")}</span>
+            <span>{t("提现金额")}</span>
           </div>
           {list.length == 0 ? (
             <NoData />
@@ -87,9 +87,9 @@ const Record: React.FC = () => {
               {list.map((item, index) => {
                 return (
                   <div className="record-item" key={index}>
-                    <span>{formatDate(item.blockTime).dateTime}</span>
-                    <span>{fromWei(item.gas)}</span>
-                    <span>{fromWei(item.amount)}</span>
+                    <span>{formatDate(item.applyTime).dateTime}</span>
+                    <span>{item.status == 1 ? t("待确认") : t("已完成")}</span>
+                    <span>{fromWei(item.applyAmount)}</span>
                   </div>
                 );
               })}

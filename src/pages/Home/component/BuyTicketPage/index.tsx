@@ -15,7 +15,6 @@ interface BuyTicketPageClass {
 }
 
 function BuyTicketPage(Props: BuyTicketPageClass) {
-  console.log("userInfo==")
   const inviteStorage = localStorage.getItem("invite") || "";
   // 当前钱包地址
   const wallertAddress = userAddress().address;

@@ -27,19 +27,8 @@ const menuList: MenuType[] = [
   { label: t("众筹"), url: "" },
   { label: t("矿机"), url: "" },
   { label: "Swap", url: "/swap" },
-  { label: t("节点"), url: "/myNode" },
   { label: t("团队"), url: "/myTeam" },
-];
-
-// const menuList: MenuType[] = [
-//   { label:  t('首页'), url: "/" },
-//   { label: t("门票"), url: "/recordList?type=tickets" },
-//   { label: t("众筹"), url: "/crowd" },
-//   { label: t("矿机"), url: "" },
-//   { label: "Swap", url: "/swap" },
-//   { label: t("节点"), url: "/myNode" },
-//   { label: t("团队"), url: "/myTeam" },
-// ];
+]
 const Menu: React.FC<{
   visible: boolean;
   onClose: () => void;

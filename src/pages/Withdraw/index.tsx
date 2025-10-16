@@ -7,7 +7,7 @@ import { userAddress } from "@/Store/Store.ts";
 import { ethers } from "ethers";
 import { Spin } from "antd";
 import { t } from "i18next";
-
+import { useNavigate } from "react-router-dom";
 import {
   Totast,
   concatSign,
@@ -21,10 +21,9 @@ import {
   defaultUserInfo,
   fillNullWithDefault,
 } from "@/components/Menu/type.ts";
-
- 
-
 const Withdraw: React.FC = () => {
+  const navigate = useNavigate();
+  //获取签名
   const { signMessage } = UseSignMessage();
   //钱包地址
   const walletAddress = userAddress().address;
@@ -113,7 +112,11 @@ const Withdraw: React.FC = () => {
   }, []);
   return (
     <>
-      <BackHeader title={t("资产提现")} rightText={t("提现记录")} />
+      <BackHeader
+        title={t("资产提现")}
+        rightText={t("提现记录")}
+        rightUrl="/recordList?type=withdrawRecord"
+      />
 
       <div className="withdraw-page">
         <div className="assets-title">{t("资产类型")}</div>
@@ -156,13 +159,13 @@ const Withdraw: React.FC = () => {
         {/* <div className="val">0.00 USDT</div> */}
         {/* </div> */}
         <div className="get-box">
-          <div className="key">{t('实际到账')}：</div>
+          <div className="key">{t("实际到账")}：</div>
           <div className="val">
             {inputAmout} {typeIndex == 1 ? "USDT" : "CA"}
           </div>
         </div>
         <Button className="confirm-btn withdraw-btn" onClick={withdrawClick}>
-          {btnLoading ? t('确认提现') : <Spin />}
+          {btnLoading ? t("确认提现") : <Spin />}
         </Button>
       </div>
     </>

@@ -45,7 +45,7 @@ const Home: React.FC<{
   // 当前钱包地址
   const wallertAddress = userAddress().address;
   // 按钮加载
-  const [butLoding, setButLoding] = useState(false);
+  const [butLoding, setButLoding] = useState<boolean>(false);
 
   // 确定购买节点
   const confirmButAction = async () => {

@@ -103,10 +103,6 @@ const PageBody: React.FC = () => {
               <img src={homeZc} className="tab-icon" alt="" />
               <span>{t("众筹")}</span>
             </div>
-            <div onClick={() => navigate("/myNode")} className="tab-item">
-              <img src={homeNode} className="tab-icon" alt="" />
-              <span>{t("节点")}</span>
-            </div>
           </div>
         </div>
       </div>

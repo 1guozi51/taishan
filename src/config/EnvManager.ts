@@ -87,6 +87,7 @@ class EnvManager {
   static print(): void {
     if (EnvManager.isProd) return;
     console.log("🌍 EnvManager.mode:", EnvManager.mode);
+    console.log("🌍 EnvManager.config:", EnvManager.config);
     console.table(EnvManager.config);
   }
 }

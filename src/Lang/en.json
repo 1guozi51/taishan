@@ -111,7 +111,7 @@
   "专属权益": "Benefits",
   "10000U矿机放大3倍3万U额度": "10,000U mining machine expanded to 30,000U limit",
   "全网动静产币均分红2%": "2% bonus from all network dynamic and static mining output",
-  "全网众筹静态10%产出总额x 1%": "1% of the total 10% static crowdfunding output across the network",
+  "全网众筹静态10%产出总额x 2%": "2% of the total 10% static crowdfunding output across the network",
   "获得F6会员等级(限时3个月)": "Obtain F6 membership level (valid for 3 months)",
   "选购节点": "Select Node",
   "充值": "top up",
@@ -153,5 +153,10 @@
   "节点已售完": "Nodes Sold Out",
   "授权失败,请检查网络连接": "Authorization failed, please check your network connection",
   "检查授权或者授权时发生了错误,请检查网络后重新尝试": "Authorization check or authorization error occurred, please check the network and try again",
-  "钱包余额": "Wallet Balance"
+  "钱包余额": "Wallet Balance",
+  "提现时间": "Time",
+  "提现状态": "Status",
+  "提现金额": "Amount",
+ "待确认": "Pending Confirmation",
+"已完成": "Completed"
 }
