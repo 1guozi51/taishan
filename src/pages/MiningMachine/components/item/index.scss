@@ -1,0 +1,116 @@
+.mining-machine-item-page {
+  position: relative;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url('@/pages/MiningMachine/components/item/img/itemBg.png');
+  .absolute-tag {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    padding: 6px 12px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000000;
+    border-top-right-radius: 36px;
+    border-bottom-right-radius: 36px;
+    background: linear-gradient(270deg, #ab46ff 0%, #00b7ff 48%, #00ffed 100%);
+  }
+  .tag-success {
+    background: linear-gradient(270deg, #6095c7 0%, #619ac9 100%) !important;
+  }
+  .top-info-option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .right-option {
+      .status-txt {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .status-bg-color {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #3ae97d;
+        }
+        .status-name {
+          margin-left: 4px;
+          font-weight: 400;
+          font-size: 12px;
+          color: #3ae97d;
+        }
+        .status-success-color {
+          color: #8a939f !important;
+        }
+      }
+      .time-txt {
+        margin-top: 4px;
+        font-weight: 400;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+      }
+    }
+  }
+
+  .content-info-option {
+    // margin-top: 14px;
+    display: flex;
+    align-items: center;
+    .progress-bar {
+      flex: none;
+      width: 50px;
+      height: 50px;
+    }
+    .right-option {
+      margin-left: 18px;
+      flex: auto;
+      display: flex;
+      align-items: center;
+      .flex-1-info {
+        flex: 1;
+        .txt-one {
+          font-weight: 400;
+          font-size: 12px;
+          color: rgba(255, 255, 255, 0.65);
+        }
+        .txt-two {
+          font-weight: 400;
+          font-size: 14px;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .end-option {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 8px;
+    box-sizing: border-box;
+    .left-option {
+      .left-name {
+        font-weight: 400;
+        font-size: 12px;
+        color: #ffffff;
+      }
+      .left-num {
+        font-weight: 500;
+        font-size: 12px;
+        color: #3ae97d;
+      }
+    }
+    .right-icon {
+    }
+  }
+}
+.mining-machine-item-success-page{
+  background-image: url('@/pages/MiningMachine/components/item/img/itemSuccessBg.png') !important;
+
+}
