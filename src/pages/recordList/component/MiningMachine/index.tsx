@@ -10,7 +10,7 @@ import { t } from "i18next";
 
 interface TeamRecord {
   blockTime: string;
-  amount: string;
+  claimAmount: string;
 }
 
 const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
@@ -103,7 +103,7 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
                   <div className="record-item" key={index}>
                     <span>{formatDate(item.blockTime).dateTime}</span>
                     <span>{t("已领取")}</span>
-                    <span>+{fromWei(item.amount)}</span>
+                    <span>+{fromWei(item.claimAmount)}</span>
                   </div>
                 );
               })}

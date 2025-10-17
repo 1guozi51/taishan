@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Input, Spin, Modal, Button } from "antd";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { BigNumber, ethers } from "ethers";
-import { fromWei, Totast } from "@/Hooks/Utils.ts";
+import { fromWei, Totast ,toWei} from "@/Hooks/Utils.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import Dice from "@/components/Dice";
@@ -63,9 +63,9 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
     const UserBalance =
       ChainResult[0].status === "fulfilled"
         ? ChainResult[0].value.value
-          ? ethers.utils.formatUnits(ChainResult[0].value.value)
-          : "0"
-        : "0";
+          ? ChainResult[0].value.value
+          : BigNumber.from(0)
+        : BigNumber.from(0);
     const userInfoResult = ChainResult[1].status === "fulfilled" ? true : false;
     const userInfoValue = ChainResult[1].value.value;
     setUserBalance(UserBalance);
@@ -88,8 +88,6 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
     if (!canBuy) {
       return;
     }
-    console.log("userInfo.inviter", userInfo.inviter);
-    console.log("userInfo.inviter", userInfo.inviter);
     if (userInfo.inviter == ethers.constants.AddressZero) {
       if (!ethers.utils.isAddress(inputAddress)) {
         Totast(t("邀请人地址不正确"), "warning"); // 邀请人地址不正确
@@ -100,18 +98,11 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         methodsName: "userInfo",
         params: [inputAddress],
       });
-      console.log("inviterUser.value.inviter==", inviterUser.value.inviter);
       if (inviterUser.value.inviter == ethers.constants.AddressZero) {
         Totast(t("邀请人无效"), "warning"); // 邀请人无效
         return;
       }
     }
-    console.log(
-      "1---",
-      userInfo.inviter != ethers.constants.AddressZero &&
-        userInfo.ticketNumber.eq(BigNumber.from(0))
-    );
-    console.log("userInfo.ticketNumber", userInfo.ticketNumber);
     if (
       userInfo.inviter != ethers.constants.AddressZero &&
       userInfo.ticketNumber.eq(BigNumber.from(0))
@@ -119,7 +110,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       Totast(t("您无法购买门票"), "warning"); // 无法购买门票
       return;
     }
-    if (parseFloat(userBalance) < parseFloat(buyNumber)) {
+    if (fromWei(userBalance) < parseFloat(buyNumber)) {
       Totast(t("USDT余额不足"), "warning"); // USDT余额不足
       return;
     }
@@ -171,26 +162,12 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
             : userInfo.inviter,
         ],
       }).then((resTicket) => {
-        console.log("resTicket==", resTicket);
         setShowDice(true);
         setRunning(true);
         // ContractSend 可能会 resolve 一个结果对象而不是抛出错误，需检查返回值字段
         if (resTicket && resTicket.value) {
-          setTarget(resTicket.value);
-          // 成功——等待一段时间再停止动画并显示指定点数
-          setTimeout(() => {
-            setRunning(false);
-            setShowDice(false);
-            Totast(
-              t(
-                `购买成功,恭喜你获得${
-                  fromWei(buyNumber, 18, true, 0) * resTicket.value
-                }MAX`
-              ),
-              "success"
-            );
-            Props.onClose();
-          }, 5500);
+          // 成功获取用户信息——等待一段时间再停止动画并显示指定点数
+          getMaxNum();
         } else {
           // 交易返回了非成功的结果（例如 res.value === false）
           Totast(t("购买失败,交易未成功"), "error");
@@ -207,6 +184,35 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       // 无论成功或失败，都需要关闭加载状态
       setButLoding(false);
     }
+  };
+  const getMaxNum = () => {
+    ContractRequest({
+      tokenName: "CaPool",
+      methodsName: "userInfo",
+      params: [wallertAddress],
+    }).then((res) => {
+      const profitQuota = res.value.profitQuota || 0;
+
+      if (res.value) {
+        setTimeout(() => {
+          setRunning(false);
+          setShowDice(false);
+          Totast(
+            t(
+              `购买成功,恭喜你获得${ (profitQuota.div(toWei(buyNumber))).toString() }MAX`
+            ),
+            "success"
+          );
+          Props.onClose();
+        }, 5500);
+      } else {
+        setTimeout(() => {
+          setRunning(false);
+          setShowDice(false);
+          Props.onClose();
+        }, 5500);
+      }
+    });
   };
   // 绑定按钮执行
   const bindInviteAction = async () => {
@@ -242,7 +248,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
       params: [ethers.utils.parseEther(buyNumber.toString())],
     }).then((res) => {
       if (res.value) {
-        const caAmount = ethers.utils.formatUnits(res.value);
+        const caAmount = fromWei(res.value);
         const usdtAmount = buyNumber || "0";
         setHintTxt(`${usdtAmount} USDT ≈${caAmount} CA`);
       }
@@ -278,7 +284,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         <div className="option-header-top">
           <div className="txt">{t("购买数量")}</div>
           <div className="txt">
-            {t("账户余额")}： {userBalance}
+            {t("账户余额")}： {fromWei(userBalance)}
           </div>
         </div>
         <div className="option-input-end">

@@ -44,10 +44,8 @@ async function useContractSend({
       gasLimit,
     });
     const receipt = await tx.wait();
-    console.log("receipt==",receipt)
     return { value: receipt };
   } catch (err: any) {
-    console.log("err===", err);
     if (
       err.code === "ACTION_REJECTED" ||
       err.message.includes("user rejected")
@@ -59,7 +57,6 @@ async function useContractSend({
         errorMsg = errorMsg.slice(0, 50) + "...";
       }
       message.error("Transaction failed：" + errorMsg); // 交易失败：
-      console.log(err.message || err);
     }
     return { value: false };
   }

@@ -110,7 +110,6 @@
   "待领取收益": "Pending Earnings",
   "专属权益": "Benefits",
   "10000U矿机放大3倍3万U额度": "10,000U mining machine expanded to 30,000U limit",
-  "全网动静产币均分红2%": "2% bonus from all network dynamic and static mining output",
   "全网众筹静态10%产出总额x 2%": "2% of the total 10% static crowdfunding output across the network",
   "获得F6会员等级(限时3个月)": "Obtain F6 membership level (valid for 3 months)",
   "选购节点": "Select Node",
@@ -138,7 +137,6 @@
   "获得F6会员等级(限时3个月)": "Obtain F6 membership level (valid for 3 months)",
   "获得F4会员等级(限时3个月)": "Obtain F4 membership level (valid for 3 months)",
   "3000U矿机放大3倍9000U额度": "3,000U miner amplified 3x to 9,000U capacity",
-  "全网动静产币均红3%": "3% of total dynamic and static mining output shared network-wide",
   "500U矿机放大3倍1500U额度": "500U miner amplified 3x to 1,500U capacity",
   "获得F2会员等级(限时3个月)": "Obtain F2 membership level (valid for 3 months)",
   "CloudFAi全球节点总数": "CloudFAi Global Total Nodes",
@@ -157,6 +155,8 @@
   "提现时间": "Time",
   "提现状态": "Status",
   "提现金额": "Amount",
- "待确认": "Pending Confirmation",
-"已完成": "Completed"
+  "待确认": "Pending Confirmation",
+  "已完成": "Completed",
+  "全网提现手续费均分2%": "Global withdrawal fee evenly distributed 2%",
+  "全网提现手续费均分3%": "Global withdrawal fee evenly distributed 3%"
 }

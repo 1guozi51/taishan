@@ -3,24 +3,22 @@ import { useState } from "react";
 import { Input, Button } from "antd-mobile";
 import Header from "@/components/Header";
 import more from "@/assets/img/records-more.png";
-import ProgressBar from "./component/ProgressBar";
+import ProgressBar from "./component/ProgressBar/ProgressBar";
+import CountDown from "./component/CountDown";
 
 const Crowd: React.FC = () => {
   const [step, setStep] = useState(2);
 
   return (
     <>
-      <Header title="众筹" recordText="我的众筹" recordUrl="/myCrowd"/>
+      <Header title="众筹" recordText="我的众筹" recordUrl="/myCrowd" />
       <div className="crowd-page">
         <div className="djs-box">
           <div className="now-period">第180期预约倒计时</div>
-          <div className="djs-list">
-            <div className="djs-item">23</div>
-            <div>:</div>
-            <div className="djs-item">08</div>
-            <div>:</div>
-            <div className="djs-item">56</div>
-          </div>
+          <CountDown
+            targetTime='1760714809000' // 27小时
+            onEnd={() => console.log("🎉 倒计时结束")}
+          />
           <div className="join-peo">已有328人参与</div>
         </div>
         <div className="assets-pool">
@@ -32,7 +30,7 @@ const Crowd: React.FC = () => {
             <span className="title">预约额度</span>
             <div className="balances">
               <span>账户余额：960,000.00</span>
-              <img src={more} className="more-img" alt="" />
+              {/* <img src={more} className="more-img" alt="" /> */}
             </div>
           </div>
           <div className="join-input">

@@ -1,0 +1,29 @@
+.count-down-box {
+  .djs-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 20px;
+
+    .djs-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 44px;
+      height: 48px;
+      background: url("@/assets/img/djs-bg.png") 0 0 / 100% 100%;
+      overflow: hidden;
+      position: relative;
+      font-weight: 600;
+
+      .label {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-top: 2px;
+      }
+    }
+  }
+}

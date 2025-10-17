@@ -12,7 +12,7 @@ import hide from "@/assets/img/hide-assets.png";
 import showEyes from "@/assets/img/eyes.png";
 import more from "@/assets/img/more.png";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
-import { fromWei, SubAddress } from "@/Hooks/Utils";
+import { fromWei, SubAddress,getMask} from "@/Hooks/Utils";
 import i18n, { t } from "i18next";
 import { defaultUserInfo, fillNullWithDefault } from "./type.ts";
 import type { UserInfo, UserInfoAbi } from "@/Hooks/InterFaceHooks.ts";
@@ -24,7 +24,7 @@ interface MenuType {
 const menuList: MenuType[] = [
   { label: t("首页"), url: "/" },
   { label: t("门票"), url: "/recordList?type=tickets" },
-  { label: t("众筹"), url: "/Crowd" },
+  { label: t("众筹"), url: "" },
   { label: t("矿机"), url: "/MiningMachine" },
   { label: "Swap", url: "/swap" },
    { label: t("节点"), url: "/myNode" },
@@ -196,7 +196,7 @@ const Menu: React.FC<{
                   <img src={more} className="more-img" alt="" />
                 </div>
                 <div className="balance-val">
-                  {fromWei(userInfo.usdtBalance) || 0}
+                  { getMask(fromWei(userInfo.usdtBalance)||0,'*',eyesShow)}
                 </div>
               </div>
               <div className="balance-item">
@@ -205,7 +205,7 @@ const Menu: React.FC<{
                   <img src={more} className="more-img" alt="" />
                 </div>
                 <div className="balance-val">
-                  {fromWei(userInfo.caBalance) || 0}
+                  { getMask(fromWei(userInfo.caBalance)||0,'*',eyesShow)}
                 </div>
               </div>
             </div>

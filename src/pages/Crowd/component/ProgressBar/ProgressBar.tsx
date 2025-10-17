@@ -24,7 +24,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 }) => {
   return (
     <div className="progress-container">
-      <Slider ticks className="custom-slider" marks={marks} step={20} />
+      <Slider ticks className="custom-slider" disabled  marks={marks} step={20} />
     </div>
   );
 };
