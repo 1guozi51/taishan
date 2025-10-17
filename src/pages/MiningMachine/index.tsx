@@ -1,56 +1,181 @@
 import "./index.scss";
 import { useEffect, useState } from "react";
 import { userAddress } from "@/Store/Store.ts";
-import { Input, Button, Toast,ProgressCircle } from "antd-mobile";
+import { Input, Button, Toast, ProgressCircle } from "antd-mobile";
 import Header from "@/components/Header";
-import Item from './components/item/index'
+import Item from "./components/item/index";
 import { fromWei, toWei, Totast } from "@/Hooks/Utils";
 import { Spin } from "antd";
 import { t } from "i18next";
-const Swap: React.FC = () => {
+import ContractRequest from "@/Hooks/ContractRequest.ts";
+import { BigNumber } from "ethers";
+import type { MinerInfo } from "@/Hooks/InterFaceHooks.ts";
+import ContractSend from "@/Hooks/ContractSend.ts";
+import NoData from "@/components/NoData";
+interface TabItem {
+  id: number;
+  name: string;
+}
+
+const tabArray: TabItem[] = [
+  {
+    id: 0,
+    name: "全部",
+  },
+  {
+    id: 1,
+    name: "挖矿中",
+  },
+  {
+    id: 2,
+    name: "已完成",
+  },
+];
+const MiningMachine: React.FC = () => {
   const wallertAddress = userAddress().address;
+  const [minerInfo, setMinerInfo] = useState<MinerInfo>();
+
+  const [pending, setPending] = useState<BigNumber>(BigNumber.from(0));
+  
+
+  //领取loading
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+
+  const [list, setList] = useState<Array>([]);
+//tab下标
+  const [tabIndex, setTabIndex] = useState<number>(0);
+  const tabIndexChange = (index) => {
+    setTabIndex(index);
+  };
+  const getPageData = async () => {
+    console.log("wallertAddress==", wallertAddress);
+    const Result = await Promise.allSettled([
+      ContractRequest({
+        tokenName: "CaPool",
+        methodsName: "minerInfo",
+        params: [wallertAddress],
+      }),
+      ContractRequest({
+        tokenName: "CaPool",
+        methodsName: "pending",
+        params: [wallertAddress],
+      }),
+    ]);
+    if (Result[0].status == "fulfilled") {
+      const {
+        value,
+        powerValue,
+        time,
+        per,
+        releaseValueDebt,
+        releaseCaAmount,
+        totalMaxValue,
+        totalReleaseCaAmount,
+        flg,
+      } = Result[0].value?.value || {};
+      setMinerInfo({
+        value,
+        powerValue,
+        time,
+        per,
+        releaseValueDebt,
+        releaseCaAmount,
+        totalMaxValue,
+        totalReleaseCaAmount,
+        flg,
+      });
+    }
+    if (Result[1].status == "fulfilled") {
+      const isPending = Result[1].value?.value || BigNumber.from(0);
+      setPending(isPending);
+    }
+  };
+  //领取收益
+  const getClaim = async () => {
+    if (buttonLoading) {
+      return;
+    }
+    if (pending.toString() == "0") {
+      Totast("不能领取", "warn");
+      return;
+    }
+    setButtonLoading(true);
+
+    const res = await ContractSend({
+      tokenName: "CaPool",
+      methodsName: "claim",
+      params: [],
+    });
+    if (res.value) {
+      //领取成功刷新数据
+      getPageData();
+    }
+    setButtonLoading(false);
+  };
+  useEffect(() => {
+    getPageData();
+  }, []);
   return (
     <div className="mining-machine-page">
-      <Header title="我的矿机" recordText="领取记录" />
+      <Header
+        title="我的矿机"
+        recordText="领取记录"
+        recordUrl="/recordList?type=miningMachine&id=1"
+      />
       <div className="content">
-        
-         <div className="card-txt-box">
-             算力矿机 
-         </div>
+        <div className="card-txt-box">算力矿机</div>
         <div className="card-box">
           <div className="card-option">
-            <div className="card-nums">矿机算力：1000</div>
+            <div className="card-nums">
+              矿机算力：{fromWei(minerInfo?.powerValue)}
+            </div>
           </div>
           <div className="card-option">
-            <div className="card-txt">已领取动静收益:2000.00</div>
-            <div className="card-txt">已领取CA:2000.00</div>
+            <div className="card-txt">
+              已领取动静收益:{fromWei(minerInfo?.releaseValueDebt)}
+            </div>
+            <div className="card-txt">
+              已领取CA:{fromWei(minerInfo?.releaseCaAmount)}
+            </div>
           </div>
           <div className="card-option">
-            <div className="card-txt">累计动静收益:2000.00</div>
-            <div className="card-txt">累计领取:2000.00</div>
+            <div className="card-txt">
+              累计动静收益:{fromWei(minerInfo?.totalMaxValue)}
+            </div>
+            <div className="card-txt">
+              累计领取:{fromWei(minerInfo?.totalReleaseCaAmount)}
+            </div>
           </div>
           <div className="card-end-box">
             <div className="left-option">
               <div className="left-top-option">待领取收益</div>
-              <div className="left-bottom-option">12008.56</div>
+              <div className="left-bottom-option">{fromWei(pending)}</div>
             </div>
-            <div className="right-option">领取</div>
+            <div className="right-option" onClick={getClaim}>
+              {buttonLoading ? <Spin /> : "领取"}
+            </div>
           </div>
         </div>
 
-         <div className="card-txt-box">
-             众筹矿机 
-         </div>
+        <div className="card-txt-box">众筹矿机</div>
 
         <div className="rank-tab">
-          <div className="tab-item active">全部</div>
-          <div className="tab-item">挖矿中</div>
-          <div className="tab-item">已完成</div>
+          {tabArray.map((item, index) => {
+            return (
+              <div
+                key={index}
+                onClick={() => tabIndexChange(index)}
+                className={`tab-item ${tabIndex == item.id ? "active" : ""}`}
+              >
+                {item.name}
+              </div>
+            );
+          })}
         </div>
-        <Item></Item>
+        {list.length == 0 ? <NoData /> : <Item />}
       </div>
     </div>
   );
 };
 
-export default Swap;
+export default MiningMachine;

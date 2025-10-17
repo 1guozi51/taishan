@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Input, Spin, Modal, Button } from "antd";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { BigNumber, ethers } from "ethers";
-import { Totast } from "@/Hooks/Utils.ts";
+import { fromWei, Totast } from "@/Hooks/Utils.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import Dice from "@/components/Dice";
@@ -82,12 +82,14 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
   const closeBindFloat = () => {
     setShowBindFloat(false);
   };
- 
+
   // 确定购买门票
   const confirmButAction = async () => {
     if (!canBuy) {
       return;
     }
+    console.log("userInfo.inviter", userInfo.inviter);
+    console.log("userInfo.inviter", userInfo.inviter);
     if (userInfo.inviter == ethers.constants.AddressZero) {
       if (!ethers.utils.isAddress(inputAddress)) {
         Totast(t("邀请人地址不正确"), "warning"); // 邀请人地址不正确
@@ -98,11 +100,18 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
         methodsName: "userInfo",
         params: [inputAddress],
       });
+      console.log("inviterUser.value.inviter==", inviterUser.value.inviter);
       if (inviterUser.value.inviter == ethers.constants.AddressZero) {
         Totast(t("邀请人无效"), "warning"); // 邀请人无效
         return;
       }
     }
+    console.log(
+      "1---",
+      userInfo.inviter != ethers.constants.AddressZero &&
+        userInfo.ticketNumber.eq(BigNumber.from(0))
+    );
+    console.log("userInfo.ticketNumber", userInfo.ticketNumber);
     if (
       userInfo.inviter != ethers.constants.AddressZero &&
       userInfo.ticketNumber.eq(BigNumber.from(0))
@@ -152,7 +161,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
     }
     try {
       // 使用 await 获取 ContractSend 的返回结果并明确处理成功/失败情况
-      const res = await ContractSend({
+      ContractSend({
         tokenName: "CaPool",
         methodsName: "ticket",
         params: [
@@ -161,28 +170,35 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
             ? inputAddress
             : userInfo.inviter,
         ],
-      });
-      // 在调用后显示骰子并设置运行状态
-      setShowDice(true);
-      setRunning(true);
-      // ContractSend 可能会 resolve 一个结果对象而不是抛出错误，需检查返回值字段
-      if (res && res.value) {
-        setTarget(res.value);
-        // 成功——等待一段时间再停止动画并显示指定点数
-        setTimeout(() => {
-          setRunning(false);
+      }).then((resTicket) => {
+        console.log("resTicket==", resTicket);
+        setShowDice(true);
+        setRunning(true);
+        // ContractSend 可能会 resolve 一个结果对象而不是抛出错误，需检查返回值字段
+        if (resTicket && resTicket.value) {
+          setTarget(resTicket.value);
+          // 成功——等待一段时间再停止动画并显示指定点数
+          setTimeout(() => {
+            setRunning(false);
+            setShowDice(false);
+            Totast(
+              t(
+                `购买成功,恭喜你获得${
+                  fromWei(buyNumber, 18, true, 0) * resTicket.value
+                }MAX`
+              ),
+              "success"
+            );
+            Props.onClose();
+          }, 5500);
+        } else {
+          // 交易返回了非成功的结果（例如 res.value === false）
+          Totast(t("购买失败,交易未成功"), "error");
           setShowDice(false);
-          Totast(
-            t(`购买成功,恭喜你获得${buyNumber * res.value}MAX`),
-            "success"
-          );
-          Props.onClose();
-        }, 5500);
-      } else {
-        // 交易返回了非成功的结果（例如 res.value === false）
-        Totast(t("购买失败,交易未成功"), "error");
-        setShowDice(false);
-      }
+        }
+      });
+      console.log("resTicket.====", resTicket.value);
+      // 在调用后显示骰子并设置运行状态
     } catch (error) {
       // 捕获真正的异常/拒绝（例如网络/链上错误）
       Totast(t("购买失败,发生异常"), "error");

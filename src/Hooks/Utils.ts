@@ -16,27 +16,31 @@ export function formatAddress(
   if (!addr) return "";
   return `${addr.slice(0, prefixLen)}....${addr.slice(-suffixLen)}`;
 }
-/**
+ /**
  * 根据数字的位数生成掩码
  * @param {number|string} value - 原始数值或字符串
  * @param {string} char - 替换字符（默认 *）
- * @param {boolean|string} convert - 是否转换字符：
- *   - false: 不转换
- *   - true: 转为 "*"
- *   - 字符串: 转为该字符
+ * @param {boolean|string} convert - 控制行为：
+ *   - true: 返回原始值
+ *   - false: 用 char 替换
+ *   - 字符串: 用该字符串替换
  * @returns {string}
  */
 export const getMask = (value, char = "*", convert = false) => {
   if (value === null || value === undefined) return "";
-  // 把值转成字符串计算长度
+
   const str = String(value);
-  const length = str.length;
-  // 根据 convert 参数确定使用哪个字符
+
+  // ✅ 如果 convert 为 true，直接返回原始内容
+  if (convert === true) return str;
+
+  // ✅ 如果 convert 是字符串，使用它作为掩码字符
   let symbol = char;
-  if (convert === true) symbol = "*";
-  else if (typeof convert === "string") symbol = convert;
-  return symbol.repeat(length);
+  if (typeof convert === "string") symbol = convert;
+
+  return symbol.repeat(str.length);
 };
+
 /**
  * 检查是否是有效的以太坊地址
  * @param addr 钱包地址

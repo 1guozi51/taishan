@@ -18,8 +18,6 @@ interface ContractResult {
   value: any;
 }
 
-
-
 async function useContractSend({
   tokenName,
   methodsName,
@@ -36,12 +34,20 @@ async function useContractSend({
   );
   try {
     const gasPrice = await provider.getGasPrice();
-    const estimatedGas = await contract.estimateGas[methodsName](...params, {});
-    const tx = await contract[methodsName](...params);
+    const estimatedGas = await contract.estimateGas[methodsName](...params, {
+      value,
+    });
+    const gasLimit = estimatedGas.mul(130).div(100);
+    const tx = await contract[methodsName](...params, {
+      value,
+      gasPrice,
+      gasLimit,
+    });
     const receipt = await tx.wait();
+    console.log("receipt==",receipt)
     return { value: receipt };
   } catch (err: any) {
-    console.log("err===",err)
+    console.log("err===", err);
     if (
       err.code === "ACTION_REJECTED" ||
       err.message.includes("user rejected")

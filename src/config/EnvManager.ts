@@ -45,7 +45,9 @@ class EnvManager {
   static get poolContract(): string {
     return EnvManager.config.poolContract;
   }
-
+    static get swapRouter(): string {
+    return EnvManager.config.swapRouter;
+  }
   static get contractIdoPool(): string {
 
     return EnvManager.config.contractIdoPool;

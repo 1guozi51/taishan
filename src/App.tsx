@@ -16,6 +16,7 @@ const MyNode = lazy(() => import("@/pages/MyNode/index.tsx"));
 const Node = lazy(() => import("@/pages/Node/index.tsx"));
 const RecordList = lazy(() => import("@/pages/recordList/index.tsx"));
 const MiningMachine = lazy(() => import("@/pages/MiningMachine/index.tsx"));
+const MyCrowd = lazy(() => import("@/pages/MyCrowd/index.tsx"));
 import EnvManager from "@/config/EnvManager";
 EnvManager.print()
 function App() {
@@ -54,6 +55,7 @@ function App() {
           <Route path="/node" element={<Node />} />
           <Route path="/recordList" element={<RecordList />} />
           <Route path="/miningMachine" element={<MiningMachine />} />
+          <Route path="/myCrowd" element={<MyCrowd />} />
         </Routes>
       ) : (
         <div className="loding">

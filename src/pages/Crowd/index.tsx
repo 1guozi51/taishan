@@ -1,16 +1,16 @@
 import "./index.scss";
-import {useState} from "react";
+import { useState } from "react";
 import { Input, Button } from "antd-mobile";
 import Header from "@/components/Header";
 import more from "@/assets/img/records-more.png";
 import ProgressBar from "./component/ProgressBar";
 
 const Crowd: React.FC = () => {
-const [step, setStep] = useState(2);
+  const [step, setStep] = useState(2);
 
   return (
     <>
-      <Header title="众筹" recordText="众筹" />
+      <Header title="众筹" recordText="我的众筹" recordUrl="/myCrowd"/>
       <div className="crowd-page">
         <div className="djs-box">
           <div className="now-period">第180期预约倒计时</div>
@@ -44,8 +44,7 @@ const [step, setStep] = useState(2);
             <span className="unit">CA</span>
           </div>
           <div className="progressBar-box">
-<ProgressBar currentStep={step} 
-/>
+            <ProgressBar currentStep={step} />
           </div>
           <Button className="confirm-btn join-btn">确认参与</Button>
           <div className="tip-text">*实际参与成功金额将于倒计时结束后显示</div>

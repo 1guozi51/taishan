@@ -56,7 +56,9 @@
         .record-body {
             flex: 1;
             padding: 0 12px;
-
+             overflow-y: auto;     
+             max-height: calc(100vh - 120px);
+            //超出高度进行滚动
             .record-item {
                 color: #fff;
                 padding: 12px 0;

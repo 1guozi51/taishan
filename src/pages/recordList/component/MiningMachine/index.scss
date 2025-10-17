@@ -56,12 +56,18 @@
         .record-body {
             flex: 1;
             padding: 0 12px;
-                overflow-y: auto;     
+    overflow-y: auto;     
              max-height: calc(100vh - 120px);
             .record-item {
                 color: #fff;
                 padding: 12px 0;
                 border-bottom: 1px dashed #ffffff25;
+                color: #3AE97D;
+
+            }
+             span:last-child {
+                text-align: right;
+                color: #3AE97D;
             }
         }
     }

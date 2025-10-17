@@ -1,7 +1,7 @@
 // 📁 src/types/user.ts
 
 import { BigNumber } from "ethers"; // 如果你用 ethers.js
-
+//用户信息接口
 export interface UserInfo {
   activate: string | null;
   address: string | null;
@@ -25,13 +25,25 @@ export interface UserInfo {
   userLevel: number | null;
 }
 
+//用户信息abi
 export interface UserInfoAbi {
   inviter: string;
   directCount: BigNumber;
-  preAmount: BigNumber;
   preIndex: BigNumber;
   gasAmount: BigNumber;
   profitQuota: BigNumber;
   ticketNumber: BigNumber;
 }
 
+//矿机收益
+export interface MinerInfo {
+  value: BigNumber; //释放金额
+  powerValue: BigNumber; //算力
+  time: BigNumber; //开始时间;
+  per: BigNumber; //每次释放额度;
+  releaseValueDebt: BigNumber; //本次动静
+  releaseCaAmount: BigNumber; //本次领取CA
+  totalMaxValue: BigNumber; //累计动静
+  totalReleaseCaAmount: BigNumber; //累计领取CA
+  flg: boolean; //true = release false = end
+}

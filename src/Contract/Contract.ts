@@ -26,6 +26,10 @@ const Contract:ContractMap = {
     "idoPool":{
          "address": EnvManager.contractIdoPool,
         "abi": IdoABI
+    },
+    "swapRouter":{
+         "address": EnvManager.swapRouter,
+        "abi": CaPoolABI
     }
 }
 // 正式

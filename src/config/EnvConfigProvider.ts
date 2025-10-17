@@ -22,12 +22,13 @@ export default class EnvConfigProvider {
       apiBase: "http://143.92.39.28:9030/api/",
       poolContract: "0x268e52d5814880E00B60780AE9D8c7f1Ac1b4A8c",
       contractIdoPool: "0x77C596103cc479eaCBe5862B514C18C5CCCd35a8", //购买节点的合约地址
-      contractPool: "0xf3f27128C8596915093439671cF223978AA3abae",
-      contractUsdt: "0x55d398326f99059fF775485246999027B3197955",
-      contractCa: "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
-      chainId: "0x38",
-      rpcUrl: "https://bsc-dataseed.binance.org/",
-      blockExplorerUrls: "https://bscscan.com",
+      contractPool: "0x71DA4ab0b66d29D673A98f745E3D560EFfdc395e",
+      contractUsdt: "0x8873bB4707351279e921637f0700BE5f9cef1b1B",
+      contractCa: "0xACEEe99b1355c62940B55Eda01d4dc0A812b67E7",
+      swapRouter: "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
+      chainId: "0x61",
+      rpcUrl: "https://bsc-testnet-rpc.publicnode.com/",
+      blockExplorerUrls: "http://143.92.39.28:9030/api",
       chainName: "BNB Smart Chain Mainnet",
     };
   }
@@ -35,7 +36,8 @@ export default class EnvConfigProvider {
   /** 生产环境配置（主网） */
   static getProdConfig(): EnvConfig {
     return {
-      poolContract: "0x268e52d5814880E00B60780AE9D8c7f1Ac1b4A8c",
+      swapRouter: "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
+      poolContract: "0x268e52d5814880E00B60780AE9D8c7f1Ac1b4A8c", //节点接口
       apiBase: "https://api.soulca.com/",
       contractPool: "0xf3f27128C8596915093439671cF223978AA3abae",
       contractIdoPool: "0x77C596103cc479eaCBe5862B514C18C5CCCd35a8", //购买节点的合约地址

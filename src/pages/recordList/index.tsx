@@ -5,12 +5,16 @@ import { useLocation } from "react-router-dom";
 import TicketRecord from "./component/record/index";
 import Team from "./component/Team/index";
 import Node from "./component/Node/index";
+import MiningMachine from "./component/MiningMachine/index";
 import WithdrawRecord from "./component/WithdrawRecord/index";
+import MyCrowdList from "./component/MyCrowdList/index";
 const RecordList: React.FC = () => {
   const location = useLocation();
   // 解析查询参数
   const searchParams = new URLSearchParams(location.search);
+  console.log("searchParams==",searchParams)
   const pageType = searchParams.get("type");
+  console.log("pageType==",pageType)
 
   //通过类型去给header标题赋值
   const getBackHeaderTitle = (val: string | null) => {
@@ -23,6 +27,10 @@ const RecordList: React.FC = () => {
         return t("领取记录");
       case "withdrawRecord":
         return t("提现记录");
+      case "miningMachine":
+        return t("领取记录");
+      case "myCrowdList":
+        return t("明细记录");
       default:
         return "记录";
     }
@@ -38,6 +46,10 @@ const RecordList: React.FC = () => {
         return <Node pathParam={searchParams} />;
       case "withdrawRecord":
         return <WithdrawRecord />;
+      case "miningMachine":
+        return <MiningMachine pathParam={searchParams} />;
+         case "myCrowdList":
+        return <MyCrowdList pathParam={searchParams} />;
       default:
         return <div>{t("暂无记录")}</div>;
     }

@@ -320,6 +320,8 @@ const Swap: React.FC = () => {
       methodsName: "swap", // 假设兑换方法名为 usdtToCa
       params: [toWei(inputSwapAmount), path],
     });
+          console.log("swapRes---",swapRes)
+
     if (swapRes && swapRes.value) {
       setButtonLoading(false);
       // 兑换成功后，刷新页面数据，例如用户余额
