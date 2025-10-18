@@ -9,6 +9,7 @@ import hide from "@/assets/img/hide-assets.png";
 import { RightOutline } from "antd-mobile-icons";
 import NoData from "@/components/NoData";
 import { getMask } from "@/Hooks/Utils";
+import { t } from "i18next";
 interface TabItem {
   id: number;
   name: string;
@@ -16,15 +17,15 @@ interface TabItem {
 const tabArray: TabItem[] = [
   {
     id: 0,
-    name: "全部",
+    name: t("全部"),
   },
   {
     id: 1,
-    name: "参与成功",
+    name: t("参与成功"),
   },
   {
     id: 2,
-    name: "参与失败",
+    name: t("参与失败"),
   },
 ];
 const MyCrowd: React.FC = () => {
@@ -39,13 +40,17 @@ const MyCrowd: React.FC = () => {
   const [list, setList] = useState([]);
   return (
     <>
-      <Header title="我的众筹" recordText="明细记录" recordUrl="/recordList?type=myCrowdList&id=1" />
+      <Header
+        title={t("我的众筹")}
+        recordText={t("明细记录")}
+        recordUrl="/recordList?type=myCrowdList&id=1"
+      />
       <div className="my-crowd-page">
         <div className="card-box">
           <div className="card-header-top">
             <div className="left-option">
               <div className="hide-balance">
-                <span className="spn-txt">参与总额</span>
+                <span className="spn-txt">{t('参与总额')}</span>
                 <img
                   src={isEyeShow ? showEyes : hide}
                   onClick={() => setIsEyeShow(!isEyeShow)}
@@ -53,7 +58,7 @@ const MyCrowd: React.FC = () => {
                 ></img>
               </div>
               <div className="ca-number">
-                {getMask(1200, "*",isEyeShow)} CA
+                {getMask(1200, "*", isEyeShow)} CA
               </div>
             </div>
             <div className="right-option">
@@ -84,17 +89,17 @@ const MyCrowd: React.FC = () => {
             </div>
           </div>
           <div className="card-txt-info-option">
-            <div className="left-info">已赎回:100,236.78</div>
+            <div className="left-info">{t('已赎回')}:100,236.78</div>
             <div className="right-info">
               <div className="right-number">
-                <span className="spn-1">昨日</span>
+                <span className="spn-1">{t('昨日')}</span>
                 <span className="spn-2">+326.89</span>
               </div>
             </div>
           </div>
 
           <div className="card-txt-info-option">
-            <div className="left-info">累计收益:100,236.78</div>
+            <div className="left-info">{t('累计收益')}:100,236.78</div>
             <div className="right-info">
               <div className="right-icon">
                 <RightOutline color="#fff" />
@@ -126,30 +131,30 @@ const MyCrowd: React.FC = () => {
                 className={`crowd-data ${isSuccess ? "success" : "error"}`}
                 key={index}
               >
-                <div className="period-num">第{index + 1}期</div>
+                <div className="period-num">{t('第')}{index + 1}{t('期')}</div>
                 <div className="crowd-status">
-                  <div className="status">众筹成功</div>
+                  <div className="status">{t('众筹成功')}</div>
                   <div className="time">09/05/2025 18:25:56</div>
                 </div>
 
                 <div className="data-row">
                   <div>
-                    <div className="key">总预约额</div>
+                    <div className="key">{t('总预约额')}</div>
                     <div className="val">100,000.00 CA</div>
                   </div>
                   <div>
-                    <div className="key">总参与额</div>
+                    <div className="key">{t('总参与额')}</div>
                     <div className="val">10,000.00 CA</div>
                   </div>
                 </div>
 
                 <div className="data-row">
                   <div>
-                    <div className="key">总退回本金</div>
+                    <div className="key">{t('总退回本金')}</div>
                     <div className="val">90,000.00 CA</div>
                   </div>
                   <div>
-                    <div className="key">已赎回总额</div>
+                    <div className="key">{t('已赎回总额')}</div>
                     <div className="val">8,320.6 CA</div>
                   </div>
                 </div>
@@ -157,11 +162,11 @@ const MyCrowd: React.FC = () => {
                 {!isSuccess && (
                   <div className="recoup-box">
                     <div>
-                      <div className="key">本金总补偿</div>
+                      <div className="key">{t('本金总补偿')}</div>
                       <div className="val">180,679.44 CA</div>
                     </div>
                     <div>
-                      <div className="key">赠送矿机总价值</div>
+                      <div className="key">{t('赠送矿机总价值')}</div>
                       <div className="val">1,609,000.00 CA</div>
                     </div>
                   </div>

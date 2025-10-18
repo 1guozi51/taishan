@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./index.scss";
+import { t } from "i18next";
 
 interface CountDownProps {
   targetTime: number; // 毫秒或秒级时间戳
@@ -9,7 +10,12 @@ interface CountDownProps {
 
 const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
   const [timeLeft, setTimeLeft] = useState(0);
-  const [prevTime, setPrevTime] = useState({ d: "00", h: "00", m: "00", s: "00" });
+  const [prevTime, setPrevTime] = useState({
+    d: "00",
+    h: "00",
+    m: "00",
+    s: "00",
+  });
 
   useEffect(() => {
     const target = targetTime < 1e12 ? targetTime * 1000 : targetTime;
@@ -86,7 +92,7 @@ const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
               value={time.d}
               prevValue={prevTime.d}
               active={time.d !== prevTime.d}
-              label="天"
+              label={t("天")}
             />
             <div>:</div>
           </>
@@ -95,21 +101,21 @@ const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
           value={time.h}
           prevValue={prevTime.h}
           active={time.h !== prevTime.h}
-          label="时"
+          label={t("时")}
         />
         <div>:</div>
         <TimeBlock
           value={time.m}
           prevValue={prevTime.m}
           active={time.m !== prevTime.m}
-          label="分"
+          label={t("分")}
         />
         <div>:</div>
         <TimeBlock
           value={time.s}
           prevValue={prevTime.s}
           active={time.s !== prevTime.s}
-          label="秒"
+          label={t("秒")}
         />
       </div>
     </div>

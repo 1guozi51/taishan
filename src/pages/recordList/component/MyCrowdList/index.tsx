@@ -22,27 +22,27 @@ interface TabItem {
 const tabArray: TabItem[] = [
   {
     id: 0,
-    name: "预约记录",
+    name: t("预约记录"),
   },
   {
     id: 1,
-    name: "赎回记录",
+    name: t("赎回记录"),
   },
   {
     id: 2,
-    name: "补偿记录",
+    name: t("补偿记录"),
   },
   {
     id: 3,
-    name: "收益记录",
+    name: t("收益记录"),
   },
 ];
 
 const labelMap = {
-  0: { text: "预约额度(CA)" },
-  1: { text: "赎回额度(CA)" },
-  2: { text: "补偿本金(CA)" },
-  3: { text: "收益金额(CA)" },
+  0: { text: t("预约额度(CA)") },
+  1: { text: t("赎回额度(CA)") },
+  2: { text: t("补偿本金(CA)") },
+  3: { text: t("收益金额(CA)") },
 };
 const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
   pathParam,
@@ -179,7 +179,7 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
                   <div className="record-item" key={index}>
                     <div className="item-content">
                       <span>{item.one}</span>
-                      <span>第180</span>
+                      <span>{t("第")}180</span>
                       <span
                         className={
                           item.status == "1"
@@ -190,10 +190,10 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
                         }
                       >
                         {item.status == "1"
-                          ? "预约中"
+                          ? t("预约中")
                           : item.status == "2"
-                          ? "参与成功"
-                          : "参与失败"}
+                          ? t("参与成功")
+                          : t("参与失败")}
                       </span>
                       <span
                         className={
@@ -203,14 +203,19 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
                         {item.amount}
                       </span>
                     </div>
-                    <div className="tag-option"
-                     style={{ display: tabIndex === 2 ? "flex" : "none" }}
+                    <div
+                      className="tag-option"
+                      style={{ display: tabIndex === 2 ? "flex" : "none" }}
                     >
-                        <div className="tag-name">赠送</div>
-                        <div className="tag-txt">赠送价值<span>6,000.00 CA</span>矿机*1台</div>
-                        <div className="tag-right">
-                           <RightOutline color="#F39D24" />
-                        </div>
+                      <div className="tag-name">{t("赠送")}</div>
+                      <div className="tag-txt">
+                        {t("赠送价值")}
+                        <span>6,000.00 CA</span>
+                        {t("矿机*1台")}
+                      </div>
+                      <div className="tag-right">
+                        <RightOutline color="#F39D24" />
+                      </div>
                     </div>
                   </div>
                 );

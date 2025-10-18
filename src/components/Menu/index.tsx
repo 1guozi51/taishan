@@ -24,7 +24,7 @@ interface MenuType {
 const menuList: MenuType[] = [
   { label: t("首页"), url: "/" },
   { label: t("门票"), url: "/recordList?type=tickets" },
-  { label: t("众筹"), url: "" },
+  { label: t("众筹"), url: "/Crowd" },
   { label: t("矿机"), url: "/MiningMachine" },
   { label: "Swap", url: "/swap" },
    { label: t("节点"), url: "/myNode" },
@@ -60,7 +60,6 @@ const Menu: React.FC<{
   const eyesChange = () => {
     setEyesShow(!eyesShow);
   };
-
   const getUserInfo = async () => {
     const userInfoResult = await Promise.allSettled([
       NetworkRequest({

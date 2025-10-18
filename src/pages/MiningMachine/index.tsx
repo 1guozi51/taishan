@@ -20,15 +20,15 @@ interface TabItem {
 const tabArray: TabItem[] = [
   {
     id: 0,
-    name: "全部",
+    name: t("全部"),
   },
   {
     id: 1,
-    name: "挖矿中",
+    name: t("挖矿中"),
   },
   {
     id: 2,
-    name: "已完成",
+    name: t("已完成"),
   },
 ];
 const MiningMachine: React.FC = () => {
@@ -96,7 +96,7 @@ const MiningMachine: React.FC = () => {
       return;
     }
     if (pending.toString() == "0") {
-      Totast("不能领取", "warn");
+      Totast(t("不能领取"), "warn");
       return;
     }
     setButtonLoading(true);
@@ -118,46 +118,48 @@ const MiningMachine: React.FC = () => {
   return (
     <div className="mining-machine-page">
       <Header
-        title="我的矿机"
-        recordText="领取记录"
+        title={t('我的矿机')}
+        recordText={t('领取记录')}
         recordUrl="/recordList?type=miningMachine&id=1"
       />
       <div className="content">
-        <div className="card-txt-box">算力矿机</div>
+        <div className="card-txt-box">{t('算力矿机')}</div>
         <div className="card-box">
           <div className="card-option">
             <div className="card-nums">
-              矿机算力：{fromWei(minerInfo?.powerValue)}
+              {t('矿机算力')}：{fromWei(minerInfo?.powerValue)}
             </div>
           </div>
           <div className="card-option">
             <div className="card-txt">
-              已领取动静收益:{fromWei(minerInfo?.releaseValueDebt)}
+              {t('已领取动静收益')}:{fromWei(minerInfo?.releaseValueDebt)}
             </div>
-            <div className="card-txt">
-              已领取CA:{fromWei(minerInfo?.releaseCaAmount)}
+            <div className="card-txt card-txt-right">
+              {t('已领取CA')}:{fromWei(minerInfo?.releaseCaAmount)}
             </div>
           </div>
           <div className="card-option">
             <div className="card-txt">
-              累计动静收益:{fromWei(minerInfo?.totalMaxValue)}
+              {t('累计动静收益')}:{fromWei(minerInfo?.totalMaxValue)}
             </div>
-            <div className="card-txt">
-              累计领取:{fromWei(minerInfo?.totalReleaseCaAmount)}
+            <div className="card-txt card-txt-right">
+              {t('累计领取')}:{fromWei(minerInfo?.totalReleaseCaAmount)}
             </div>
           </div>
           <div className="card-end-box">
             <div className="left-option">
-              <div className="left-top-option">待领取收益</div>
+              <div className="left-top-option">{t('待领取收益')}</div>
               <div className="left-bottom-option">{fromWei(pending)}</div>
             </div>
             <div className="right-option" onClick={getClaim}>
-              {buttonLoading ? <Spin /> : "领取"}
+              {buttonLoading ? <Spin /> : t("领取")}
             </div>
           </div>
         </div>
 
-        <div className="card-txt-box">众筹矿机</div>
+        <div className="card-txt-box">
+          {t('众筹矿机')}
+        </div>
 
         <div className="rank-tab">
           {tabArray.map((item, index) => {
