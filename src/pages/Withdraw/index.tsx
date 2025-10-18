@@ -43,9 +43,21 @@ const Withdraw: React.FC = () => {
     setTabIndex(val);
   };
 
-  const inputAmountChange = (val) => {
-    console.log("vall===", val);
-    setInputAmout(val);
+  const inputAmountChange = (value) => {
+    // 禁止负号输入
+    if (value.includes("-")) return;
+    // 只允许数字和一个小数点
+    if (!/^\d*\.?\d*$/.test(value)) return;
+    // 限制小数点后最多 4 位
+    if (value.includes(".")) {
+      const [integer, decimal] = value.split(".");
+      if (decimal.length > 4) return;
+    }
+    // 自动补0（防止以 . 开头）
+    if (value.startsWith(".")) {
+      value = "0" + value;
+    }
+    setInputAmout(value);
   };
   //获取用户信息
   const getPageData = async () => {
@@ -94,7 +106,6 @@ const Withdraw: React.FC = () => {
         },
       })
         .then((res) => {
-          console.log("res==", res);
           setBtnLoading(true);
         })
         .finally(() => {

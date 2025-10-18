@@ -321,7 +321,7 @@ function BuyTicketPage(Props: BuyTicketPageClass) {
 
       <div className="option-box">
         <div className="option-header-top">
-          <div className="txt">{t("获得10倍购买额度")}</div>
+          <div className="txt">{t("获得10倍购买CAS")}</div>
         </div>
         <div className="option-input-end">
           <Input

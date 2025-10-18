@@ -13,9 +13,7 @@ interface TeamRecord {
   claimAmount: string;
 }
 
-const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
-  pathParam,
-}) => {
+const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({pathParam}) => {
   //通过searchParams参数获取id值
   const typeId = pathParam.get("id");
   const wallertAddress = userAddress().address;

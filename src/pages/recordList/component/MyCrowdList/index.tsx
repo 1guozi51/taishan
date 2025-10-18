@@ -87,20 +87,22 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
   });
 
   //tab下标
-  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [tabIndex, setTabIndex] = useState<string>('1');
   const tabIndexChange = (index) => {
+    console.log("index=tabIndexChange=",index)
     setTabIndex(index);
+    
   };
   // 获取更多团队列表
   const loadMoreAction = async () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({
-      Url: "userRecord/claimMinerRecord",
+      Url: "userCrowdf/crowdfDetailsRecord",
       Data: {
         current: nexPage,
         size: dataParam.size,
-        type: dataParam.type,
+        type:tabIndex,
         address: dataParam.address,
       },
     }).then((res) => {
@@ -119,14 +121,15 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
       }
     });
   };
-  const getDataList = useCallback(async () => {
+  const getDataList = useCallback(async (type) => {
+    console.log("最新的tabindex",tabIndex)
     setListLoding(true);
     const result = await NetworkRequest({
-      Url: "userRecord/claimMinerRecord",
+      Url: "userCrowdf/crowdfDetailsRecord",
       Data: {
         current: 1,
         size: dataParam.size,
-        type: dataParam.type,
+        type,
         address: dataParam.address,
       },
     });
@@ -143,8 +146,9 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
     }
   }, [dataParam]);
   useEffect(() => {
-    getDataList();
-  }, []);
+    setList([])
+    getDataList(tabIndex);
+  }, [tabIndex]);
   return (
     <>
       <div className="records-my-crow-page">
@@ -170,28 +174,28 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
               <span>{labelMap[tabIndex]?.text || "预约额度(CA)"}</span>
             </div>
           </div>
-          {list2.length == 0 ? (
+          {list.length == 0 ? (
             <NoData />
           ) : (
             <div className="record-body">
-              {list2.map((item, index) => {
+              {list.map((item, index) => {
                 return (
                   <div className="record-item" key={index}>
                     <div className="item-content">
-                      <span>{item.one}</span>
-                      <span>{t("第")}180</span>
+                      <span>{formatDate(item.createTime).dateTime}</span>
+                      <span>{t("第")}{item.crowdfNo}{t('期')}</span>
                       <span
                         className={
-                          item.status == "1"
+                          item.allocateStatus == "1"
                             ? "status status-booked"
-                            : item.status == "2"
+                            : item.allocateStatus == "2"
                             ? "status status-success"
                             : "status status-failed"
                         }
                       >
-                        {item.status == "1"
+                        {item.allocateStatus == "1"
                           ? t("预约中")
-                          : item.status == "2"
+                          : item.allocateStatus == "2"
                           ? t("参与成功")
                           : t("参与失败")}
                       </span>
@@ -200,7 +204,7 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
                           tabIndex != "0" ? "status status-success" : ""
                         }
                       >
-                        {item.amount}
+                        {fromWei(item.amount)}
                       </span>
                     </div>
                     <div
@@ -210,8 +214,8 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
                       <div className="tag-name">{t("赠送")}</div>
                       <div className="tag-txt">
                         {t("赠送价值")}
-                        <span>6,000.00 CA</span>
-                        {t("矿机*1台")}
+                        <span>{fromWei(item.minerAmount)} CA</span>
+                        {t(`矿机*${item.triggerCrowdfNo}台`)}
                       </div>
                       <div className="tag-right">
                         <RightOutline color="#F39D24" />

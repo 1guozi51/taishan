@@ -159,10 +159,10 @@ const MyTeam: React.FC = () => {
   };
   //待领取奖励 type 领取对应类型的奖励
   const claimTeamClick = async (type, amount) => {
-    if (fromWei(amount) == 0) {
-      Totast("不能领取", "warning");
-      return;
-    }
+    // if (fromWei(amount) == 0) {
+    //   Totast("不能领取", "warning");
+    //   return;
+    // }
     if (btnLoading) return; // 防止重复点击
     const bigRes = concatSign(fromWei(amount));
     setBtnLoading(true);
@@ -179,8 +179,11 @@ const MyTeam: React.FC = () => {
         },
       })
         .then((res) => {
-          Totast("领取成功", "success");
-          getPageInfo();
+          console.log("res==",res)
+          if (res.data.code == 200) {
+            Totast(t("领取成功"), "success");
+            getPageInfo();
+          }
         })
         .finally(() => {
           setBtnLoading(false);
@@ -197,7 +200,11 @@ const MyTeam: React.FC = () => {
     <>
       <Header title={t("团队")} />
       <div
-        style={{ padding: "46px 16px", background: "#03022c", minHeight: "100vh" }}
+        style={{
+          padding: "46px 16px",
+          background: "#03022c",
+          minHeight: "100vh",
+        }}
       >
         <div className="teamInfo">
           <div>

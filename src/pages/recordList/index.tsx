@@ -54,7 +54,7 @@ const RecordList: React.FC = () => {
       case "myCrowdList":
         return <MyCrowdList pathParam={searchParams} />;
       case "swap":
-        return <Swap />;
+        return <Swap pathParam={searchParams}/>;
       default:
         return <div>{t("暂无记录")}</div>;
     }

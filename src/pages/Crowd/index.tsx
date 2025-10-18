@@ -1,13 +1,26 @@
 import "./index.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input, Button } from "antd-mobile";
 import Header from "@/components/Header";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import more from "@/assets/img/records-more.png";
 import ProgressBar from "./component/ProgressBar/ProgressBar";
 import CountDown from "./component/CountDown";
 import { t } from "i18next";
 const Crowd: React.FC = () => {
   const [step, setStep] = useState(2);
+  const getLastCrowdf = async () => {
+    const res = await NetworkRequest({
+      Url: "crowdf/crowdfPage",
+      Method:"get",
+      current: 1,
+      size: 4,
+    });
+    console.log("res==", res);
+  };
+  useEffect(() => {
+    getLastCrowdf();
+  });
   return (
     <>
       <Header
@@ -20,17 +33,23 @@ const Crowd: React.FC = () => {
           <div className="now-period">
             {t("第")}180{t("期预约倒计时")}
           </div>
-          <CountDown
+          {/* <CountDown
             targetTime="1760714809000" // 27小时
             onEnd={() => console.log("🎉 倒计时结束")}
-          />
+          /> */}
           <div className="join-peo">
             {t("已有")}328{t("人参与")}
           </div>
         </div>
         <div className="assets-pool">
-          <span className="key">{t("预约资金池")}</span>
-          <span className="val">3,280,800.00 CA</span>
+          <div className="assets-option">
+            <span className="key">{t("预约资金池")}</span>
+            <span className="val">3,280,800.00 CA</span>
+          </div>
+          <div className="assets-option">
+            <span className="key">{t("预约资金池")}</span>
+            <span className="val">3,280,800.00 CA</span>
+          </div>
         </div>
         <div className="quota-box">
           <div className="balance-box">
@@ -89,11 +108,11 @@ const Crowd: React.FC = () => {
               </div>
               <div className="data-row">
                 <div>
-                  <div className="key">{t("总退回本金")}</div>
+                  <div className="key">{t("赎回总额")}</div>
                   <div className="val">90,000.00 CA</div>
                 </div>
                 <div>
-                  <div className="key">{t("已赎回总额")}</div>
+                  <div className="key">{t("收益总额")}</div>
                   <div className="val">8,320.6 CA</div>
                 </div>
               </div>

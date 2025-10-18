@@ -94,7 +94,7 @@
   "输入买入数量(10-3000)": "Enter Purchase Quantity (10–3000)",
   "上级地址": "Superior Address",
   "请输入上级地址": "Please Enter Superior Address",
-  "获得10倍购买额度": "Obtain 10x Purchase Limit",
+  "获得10倍购买CAS": "Get 10× CAS Purchase",
   "2至6倍算力额度": "2–6x Computing Power Limit",
   "确认购买": "Confirm Purchase",
   "购买数量不符合要求": "Purchase Quantity Does Not Meet Requirements",
@@ -220,6 +220,8 @@
   "赠送": "Gift",
   "赠送价值": "Gift Value",
   "矿机*1台": "Miner ×1",
- "用": "Use",
-"兑换": "Exchange"
+  "用": "Use",
+  "兑换": "Exchange",
+  "领取成功": "Claimed Successfully",
+  "我的记录": "My Record"
 }

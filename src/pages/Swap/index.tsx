@@ -31,8 +31,9 @@ interface SwapRecord {
   amount0: BigNumber;
   amount1: BigNumber;
 }
-const Swap: React.FC = () => {
+const Swap: React.FC  = () => {
   const navigate = useNavigate();
+
   const wallertAddress = userAddress().address;
   // 按钮加载
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -357,8 +358,8 @@ const Swap: React.FC = () => {
     <>
       <Header
         title="Swap"
-        recordText={t("兑换记录")}
-        recordUrl="/recordList?type=swap"
+        recordText={t("我的记录")}
+        recordUrl="/recordList?type=swap&id=me"
       />
       {wallertAddress ? (
         <div className="swap-page">
@@ -459,7 +460,7 @@ const Swap: React.FC = () => {
           <div className="records-title">
             <span className="title-text">{t("兑换记录")}</span>
             <div className="more-box">
-              <span onClick={() => navigate("/recordList?type=swap")}>
+              <span onClick={() => navigate("/recordList?type=swap&id=all")}>
                 {t("全部记录")}
               </span>
               <img src={more} alt="" />
@@ -475,10 +476,11 @@ const Swap: React.FC = () => {
               <div className="record-item" key={index}>
                 <span>{formatDate(item.blockTime).dateTime}</span>
                 <span>
-                  {t('用')} {fromWei(item.amount0)} {item.type == 1 ? "usdt" : "ca"}{" "}
-                   {t('兑换')} {fromWei(item.amount1)} {item.type == 1 ? "ca" : "usdt"}
+                  {t("用")} {fromWei(item.amount0)}{" "}
+                  {item.type == 1 ? "usdt" : "ca"} {t("兑换")}{" "}
+                  {fromWei(item.amount1)} {item.type == 1 ? "ca" : "usdt"}
                 </span>
-                <span>{t('已完成')}</span>
+                <span>{t("已完成")}</span>
               </div>
             );
           })}
