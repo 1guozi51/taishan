@@ -6,13 +6,9 @@ import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
 import { concatSign } from "@/Hooks/Utils.ts";
-import { Totast, fromWei, SubAddress, formatDate } from "@/Hooks/Utils.ts";
+import { Totast, fromWei } from "@/Hooks/Utils.ts";
 import { useNavigate } from "react-router-dom";
-import {
-  defaultUserInfo,
-  fillNullWithDefault,
-} from "@/components/Menu/type.ts";
-import BackHeader from "@/components/BackHeader";
+import Header from "@/components/Header";
 import noNode from "@/assets/img/noNode.png";
 import CloudNode from "@/assets/img/CloudNode.png";
 import { Button } from "antd-mobile";
@@ -104,7 +100,7 @@ const MyNode: React.FC = () => {
   }, []);
   return (
     <>
-      <BackHeader title={t('节点')} />
+      <Header title={t("节点")} />
       <div className="nodeBox">
         {nodeState == true ? (
           <>

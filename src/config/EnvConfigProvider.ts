@@ -22,9 +22,9 @@ export default class EnvConfigProvider {
       apiBase: "http://143.92.39.28:9030/api/",
       poolContract: "0x268e52d5814880E00B60780AE9D8c7f1Ac1b4A8c",
       contractIdoPool: "0x77C596103cc479eaCBe5862B514C18C5CCCd35a8", //购买节点的合约地址
-      contractPool: "0x71DA4ab0b66d29D673A98f745E3D560EFfdc395e",
+      contractPool: "0x9790Efa5C159AFcFfa7fCfeE26D930EAD90Fb2DE",
       contractUsdt: "0x8873bB4707351279e921637f0700BE5f9cef1b1B",
-      contractCa: "0xACEEe99b1355c62940B55Eda01d4dc0A812b67E7",
+      contractCa: "0xa364d7e33b688adba98F6351200c064a4E134b44",
       swapRouter: "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
       chainId: "0x61",
       rpcUrl: "https://bsc-testnet-rpc.publicnode.com/",

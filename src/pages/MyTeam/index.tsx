@@ -1,5 +1,7 @@
 import "./index.scss";
 import { useState, useEffect } from "react";
+import Header from "@/components/Header";
+
 import copy from "@/assets/img/copy.png";
 import wallet from "@/assets/img/wallet.png";
 import { Button, InfiniteScroll } from "antd-mobile";
@@ -193,9 +195,9 @@ const MyTeam: React.FC = () => {
   }, []);
   return (
     <>
-      <BackHeader title="团队" />
+      <Header title={t("团队")} />
       <div
-        style={{ padding: "0 16px", background: "#03022c", minHeight: "100vh" }}
+        style={{ padding: "46px 16px", background: "#03022c", minHeight: "100vh" }}
       >
         <div className="teamInfo">
           <div>

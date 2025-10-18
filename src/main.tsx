@@ -2,8 +2,7 @@ import { Buffer } from "buffer";
 if (!window.Buffer) {
   window.Buffer = Buffer;
 }
-// import "@/hooks/suppressConsole";
-
+// import "@/hooks/suppressConsole";//是否正式环境关闭console
 import { createRoot } from "react-dom/client";
 import { HashRouter, BrowserRouter } from "react-router-dom";
 import "./index.css";

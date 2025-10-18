@@ -1,6 +1,5 @@
 import { message } from "antd";
 import { ethers, BigNumber } from "ethers";
-import CryptoJS from "crypto-js";
 /**
  * 格式化钱包地址
  * @param addr 钱包地址
@@ -16,7 +15,7 @@ export function formatAddress(
   if (!addr) return "";
   return `${addr.slice(0, prefixLen)}....${addr.slice(-suffixLen)}`;
 }
- /**
+/**
  * 根据数字的位数生成掩码
  * @param {number|string} value - 原始数值或字符串
  * @param {string} char - 替换字符（默认 *）
@@ -37,7 +36,6 @@ export const getMask = (value, char = "*", convert = false) => {
   // ✅ 如果 convert 是字符串，使用它作为掩码字符
   let symbol = char;
   if (typeof convert === "string") symbol = convert;
-
   return symbol.repeat(str.length);
 };
 
@@ -258,4 +256,22 @@ export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
   const b = BigNumber.from(big2.toString()); // 2e18
   const sum = a.add(b);
   return sum;
+};
+
+/**
+ * 格式化数字为千分位，保留两位小数
+ * @param num 输入数字或字符串
+ * @returns 格式化后的字符串，如 20000 -> "20,000.00"
+ */
+ export const formatNumber = (num: number | string): string => {
+  if (num === null || num === undefined || num === "") return "0.00";
+
+  const numberValue = typeof num === "string" ? parseFloat(num) : num;
+
+  if (isNaN(numberValue)) return "0.00";
+
+  return numberValue.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 };

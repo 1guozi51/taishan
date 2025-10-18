@@ -1,10 +1,9 @@
 import "./index.scss";
 import { useEffect, useState } from "react";
 import { userAddress } from "@/Store/Store.ts";
-import { Input, Button, Toast, ProgressCircle } from "antd-mobile";
 import Header from "@/components/Header";
 import Item from "./components/item/index";
-import { fromWei, toWei, Totast } from "@/Hooks/Utils";
+import { fromWei, Totast } from "@/Hooks/Utils";
 import { Spin } from "antd";
 import { t } from "i18next";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
@@ -120,6 +119,7 @@ const MiningMachine: React.FC = () => {
       <Header
         title={t('我的矿机')}
         recordText={t('领取记录')}
+        fixed={false}
         recordUrl="/recordList?type=miningMachine&id=1"
       />
       <div className="content">
@@ -127,20 +127,20 @@ const MiningMachine: React.FC = () => {
         <div className="card-box">
           <div className="card-option">
             <div className="card-nums">
-              {t('矿机算力')}：{fromWei(minerInfo?.powerValue)}
+              {t('矿机算力')}：{fromWei(minerInfo?.powerValue)} Max
             </div>
           </div>
           <div className="card-option">
             <div className="card-txt">
-              {t('已领取动静收益')}:{fromWei(minerInfo?.releaseValueDebt)}
+              {t('已领取动静收益')}:{fromWei(minerInfo?.releaseValueDebt)} Max
             </div>
             <div className="card-txt card-txt-right">
-              {t('已领取CA')}:{fromWei(minerInfo?.releaseCaAmount)}
+              {t('已领取CA')}:{fromWei(minerInfo?.releaseCaAmount)} 
             </div>
           </div>
           <div className="card-option">
             <div className="card-txt">
-              {t('累计动静收益')}:{fromWei(minerInfo?.totalMaxValue)}
+              {t('累计动静收益')}:{fromWei(minerInfo?.totalMaxValue)} Max
             </div>
             <div className="card-txt card-txt-right">
               {t('累计领取')}:{fromWei(minerInfo?.totalReleaseCaAmount)}
@@ -148,7 +148,7 @@ const MiningMachine: React.FC = () => {
           </div>
           <div className="card-end-box">
             <div className="left-option">
-              <div className="left-top-option">{t('待领取收益')}</div>
+              <div className="left-top-option">{t('待领取收益')} </div>
               <div className="left-bottom-option">{fromWei(pending)}</div>
             </div>
             <div className="right-option" onClick={getClaim}>
@@ -158,7 +158,7 @@ const MiningMachine: React.FC = () => {
         </div>
 
         <div className="card-txt-box">
-          {t('众筹矿机')}
+          {t('爆块矿机')}
         </div>
 
         <div className="rank-tab">

@@ -1,62 +1,73 @@
 .head-box {
-    position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+ &.fixed {
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 999;
+  }
+
+  &.static {
+    position: relative; // 在文档流中
+  }
+  &.scrolled {
+    background: rgba(3, 2, 44, 0.9);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .menu-box {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    height: 44px;
+    width: 100px;
+    .menu-img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .logo-img {
+      height: 36px;
+      object-fit: contain;
+      margin-left: 16px;
+    }
+  }
+
+  .title-text {
+    font-size: 18px;
+    color: #fff;
+  }
+
+  .wallet-box {
+    display: flex;
+    align-items: center;
+    height: 32px;
     padding: 0 16px;
+    background: linear-gradient(270deg, #ab46ff 0%, #00b7ff 48%, #00ffed 100%);
+    border-radius: 16px;
+    font-size: 12px;
+    color: #000;
 
-    &.sticky {
-        position: sticky;
-        background: #03022c;
+    .wallet-img {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
     }
+  }
 
-    .menu-box {
-        display: flex;
-        align-items: center;
-        width: 100px;
-        .menu-img {
-            width: 24px;
-            height: 24px;
-        }
-
-        .logo-img {
-            height: 36px;
-            object-fit: contain;
-            margin-left: 16px;
-        }
-    }
-
-    .title-text {
-        font-size: 18px;
-        color: #fff;
-    }
-
-    .wallet-box {
-        display: flex;
-        align-items: center;
-        height: 32px;
-        padding: 0 16px;
-        background: linear-gradient(270deg, #AB46FF 0%, #00B7FF 48%, #00FFED 100%);
-        border-radius: 16px;
-        font-size: 12px;
-        color: #000;
-
-        .wallet-img {
-            width: 16px;
-            height: 16px;
-            margin-right: 4px;
-        }
-    }
-
-    .record-text {
-        width: 100px;
-        font-size: 14px;
-        color: #67BAFF;
-        text-align: right;
-    }
+  .record-text {
+    width: 100px;
+    font-size: 14px;
+    color: #67baff;
+    text-align: right;
+  }
 }
