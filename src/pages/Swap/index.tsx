@@ -10,32 +10,30 @@ import toggle from "@/assets/img/toggle.png";
 import more from "@/assets/img/records-more.png";
 import { ethers, BigNumber } from "ethers";
 import { Totast } from "@/Hooks/Utils.ts";
-import { fromWei, toWei } from "@/Hooks/Utils";
+import { fromWei, toWei, formatDate } from "@/Hooks/Utils";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import ContractList from "@/Contract/Contract.ts";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
+import { useNavigate } from "react-router-dom";
 import { Spin } from "antd";
 import { t } from "i18next";
 import type { UserInfoAbi } from "@/types/user";
-
- 
 
 interface SwapFee {
   buyFee: BigNumber;
   sellFee: BigNumber;
 }
-
+interface SwapRecord {
+  blockTime: string;
+  type: number;
+  amount0: BigNumber;
+  amount1: BigNumber;
+}
 const Swap: React.FC = () => {
+  const navigate = useNavigate();
   const wallertAddress = userAddress().address;
-  useEffect(() => {
-    if (!wallertAddress) {
-      ensureWalletConnected();
-    } else {
-      getPageInfo();
-    }
-  }, [wallertAddress]);
-
   // 按钮加载
   const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -50,7 +48,8 @@ const Swap: React.FC = () => {
   const [caTokenBalance, setCaTokenBalance] = useState<BigNumber>(
     BigNumber.from(0)
   );
-
+  //swap 记录
+  const [swapList, setSwapList] = useState<SwapRecord>([]);
   //输入需要换的数量
   const [inputSwapAmount, setInputSwapAmount] = useState<string>("0");
   //输出获得的数量
@@ -97,7 +96,20 @@ const Swap: React.FC = () => {
     clearCheckStatus();
     swapType == 1 ? setSwapType(2) : setSwapType(1);
   };
-
+  //获取swap兑换记录
+  const getSwapList = async () => {
+    const swapResult = await NetworkRequest({
+      Url: "userRecord/swapRecord",
+      Data: {
+        current: 1,
+        size: 10,
+      },
+    });
+    console.log("swapResult==", swapResult);
+    if (swapResult.data.code == 200) {
+      setSwapList(swapResult.data.data.records);
+    }
+  };
   //获取用户USDT和CA余额
   const getPageInfo = async () => {
     const balanceResult = await Promise.allSettled([
@@ -320,7 +332,7 @@ const Swap: React.FC = () => {
       methodsName: "swap", // 假设兑换方法名为 usdtToCa
       params: [toWei(inputSwapAmount), path],
     });
-          console.log("swapRes---",swapRes)
+    console.log("swapRes---", swapRes);
 
     if (swapRes && swapRes.value) {
       setButtonLoading(false);
@@ -333,10 +345,21 @@ const Swap: React.FC = () => {
       Toast(t("兑换失败"), "warning");
     }
   };
-
+  useEffect(() => {
+    if (!wallertAddress) {
+      ensureWalletConnected();
+    } else {
+      getPageInfo();
+      getSwapList();
+    }
+  }, [wallertAddress]);
   return (
     <>
-      <Header title="Swap" recordText={t("兑换记录")} />
+      <Header
+        title="Swap"
+        recordText={t("兑换记录")}
+        recordUrl="/recordList?type=swap"
+      />
       {wallertAddress ? (
         <div className="swap-page">
           <div className="scale-tip">
@@ -434,26 +457,31 @@ const Swap: React.FC = () => {
           </Button>
 
           <div className="records-title">
-            <span className="title-text">{t('兑换记录')}</span>
+            <span className="title-text">{t("兑换记录")}</span>
             <div className="more-box">
-              <span>{t('全部记录')}</span>
+              <span onClick={() => navigate("/recordList?type=swap")}>
+                {t("全部记录")}
+              </span>
               <img src={more} alt="" />
             </div>
           </div>
           <div className="records-head">
-            <span>{t('时间')}</span>
-            <span>{t('交易对')}</span>
-            <span>{t('状态')}</span>
+            <span>{t("时间")}</span>
+            <span>{t("交易对")}</span>
+            <span>{t("状态")}</span>
           </div>
-          {/* {[1, 2, 3, 4, 5, 5].map((_, index) => {
-          return (
-            <div className="record-item" key={index}>
-              <span>04/25/2025 18:25:56</span>
-              <span>用 1500 CA兑换 150.56 SUDT</span>
-              <span>已完成</span>
-            </div>
-          );
-        })} */}
+          {swapList.map((item, index) => {
+            return (
+              <div className="record-item" key={index}>
+                <span>{formatDate(item.blockTime).dateTime}</span>
+                <span>
+                  {t('用')} {fromWei(item.amount0)} {item.type == 1 ? "usdt" : "ca"}{" "}
+                   {t('兑换')} {fromWei(item.amount1)} {item.type == 1 ? "ca" : "usdt"}
+                </span>
+                <span>{t('已完成')}</span>
+              </div>
+            );
+          })}
         </div>
       ) : (
         <div className="loding">

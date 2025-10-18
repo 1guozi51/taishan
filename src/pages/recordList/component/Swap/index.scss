@@ -1,0 +1,74 @@
+.records-swap-page {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  height: calc(100vh - 44px);
+  .records-tab {
+    display: flex;
+    height: 44px;
+    padding: 6px;
+    background: #2f355665;
+    border-radius: 8px;
+    margin-bottom: 20px;
+
+    .records-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      height: 100%;
+      font-size: 14px;
+      color: #67baff;
+      border-radius: 4px;
+
+      &.active {
+        color: #fff;
+        background: linear-gradient(
+          270deg,
+          #ab46ff 0%,
+          #00b7ff 48%,
+          #00ffed 100%
+        );
+      }
+    }
+  }
+
+  .records-list {
+
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 12px 0;
+    border-radius: 8px;
+    border: 1px solid #6b93fa;
+
+    .record-head,
+    .record-item {
+      display: grid;
+      grid-template-columns: 38% 38% 24%;
+      font-size: 12px;
+
+      span:last-child {
+        text-align: right;
+      }
+    }
+
+    .record-head {
+      padding: 0 12px;
+      color: #ffffff80;
+    }
+
+    .record-body {
+      flex: 1;
+      padding: 0 12px;
+  overflow-y: auto;     
+             max-height: calc(100vh - 120px);
+      .record-item {
+        color: #fff;
+        padding: 12px 0;
+        border-bottom: 1px dashed #ffffff25;
+      }
+    }
+  }
+}

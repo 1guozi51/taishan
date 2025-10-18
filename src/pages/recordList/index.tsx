@@ -8,13 +8,14 @@ import Node from "./component/Node/index";
 import MiningMachine from "./component/MiningMachine/index";
 import WithdrawRecord from "./component/WithdrawRecord/index";
 import MyCrowdList from "./component/MyCrowdList/index";
+import Swap from "./component/Swap/index";
 const RecordList: React.FC = () => {
   const location = useLocation();
   // 解析查询参数
   const searchParams = new URLSearchParams(location.search);
-  console.log("searchParams==",searchParams)
+  console.log("searchParams==", searchParams);
   const pageType = searchParams.get("type");
-  console.log("pageType==",pageType)
+  console.log("pageType==", pageType);
 
   //通过类型去给header标题赋值
   const getBackHeaderTitle = (val: string | null) => {
@@ -31,6 +32,8 @@ const RecordList: React.FC = () => {
         return t("领取记录");
       case "myCrowdList":
         return t("明细记录");
+      case "swap":
+        return t("兑换记录");
       default:
         return "记录";
     }
@@ -48,8 +51,10 @@ const RecordList: React.FC = () => {
         return <WithdrawRecord />;
       case "miningMachine":
         return <MiningMachine pathParam={searchParams} />;
-         case "myCrowdList":
+      case "myCrowdList":
         return <MyCrowdList pathParam={searchParams} />;
+      case "swap":
+        return <Swap />;
       default:
         return <div>{t("暂无记录")}</div>;
     }
