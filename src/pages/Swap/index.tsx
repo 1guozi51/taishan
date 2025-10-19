@@ -36,7 +36,7 @@ const Swap: React.FC  = () => {
 
   const wallertAddress = userAddress().address;
   // 按钮加载
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   // 兑换比例
   const [ratios, setRatios] = useState<BigNumber>(BigNumber.from(0));

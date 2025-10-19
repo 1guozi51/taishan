@@ -1,48 +1,138 @@
 import "./index.scss";
 import { useEffect, useState } from "react";
-import { Input, Button } from "antd-mobile";
+import { InfiniteScroll } from "antd-mobile";
 import Header from "@/components/Header";
-import more from "@/assets/img/records-more.png";
-import { ProgressCircle } from "antd-mobile";
+import { Spin } from "antd";
 import showEyes from "@/assets/img/eyes.png";
 import hide from "@/assets/img/hide-assets.png";
 import { RightOutline } from "antd-mobile-icons";
 import NoData from "@/components/NoData";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
-
-import { getMask } from "@/Hooks/Utils";
+import { userAddress } from "@/Store/Store.ts";
+import { formatDate, fromWei, getMask } from "@/Hooks/Utils";
 import { t } from "i18next";
 interface TabItem {
   id: number;
   name: string;
 }
+const statusList = [
+  { text: "众筹成功", color: "success", status: 2 },
+  { text: "众筹失败", color: "error", status: 3 },
+  { text: "预约中", color: "success", status: 1 },
+];
 const tabArray: TabItem[] = [
   {
     id: 0,
     name: t("全部"),
   },
   {
-    id: 1,
+    id: 2,
     name: t("参与成功"),
   },
   {
-    id: 2,
+    id: 3,
     name: t("参与失败"),
   },
 ];
 const MyCrowd: React.FC = () => {
+  //钱包地址
+  const wallertAddress = userAddress().address;
+  // 列表是否加载
+  const [listLoding, setListLoding] = useState<boolean>(false);
+  //页面信息
+  const [dataInfo, setDataInfo] = useState({});
   //tab下标
   const [tabIndex, setTabIndex] = useState<number>(0);
+
+  //current
+  const [current, setCurrent] = useState<number>(0);
+
+  // 是否还有更多数据可以加载
+  const [isMore, setIsMore] = useState<boolean>(false);
+
   //切换tab
   const tabIndexChange = (e) => {
     setTabIndex(e);
   };
   //数据是否展示
   const [isEyeShow, setIsEyeShow] = useState<boolean>(false);
-  const [list, setList] = useState([1, 2, 3]);
+  //我的众筹记录
+  const [list, setList] = useState<listItem[]>([]);
+  const getPageData = async () => {
+    const result = await NetworkRequest({
+      Url: "userCrowdf/statistics",
+      Method: "get",
+      Data: {
+        address: wallertAddress,
+      },
+    });
+    if (result.data.code == 200) {
+      setDataInfo(result.data.data);
+    }
+  };
+  // 获取更多团队列表
+  const loadMoreAction = async () => {
+    const nexPage = current + 1;
+    setCurrent(nexPage);
+    setListLoding(true);
+    await NetworkRequest({
+      Url: "userCrowdf/crowdfDetailsRecord",
+      Data: {
+        current: nexPage,
+        size: 10,
+        address: wallertAddress,
+        status: tabIndex == 0 ? "" : tabIndex,
+      },
+    }).then((res) => {
+      if (res.success) {
+        setList((prevList) => [...prevList, ...res.data.data.records]);
+        if (res.data.data.records.length === 10) {
+          setIsMore(true);
+        } else {
+          setIsMore(false);
+        }
+        setListLoding(false);
+      } else {
+        setListLoding(false);
+      }
+    });
+  };
 
+  const getList = async () => {
+    setList([])
+    setListLoding(true);
+    const result = await NetworkRequest({
+      Url: "userCrowdf/crowdfRecord",
+      Method: "get",
+      Data: {
+        address: wallertAddress,
+        size: 10,
+        current: 1,
+        status: tabIndex == 0 ? "" : tabIndex,
+      },
+    });
+    if (result.data.code == 200) {
+      setList((prevList) => [...prevList, ...result.data.data.records]);
+      if (result.data.data.records.length === 10) {
+        setIsMore(true);
+      } else {
+        setIsMore(false);
+      }
+      setListLoding(false);
+    } else {
+      setListLoding(false);
+    }
+  };
   useEffect(() => {
-  });
+    //切换tab 重新请求数据
+    setCurrent(1);
+    setList([]);
+    getList();
+  }, [tabIndex]);
+  useEffect(() => {
+    getPageData();
+    getList();
+  }, []);
   return (
     <>
       <Header
@@ -63,48 +153,24 @@ const MyCrowd: React.FC = () => {
                 ></img>
               </div>
               <div className="ca-number">
-                {getMask(1200, "*", isEyeShow)} CA
+                {getMask(fromWei(dataInfo.partakeAmount), "*", isEyeShow)} CA
               </div>
             </div>
-            <div className="right-option">
-              <svg width="0" height="0">
-                <defs>
-                  <linearGradient
-                    id="gradientColor"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
-                    <stop offset="0%" stopColor="#3AE97D" />
-                    <stop offset="100%" stopColor="#67BAFF" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <ProgressCircle
-                percent={65}
-                style={{
-                  "--track-width": ".25rem",
-                  "--fill-color": "url(#gradientColor)",
-                  "--track-color": "rgba(255,255,255,0.1)",
-                }}
-              >
-                <div className="progress-txt-color">65%</div>
-              </ProgressCircle>
-            </div>
+            <div className="right-option"></div>
           </div>
           <div className="card-txt-info-option">
-            <div className="left-info">{t("已赎回")}:100,236.78</div>
-            <div className="right-info">
-              <div className="right-number">
-                <span className="spn-1">{t("昨日")}</span>
-                <span className="spn-2">+326.89</span>
-              </div>
+            <div className="left-info">
+              {t("已赎回")}:
+              {getMask(fromWei(dataInfo.backAmount), "*", isEyeShow)}
             </div>
+            <div className="right-info"></div>
           </div>
 
           <div className="card-txt-info-option">
-            <div className="left-info">{t("累计收益")}:100,236.78</div>
+            <div className="left-info">
+              {t("累计收益")}:
+              {getMask(fromWei(dataInfo.profitAmount), "*", isEyeShow)}
+            </div>
             <div className="right-info">
               <div className="right-icon">
                 <RightOutline color="#fff" />
@@ -118,7 +184,7 @@ const MyCrowd: React.FC = () => {
             return (
               <div
                 key={index}
-                onClick={() => tabIndexChange(index)}
+                onClick={() => tabIndexChange(item.id)}
                 className={`tab-item ${tabIndex == item.id ? "active" : ""}`}
               >
                 {item.name}
@@ -130,53 +196,65 @@ const MyCrowd: React.FC = () => {
           <NoData />
         ) : (
           list.map((crowd, index) => {
-            const isSuccess = index % 2 === 0;
+            const status = statusList.find(
+              (item) => item.status === crowd.status
+            );
+
             return (
-              <div
-                className={`crowd-data ${isSuccess ? "success" : "error"}`}
-                key={index}
-              >
+              <div className={`crowd-data ${status?.color || ""}`} key={index}>
                 <div className="period-num">
                   {t("第")}
-                  {index + 1}
+                  {crowd.crowdfNo}
                   {t("期")}
                 </div>
                 <div className="crowd-status">
-                  <div className="status">{t("众筹成功")}</div>
-                  <div className="time">09/05/2025 18:25:56</div>
+                  <div className={`status ${status?.color || ""}`}>
+                    {t(status?.text)}
+                  </div>
+                  <div className="time">
+                    {formatDate(crowd.blockTime).dateTime}
+                  </div>
                 </div>
 
                 <div className="data-row">
                   <div>
                     <div className="key">{t("总预约额")}</div>
-                    <div className="val">100,000.00 CA</div>
+                    <div className="val">{fromWei(crowd.crowdfAmount)} CA</div>
                   </div>
                   <div>
-                    <div className="key">{t("总参与额")}</div>
-                    <div className="val">10,000.00 CA</div>
+                    <div className="key">{t("我的参与额")}</div>
+                    <div className="val">{fromWei(crowd.partakeAmount)} CA</div>
                   </div>
                 </div>
 
-                <div className="data-row">
-                  <div>
-                    <div className="key">{t("总退回本金")}</div>
-                    <div className="val">90,000.00 CA</div>
+                {status?.status != 1 && (
+                  <div className="data-row">
+                    <div>
+                      <div className="key">{t("赎回本金")}</div>
+                      <div className="val">{fromWei(crowd.backAmount)} CA</div>
+                    </div>
+                    <div>
+                      <div className="key">{t("收益总额")}</div>
+                      <div className="val">
+                        {fromWei(crowd.profitAmount)} CA
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="key">{t("已赎回总额")}</div>
-                    <div className="val">8,320.6 CA</div>
-                  </div>
-                </div>
+                )}
 
-                {!isSuccess && (
+                {Number(fromWei(crowd.compensateAmount)) > 0 && (
                   <div className="recoup-box">
                     <div>
                       <div className="key">{t("本金总补偿")}</div>
-                      <div className="val">180,679.44 CA</div>
+                      <div className="val">
+                        {fromWei(crowd.compensateAmount)} CA
+                      </div>
                     </div>
-                    <div>
+                    <div className="recoup-right-box">
                       <div className="key">{t("赠送矿机总价值")}</div>
-                      <div className="val">1,609,000.00 CA</div>
+                      <div className="val">
+                        ={fromWei(crowd.compensateMiner)} CA
+                      </div>
                     </div>
                   </div>
                 )}
@@ -184,6 +262,16 @@ const MyCrowd: React.FC = () => {
             );
           })
         )}
+
+        <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
+          <div>
+            {listLoding && (
+              <div className="loding flex flexCenter">
+                <Spin />
+              </div>
+            )}
+          </div>
+        </InfiniteScroll>
       </div>
     </>
   );

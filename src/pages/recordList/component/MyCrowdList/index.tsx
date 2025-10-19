@@ -9,10 +9,7 @@ import { RightOutline } from "antd-mobile-icons";
 
 import { fromWei, formatDate } from "@/Hooks/Utils.ts";
 import { t } from "i18next";
-interface TeamRecord {
-  blockTime: string;
-  amount: string;
-}
+import type { BigNumber } from "ethers";
 
 interface TabItem {
   id: number;
@@ -37,12 +34,108 @@ const tabArray: TabItem[] = [
     name: t("收益记录"),
   },
 ];
-
+interface listItem {
+  address: string;
+  backAmount: string | number;
+  blockNum: string | number;
+  blockTime: string | number;
+  compensateAmount: string;
+  compensateMiner: string;
+  crowdfAmount: string;
+  crowdfNo: string | number;
+  endTime: string;
+  id: number;
+  partakeAmount: BigNumber;
+  profitAmount: string;
+  startTime: string;
+  status: string;
+}
 const labelMap = {
   0: { text: t("预约额度(CA)") },
   1: { text: t("赎回额度(CA)") },
   2: { text: t("补偿本金(CA)") },
   3: { text: t("收益金额(CA)") },
+};
+
+const RecordTabIndexZero = ({ item, tabIndex }) => {
+  return (
+    <div className="record-item">
+      <div className="item-content">
+        <span>{formatDate(item.blockTime).dateTime}</span>
+        <span>
+          {t("第")}
+          {item.crowdfNo}
+          {t("期")}
+        </span>
+        <span
+          className={
+            item.status == "1"
+              ? "status status-booked"
+              : item.status == "2"
+              ? "status status-success"
+              : "status status-failed"
+          }
+        >
+          {item.status == "1"
+            ? t("预约中")
+            : item.status == "2"
+            ? t("参与成功")
+            : t("参与失败")}
+        </span>
+        <span className={item.status != 1 ? "status status-success" : ""}>
+          {fromWei(item.partakeAmount)}
+        </span>
+      </div>
+      
+    </div>
+  );
+};
+
+const RecordTabIndexOthter = ({ item, tabIndex }) => {
+  return (
+    <div className="record-item">
+      <div className="item-content">
+        <span>{formatDate(item.createTime).dateTime}</span>
+        <span>
+          {t("第")}
+          {item.crowdfNo}
+          {t("期")}
+        </span>
+        <span
+          className={
+            item.allocateStatus == "1"
+              ? "status status-booked"
+              : item.allocateStatus == "2"
+              ? "status status-success"
+              : "status status-failed"
+          }
+        >
+          {item.allocateStatus == "1"
+            ? t("预约中")
+            : item.allocateStatus == "2"
+            ? t("参与成功")
+            : t("参与失败")}
+        </span>
+        <span className={tabIndex != "0" ? "status status-success" : ""}>
+          {fromWei(item.amount)}
+        </span>
+      </div>
+      <div
+        className="tag-option"
+        style={{ display: tabIndex === 2 ? "flex" : "none" }}
+      >
+        <div className="tag-name">{t("赠送")}</div>
+        <div className="tag-txt">
+          {t("赠送价值")}
+          <span>{fromWei(item.minerAmount)} CA</span>
+          {t(`矿机*1台`)}
+        </div>
+        <div className="tag-right">
+          <RightOutline color="#F39D24" />
+        </div>
+      </div>
+    </div>
+  );
 };
 const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
   pathParam,
@@ -50,30 +143,7 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
   //通过searchParams参数获取id值
   const typeId = pathParam.get("id");
   const wallertAddress = userAddress().address;
-  const [list, setList] = useState<TeamRecord[]>([]);
-  const list2 = [
-    {
-      one: "1",
-      two: "1",
-      status: "1", //1 预约 2参与成功 3参与失败
-      type: 0, //0正常 1补偿
-      amount: 12,
-    },
-    {
-      one: "1",
-      two: "1",
-      status: "2", //1 预约 2参与成功 3参与失败
-      type: 0, //0正常 1补偿
-      amount: 12,
-    },
-    {
-      one: "1",
-      two: "1",
-      status: "3", //1 预约 2参与成功 3参与失败
-      type: 0, //0正常 1补偿
-      amount: 12,
-    },
-  ];
+  const [list, setList] = useState<listItem[]>([]);
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
@@ -85,33 +155,35 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
     size: 20,
     type: typeId,
   });
-
   //tab下标
-  const [tabIndex, setTabIndex] = useState<string>('1');
+  const [tabIndex, setTabIndex] = useState<string>("0");
   const tabIndexChange = (index) => {
-    console.log("index=tabIndexChange=",index)
     setTabIndex(index);
-    
   };
   // 获取更多团队列表
   const loadMoreAction = async () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
+    let Url = "";
+    let Data = {
+      current: nexPage,
+      size: dataParam.size,
+      type: tabIndex,
+      address: dataParam.address,
+    };
+    if (tabIndex != "0") {
+      Url = "userCrowdf/crowdfDetailsRecord";
+    } else {
+      Url = "userCrowdf/crowdfRecord";
+      Data.status = "";
+      delete Data.type;
+    }
     await NetworkRequest({
-      Url: "userCrowdf/crowdfDetailsRecord",
-      Data: {
-        current: nexPage,
-        size: dataParam.size,
-        type:tabIndex,
-        address: dataParam.address,
-      },
+      Url,
+      Data,
     }).then((res) => {
       if (res.success) {
         setList((prevList) => [...prevList, ...res.data.data.records]);
-        console.log(
-          "res.data.data.records.length ==",
-          res.data.data.records.length
-        );
         if (res.data.data.records.length === dataParam.size) {
           console.log("list==", list.length);
           setIsMore(true);
@@ -121,17 +193,27 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
       }
     });
   };
-  const getDataList = useCallback(async (type) => {
-    console.log("最新的tabindex",tabIndex)
+  const getDataList = async (type) => {
+    let Url = "";
+    let Data = {
+      current: 1,
+      size: dataParam.size,
+      type: tabIndex,
+      address: dataParam.address,
+    };
+
+    if (tabIndex != "0") {
+      Url = "userCrowdf/crowdfDetailsRecord";
+    } else {
+      Url = "userCrowdf/crowdfRecord";
+      Data.status = "";
+      delete Data.type;
+    }
+
     setListLoding(true);
     const result = await NetworkRequest({
-      Url: "userCrowdf/crowdfDetailsRecord",
-      Data: {
-        current: 1,
-        size: dataParam.size,
-        type,
-        address: dataParam.address,
-      },
+      Url,
+      Data,
     });
     if (result.data.code === 200) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
@@ -144,9 +226,9 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
     } else {
       setListLoding(false);
     }
-  }, [dataParam]);
+  };
   useEffect(() => {
-    setList([])
+    setList([]);
     getDataList(tabIndex);
   }, [tabIndex]);
   return (
@@ -157,7 +239,7 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
             return (
               <div
                 key={index}
-                onClick={() => tabIndexChange(index)}
+                onClick={() => tabIndexChange(item.id)}
                 className={`tab-item ${tabIndex == item.id ? "active" : ""}`}
               >
                 {item.name}
@@ -178,52 +260,16 @@ const MiningMachine: React.FC<{ pathParam: URLSearchParams }> = ({
             <NoData />
           ) : (
             <div className="record-body">
-              {list.map((item, index) => {
-                return (
-                  <div className="record-item" key={index}>
-                    <div className="item-content">
-                      <span>{formatDate(item.createTime).dateTime}</span>
-                      <span>{t("第")}{item.crowdfNo}{t('期')}</span>
-                      <span
-                        className={
-                          item.allocateStatus == "1"
-                            ? "status status-booked"
-                            : item.allocateStatus == "2"
-                            ? "status status-success"
-                            : "status status-failed"
-                        }
-                      >
-                        {item.allocateStatus == "1"
-                          ? t("预约中")
-                          : item.allocateStatus == "2"
-                          ? t("参与成功")
-                          : t("参与失败")}
-                      </span>
-                      <span
-                        className={
-                          tabIndex != "0" ? "status status-success" : ""
-                        }
-                      >
-                        {fromWei(item.amount)}
-                      </span>
-                    </div>
-                    <div
-                      className="tag-option"
-                      style={{ display: tabIndex === 2 ? "flex" : "none" }}
-                    >
-                      <div className="tag-name">{t("赠送")}</div>
-                      <div className="tag-txt">
-                        {t("赠送价值")}
-                        <span>{fromWei(item.minerAmount)} CA</span>
-                        {t(`矿机*${item.triggerCrowdfNo}台`)}
-                      </div>
-                      <div className="tag-right">
-                        <RightOutline color="#F39D24" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {list.map((item, index) => (
+                <div key={index}>
+                  {tabIndex == "0" ? (
+                    <RecordTabIndexZero item={item} tabIndex={tabIndex} />
+                  ) : (
+                    <RecordTabIndexOthter item={item} tabIndex={tabIndex} />
+                  )}
+                </div>
+              ))}
+
               <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
                 <div>
                   {listLoding && (

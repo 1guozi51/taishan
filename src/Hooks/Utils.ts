@@ -250,7 +250,7 @@ export const toBigNumberUnits = (
     throw new Error("Invalid number format");
   }
 };
-
+//bigNumber加法
 export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
   const a = BigNumber.from(big1.toString()); // 1e18
   const b = BigNumber.from(big2.toString()); // 2e18
@@ -275,3 +275,10 @@ export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
     maximumFractionDigits: 2,
   });
 };
+
+/**
+ * 
+ * @param timeStr 2025-10-19T17:32:00.02 格式数据
+ * @returns  //返回毫秒级时间戳
+ */
+export const toTimestamp = (timeStr: string): number => new Date(timeStr).getTime();

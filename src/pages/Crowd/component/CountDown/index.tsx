@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./index.scss";
+import { toTimestamp } from "@/Hooks/Utils";
 import { t } from "i18next";
+import "./index.scss";
 
-interface CountDownProps {
-  targetTime: number; // 毫秒或秒级时间戳
-  onEnd?: () => void;
+interface CrowdInfo {
+  startTime: string;
+  endTime: string;
+  // 其他字段可选
 }
 
-const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
-  const [timeLeft, setTimeLeft] = useState(0);
+interface CountDownProps {
+  crowdInfo: CrowdInfo;
+}
+
+const CountDown: React.FC<CountDownProps> = ({ crowdInfo }) => {
+  // 倒计时秒数
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+
+  // 格式化后的时间
   const [prevTime, setPrevTime] = useState({
     d: "00",
     h: "00",
@@ -17,22 +26,30 @@ const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
     s: "00",
   });
 
+  // 初始化倒计时
   useEffect(() => {
-    const target = targetTime < 1e12 ? targetTime * 1000 : targetTime;
+    if (!crowdInfo?.endTime) return;
+
+    // 转化为毫秒时间戳
+    const endTimeMs = toTimestamp(crowdInfo.endTime);
+    const startTimeMs = toTimestamp(crowdInfo.startTime);
+
+    // 如果当前时间小于开始时间，则倒计时从开始时间开始
+    const targetTime =
+      Math.max(Date.now(), startTimeMs) > endTimeMs ? 0 : endTimeMs;
 
     const tick = () => {
       const now = Date.now();
-      const diff = Math.max(0, Math.floor((target - now) / 1000));
+      const diff = Math.max(0, Math.floor((targetTime - now) / 1000));
       setTimeLeft(diff);
-      if (diff <= 0 && onEnd) onEnd();
     };
-
-    tick();
+                                                                                                                            
+    tick(); // 立即执行一次
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, [targetTime, onEnd]);
+  }, [crowdInfo]);
 
-  // 🧮 计算时间
+  // 计算天时分秒
   const days = Math.floor(timeLeft / (24 * 3600))
     .toString()
     .padStart(2, "0");
@@ -48,11 +65,12 @@ const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
 
   const time = { d: days, h: hours, m: minutes, s: seconds };
 
+  // 保存前一次时间，用于动画比较
   useEffect(() => {
     setPrevTime(time);
   }, [time.d, time.h, time.m, time.s]);
 
-  /** 单个时间块（仅当变化时触发动画） */
+  // 时间块动画组件
   const TimeBlock: React.FC<{
     value: string;
     prevValue: string;
@@ -92,7 +110,6 @@ const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
               value={time.d}
               prevValue={prevTime.d}
               active={time.d !== prevTime.d}
-              label={t("天")}
             />
             <div>:</div>
           </>
@@ -101,21 +118,18 @@ const CountDown: React.FC<CountDownProps> = ({ targetTime, onEnd }) => {
           value={time.h}
           prevValue={prevTime.h}
           active={time.h !== prevTime.h}
-          label={t("时")}
         />
         <div>:</div>
         <TimeBlock
           value={time.m}
           prevValue={prevTime.m}
           active={time.m !== prevTime.m}
-          label={t("分")}
         />
         <div>:</div>
         <TimeBlock
           value={time.s}
           prevValue={prevTime.s}
           active={time.s !== prevTime.s}
-          label={t("秒")}
         />
       </div>
     </div>

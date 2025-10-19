@@ -223,5 +223,13 @@
   "用": "Use",
   "兑换": "Exchange",
   "领取成功": "Claimed Successfully",
-  "我的记录": "My Record"
+  "我的记录": "My Record",
+   "参与资金池": "Participation Pool",
+  "众筹失败": "Crowdfunding Failed",
+  "你已经参与": "Already Participated",
+  "输入的参与额度不足": "Insufficient Participation Amount",
+  "我的参与额": "My Contribution",
+  "收益总额": "Total Earnings",
+  "未参与成功的代币金额将退回到预约资金池": "Unsuccessful tokens will be returned to the reservation pool",
+    "赎回本金": "Redeemed Principal"
 }

@@ -21,18 +21,18 @@ export interface UserInfo {
   userLevel: number | null;
 }
 export const defaultUserInfo: Required<Record<keyof UserInfo, any>> = {
-  activate: '',
-  address: '',
+  activate: "",
+  address: "",
   caBalance: 0,
   caReward: 0,
   communityPerf: 0,
-  createTime: '',
+  createTime: "",
   directCount: 0,
   directTotalCount: 0,
-  inviterAddress: '',
+  inviterAddress: "",
   layer: 0,
   nodeLevel: 0,
-  parentAddress: '',
+  parentAddress: "",
   selfInvest: 0,
   sort: 0,
   teamCount: 0,
@@ -42,7 +42,7 @@ export const defaultUserInfo: Required<Record<keyof UserInfo, any>> = {
   usdtBalance: 0,
   userLevel: 0,
 };
-
+ 
 export const fillNullWithDefault = <T extends Record<string, any>>(
   data: Partial<T>,
   defaults: T
