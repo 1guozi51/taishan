@@ -24,7 +24,6 @@ interface MenuType {
 const menuList: MenuType[] = [
   { label: t("首页"), url: "/" },
   { label: t("门票"), url: "/recordList?type=tickets"},
-  // { label: t("众筹"), url: "" },
   { label: t("众筹"), url: "/Crowd" },
   { label: t("矿机"), url: "/MiningMachine" },
   { label: "Swap", url: "/swap" },
@@ -35,6 +34,9 @@ const Menu: React.FC<{
   visible: boolean;
   onClose: () => void;
 }> = ({ visible, onClose }) => {
+
+    const { setAddress } = userAddress.getState();
+
   const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
   const [userInfoAbi, setUserInfoAbi] = useState<UserInfoAbi>();
   const [eyesShow, setEyesShow] = useState<boolean>(false);
@@ -122,6 +124,10 @@ const Menu: React.FC<{
       setCurLang(2);
     }
   };
+  const logOutClick=()=>{
+      setAddress('');
+    window.location.reload();
+  }
   useEffect(() => {
     document.body.style.overflow = visible ? "hidden" : "";
     if (walletAddress) {
@@ -240,7 +246,7 @@ const Menu: React.FC<{
             );
           })}
 
-          <div className="disconnect-box">{t("断开绑定钱包")}</div>
+          <div className="disconnect-box" onClick={logOutClick}>{t("断开绑定钱包")}</div>
         </div>
       </div>
     </>

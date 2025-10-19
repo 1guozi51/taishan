@@ -127,12 +127,12 @@ const MiningMachine: React.FC = () => {
         <div className="card-box">
           <div className="card-option">
             <div className="card-nums">
-              {t('矿机算力')}：{fromWei(minerInfo?.powerValue)} Max
+              {t('矿机算力')}：{fromWei(minerInfo?.powerValue)}  
             </div>
           </div>
           <div className="card-option">
             <div className="card-txt">
-              {t('已领取动静收益')}:{fromWei(minerInfo?.releaseValueDebt)} Max
+              {t('已领取动静收益')}:{fromWei(minerInfo?.releaseValueDebt)}  
             </div>
             <div className="card-txt card-txt-right">
               {t('已领取CA')}:{fromWei(minerInfo?.releaseCaAmount)} 
@@ -140,10 +140,10 @@ const MiningMachine: React.FC = () => {
           </div>
           <div className="card-option">
             <div className="card-txt">
-              {t('累计动静收益')}:{fromWei(minerInfo?.totalMaxValue)} Max
+              {t('累计动静收益')}:{fromWei(minerInfo?.totalMaxValue)}  
             </div>
             <div className="card-txt card-txt-right">
-              {t('累计领取')}:{fromWei(minerInfo?.totalReleaseCaAmount)}
+              {t('累计领取')}CA:{fromWei(minerInfo?.totalReleaseCaAmount)}
             </div>
           </div>
           <div className="card-end-box">

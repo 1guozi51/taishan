@@ -77,7 +77,7 @@ const Record: React.FC = () => {
         <div className="records-list">
           <div className="record-head">
             <span>{t("时间")}</span>
-            <span>{t("获取")}MAX</span>
+            <span>{t("获取")}GAS</span>
             <span>{t("支付")}USDT</span>
           </div>
           {list.length == 0 ? (
