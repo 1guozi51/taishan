@@ -100,7 +100,7 @@ const Swap: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
         <div className="records-list">
           <div className="record-head">
             <span>{t("时间")}</span>
-            <span>{t("交易对")}</span>
+            <span className="span-2">{t("交易对")}</span>
             <span>{t("状态")}</span>
           </div>
           {list.length == 0 ? (
@@ -111,10 +111,10 @@ const Swap: React.FC<{ pathParam: URLSearchParams }> = ({ pathParam }) => {
                 return (
                   <div className="record-item" key={index}>
                     <span>{formatDate(item.blockTime).dateTime}</span>
-                    <span>
-                      {t("用")} {fromWei(item.amount0)}{" "}
-                      {item.type == 1 ? "usdt" : "ca"} {t("兑换")}{" "}
-                      {fromWei(item.amount1)} {item.type == 1 ? "ca" : "usdt"}
+                    <span className="span-2">
+                      {fromWei(item.amount0,18,true,3)}{" "}
+                      {item.type == 1 ? "USDT" : "CA"} {" "}{'=>'}{" "}
+                      {fromWei(item.amount1,18,true,3)} {item.type == 1 ? "CA" : "USDT"}
                     </span>
                     <span>{t("已完成")}</span>
                   </div>

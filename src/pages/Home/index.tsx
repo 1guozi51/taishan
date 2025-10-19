@@ -99,7 +99,7 @@ const PageBody: React.FC = () => {
               <img src={homeSwap} className="tab-icon" alt="" />
               <span>{t("交易")}</span>
             </div>
-            <div onClick={() => navigatePath("/crowd")} className="tab-item">
+            <div onClick={() => navigate("/crowd")} className="tab-item">
               <img src={homeZc} className="tab-icon" alt="" />
               <span>{t("众筹")}</span>
             </div>

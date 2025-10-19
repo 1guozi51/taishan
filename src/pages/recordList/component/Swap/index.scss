@@ -35,7 +35,6 @@
   }
 
   .records-list {
-
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -46,8 +45,12 @@
     .record-head,
     .record-item {
       display: grid;
-      grid-template-columns: 38% 38% 24%;
+        grid-template-columns: 20% 60% 20%;
       font-size: 12px;
+      .span-2 {
+        text-align: left;
+        padding-left: 24px;
+      }
 
       span:last-child {
         text-align: right;
@@ -62,8 +65,8 @@
     .record-body {
       flex: 1;
       padding: 0 12px;
-  overflow-y: auto;     
-             max-height: calc(100vh - 120px);
+      overflow-y: auto;
+      max-height: calc(100vh - 120px);
       .record-item {
         color: #fff;
         padding: 12px 0;

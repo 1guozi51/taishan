@@ -12,7 +12,7 @@ import hide from "@/assets/img/hide-assets.png";
 import showEyes from "@/assets/img/eyes.png";
 import more from "@/assets/img/more.png";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
-import { fromWei, SubAddress,getMask} from "@/Hooks/Utils";
+import { fromWei, SubAddress, getMask } from "@/Hooks/Utils";
 import i18n, { t } from "i18next";
 import { defaultUserInfo, fillNullWithDefault } from "./type.ts";
 import type { UserInfo, UserInfoAbi } from "@/Hooks/InterFaceHooks.ts";
@@ -23,19 +23,18 @@ interface MenuType {
 }
 const menuList: MenuType[] = [
   { label: t("首页"), url: "/" },
-  { label: t("门票"), url: "/recordList?type=tickets"},
+  { label: t("门票"), url: "/recordList?type=tickets" },
   { label: t("众筹"), url: "/Crowd" },
   { label: t("矿机"), url: "/MiningMachine" },
   { label: "Swap", url: "/swap" },
-   { label: t("节点"), url: "/myNode" },
+  { label: t("节点"), url: "/myNode" },
   { label: t("团队"), url: "/myTeam" },
-]
+];
 const Menu: React.FC<{
   visible: boolean;
   onClose: () => void;
 }> = ({ visible, onClose }) => {
-
-    const { setAddress } = userAddress.getState();
+  const { setAddress } = userAddress.getState();
 
   const [userInfo, setUserInfo] = useState<UserInfo>(defaultUserInfo);
   const [userInfoAbi, setUserInfoAbi] = useState<UserInfoAbi>();
@@ -55,6 +54,9 @@ const Menu: React.FC<{
     }
     if (name == "en") {
       setCurLang(2);
+    }
+    if (name == "vietnam") {
+      setCurLang(3);
     }
     window.localStorage.setItem("lang", name);
     window.location.reload();
@@ -120,14 +122,17 @@ const Menu: React.FC<{
     if (localLang == "zh") {
       setCurLang(1);
     }
-    if (localLang == "en") {  
+    if (localLang == "en") {
       setCurLang(2);
     }
+    if (localLang == "vietnam") {
+      setCurLang(3);
+    }
   };
-  const logOutClick=()=>{
-      setAddress('');
+  const logOutClick = () => {
+    setAddress("");
     window.location.reload();
-  }
+  };
   useEffect(() => {
     document.body.style.overflow = visible ? "hidden" : "";
     if (walletAddress) {
@@ -160,9 +165,11 @@ const Menu: React.FC<{
             </div>
           )}
         </div>
-
         <div className="connect-info">
           <div className="lang-txt">{t("切换语言")}</div>
+        </div>
+
+        <div className="connect-info">
           <div className="langAndClose">
             <div className="lang flex flexStart">
               <div
@@ -180,6 +187,14 @@ const Menu: React.FC<{
                 }}
               >
                 English
+              </div>
+              <div
+                className={"item " + (curLang == 3 ? "select" : "")}
+                onClick={() => {
+                  changeLanguage("vietnam");
+                }}
+              >
+                VN Vietnam
               </div>
             </div>
           </div>
@@ -202,7 +217,7 @@ const Menu: React.FC<{
                   <img src={more} className="more-img" alt="" />
                 </div>
                 <div className="balance-val">
-                  { getMask(fromWei(userInfo.usdtBalance)||0,'*',eyesShow)}
+                  {getMask(fromWei(userInfo.usdtBalance) || 0, "*", eyesShow)}
                 </div>
               </div>
               <div className="balance-item">
@@ -211,7 +226,7 @@ const Menu: React.FC<{
                   <img src={more} className="more-img" alt="" />
                 </div>
                 <div className="balance-val">
-                  { getMask(fromWei(userInfo.caBalance)||0,'*',eyesShow)}
+                  {getMask(fromWei(userInfo.caBalance) || 0, "*", eyesShow)}
                 </div>
               </div>
             </div>
@@ -246,7 +261,9 @@ const Menu: React.FC<{
             );
           })}
 
-          <div className="disconnect-box" onClick={logOutClick}>{t("断开绑定钱包")}</div>
+          <div className="disconnect-box" onClick={logOutClick}>
+            {t("断开绑定钱包")}
+          </div>
         </div>
       </div>
     </>
