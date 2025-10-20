@@ -39,10 +39,10 @@ export default class EnvConfigProvider {
       swapRouter: "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
       poolContract: "0x268e52d5814880E00B60780AE9D8c7f1Ac1b4A8c", //节点接口
       apiBase: "https://api.soulca.com/",
-      contractPool: "0xf3f27128C8596915093439671cF223978AA3abae",
       contractIdoPool: "0x77C596103cc479eaCBe5862B514C18C5CCCd35a8", //购买节点的合约地址
+      contractPool: "0x7F652Ef3416fCaf4cA88AB42A950E30bFdC8E797",
       contractUsdt: "0x55d398326f99059fF775485246999027B3197955", //
-      contractCa: "0x7e0060dD72eBBc2dbA1A1498905657874c6064d3",
+      contractCa: "0xD9f5eE36A1809B10F5aDF005ef52e54E3b5ff1C6",
       chainId: "0x38",
       rpcUrl: "https://bsc-dataseed.binance.org/",
       blockExplorerUrls: "https://bscscan.com",

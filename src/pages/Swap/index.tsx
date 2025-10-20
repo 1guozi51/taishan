@@ -150,7 +150,8 @@ const Swap: React.FC = () => {
         params: [toWei(1)],
       }),
     ]);
-
+    console.log("balanceResult[6].value?.value=1=",balanceResult)
+    console.log("balanceResult[6].value?.value==",fromWei(balanceResult[6].value?.value))
     setRatios(balanceResult[6].value?.value);
 
     if (
@@ -452,7 +453,7 @@ const Swap: React.FC = () => {
               {t("最大购买额度")}：{fromWei(userInfo.gasAmount, 18, false)}
             </span>
           </div>
-          {/* onClick={confirmBtnClick} */}
+           {/* onClick={confirmBtnClick} */}
           <Button className="confirm-btn swap-btn" disabled>
             {buttonLoading ? <Spin /> : t("兑换")}
           </Button>
