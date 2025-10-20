@@ -40,7 +40,7 @@ const MiningMachine: React.FC = () => {
   //领取loading
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
-  const [list, setList] = useState<Array>([]);
+  const [list, setList] = useState([]);
 //tab下标
   const [tabIndex, setTabIndex] = useState<number>(0);
   const tabIndexChange = (index) => {
@@ -132,7 +132,7 @@ const MiningMachine: React.FC = () => {
           </div>
           <div className="card-option">
             <div className="card-txt">
-              {t('已领取动静收益')}:{fromWei(minerInfo?.releaseValueDebt)}  
+              {t('已领取MAX收益')}:{fromWei(minerInfo?.releaseValueDebt)}  
             </div>
             <div className="card-txt card-txt-right">
               {t('已领取CA')}:{fromWei(minerInfo?.releaseCaAmount)} 
@@ -140,7 +140,7 @@ const MiningMachine: React.FC = () => {
           </div>
           <div className="card-option">
             <div className="card-txt">
-              {t('累计动静收益')}:{fromWei(minerInfo?.totalMaxValue)}  
+              {t('累计MAX收益')}:{fromWei(minerInfo?.totalMaxValue)}  
             </div>
             <div className="card-txt card-txt-right">
               {t('累计领取')}CA:{fromWei(minerInfo?.totalReleaseCaAmount)}

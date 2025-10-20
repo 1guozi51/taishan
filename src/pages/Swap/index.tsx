@@ -31,7 +31,7 @@ interface SwapRecord {
   amount0: BigNumber;
   amount1: BigNumber;
 }
-const Swap: React.FC  = () => {
+const Swap: React.FC = () => {
   const navigate = useNavigate();
 
   const wallertAddress = userAddress().address;
@@ -452,8 +452,8 @@ const Swap: React.FC  = () => {
               {t("最大购买额度")}：{fromWei(userInfo.gasAmount, 18, false)}
             </span>
           </div>
-
-          <Button className="confirm-btn swap-btn" onClick={confirmBtnClick}>
+          {/* onClick={confirmBtnClick} */}
+          <Button className="confirm-btn swap-btn" disabled>
             {buttonLoading ? <Spin /> : t("兑换")}
           </Button>
 
@@ -476,9 +476,10 @@ const Swap: React.FC  = () => {
               <div className="record-item" key={index}>
                 <span>{formatDate(item.blockTime).dateTime}</span>
                 <span className="span-2">
-                   {fromWei(item.amount0,18,true,3)}{" "}
-                  {item.type == 1 ? "USDT" : "CA"}{" "}{'=>'}{" "}
-                  {fromWei(item.amount1,18,true,3)} {item.type == 1 ? "CA" : "USDT"}
+                  {fromWei(item.amount0, 18, true, 3)}{" "}
+                  {item.type == 1 ? "USDT" : "CA"} {"=>"}{" "}
+                  {fromWei(item.amount1, 18, true, 3)}{" "}
+                  {item.type == 1 ? "CA" : "USDT"}
                 </span>
                 <span>{t("已完成")}</span>
               </div>
